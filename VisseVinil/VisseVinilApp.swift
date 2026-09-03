@@ -5,15 +5,16 @@
 //  Created by Rian Antony Medeiros de Abreu on 03/09/26.
 //
 
+import Foundation
 import SwiftUI
 import SwiftData
+
+let appSchema: [any PersistentModel.Type] = [Disco.self, Caixa.self, Evento.self]
 
 @main
 struct VisseVinilApp: App {
     var sharedModelContainer: ModelContainer = {
-        let schema = Schema([
-            Item.self,
-        ])
+        let schema = Schema(appSchema)
         let modelConfiguration = ModelConfiguration(schema: schema, isStoredInMemoryOnly: false)
 
         do {
