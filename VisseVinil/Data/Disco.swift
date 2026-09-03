@@ -10,7 +10,7 @@ import SwiftData
 
 @Model
 final class Disco {
-    var nome: String = ""
+    var nome: String = "Disco"
     var posicao: Int
     
     @Relationship(deleteRule: .cascade, inverse: \Evento.disco)

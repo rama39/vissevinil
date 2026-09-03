@@ -23,12 +23,14 @@ struct ListaDiscosView: View {
         })
     }
     
+    @State var discoSelecionado: Disco? = nil
+    
     var body: some View {
         NavigationStack {
             List {
                 ForEach(discosBuscados) { disco in
-                    NavigationLink {
-                        Text("Disco \(disco.nome)")
+                    Button {
+                        discoSelecionado = disco
                     } label: {
                         Text("\(disco.nome)")
                     }
@@ -40,6 +42,11 @@ struct ListaDiscosView: View {
                     Button(action: addItem) {
                         Label("Add Item", systemImage: "plus")
                     }
+                }
+            }
+            .sheet(item: $discoSelecionado) { discoSelecionado in
+                NavigationStack {
+                    DiscoSheetView(discoSelecionado: discoSelecionado)
                 }
             }
         }
