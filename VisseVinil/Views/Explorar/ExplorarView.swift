@@ -8,13 +8,22 @@
 import SwiftUI
 import SwiftData
 
-struct InicioView: View {
+struct ExplorarView: View {
+    
+    
+    
     var body: some View {
-        Text("Início")
+        NavigationStack {
+            VStack {
+                
+            }
+            .navigationTitle("Início")
+            .navigationBarTitleDisplayMode(.large)
+        }
     }
 }
 
 #Preview {
-    InicioView()
+    ExplorarView()
         .modelContainer(for: appSchema, inMemory: true)
 }
