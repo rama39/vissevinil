@@ -26,7 +26,7 @@ class DiscogsViewModel {
         //"https://api.discogs.com\(encodedQuery)&format=vinyl&per_page=25"
         //"https://api.discogs.com/database/search?release_title=nevermind&per_page=3&page=1"
         //"https://api.discogs.com/database/search?release_title=nevermind&artist=nirvana&per_page=3&page=1"
-        "https://api.discogs.com/database/search?release_title=\(encodedQuery)&per_page=3&page=1"
+        "https://api.discogs.com/database/search?release_title=\(encodedQuery)&per_page=10&page=1"
         guard let url = URL(string: urlString) else { return }
         
         var request = URLRequest(url: url)
