@@ -14,7 +14,7 @@ struct ContentView: View {
             Tab("Explorar", systemImage: "magnifyingglass") {
                 BuscarView()
             }
-            Tab("Coleção", systemImage: "square.stack") {
+            Tab("Coleção", systemImage: "music.note.square.stack.fill") {
                 ListaDiscosView()
             }
             Tab("Mapa", systemImage: "map") {
