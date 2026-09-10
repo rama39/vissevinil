@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct ExplorarView: View {
+struct BuscarView: View {
     
     
     
@@ -24,6 +24,6 @@ struct ExplorarView: View {
 }
 
 #Preview {
-    ExplorarView()
+    BuscarView()
         .modelContainer(for: appSchema, inMemory: true)
 }
