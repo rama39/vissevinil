@@ -8,19 +8,27 @@
 import SwiftUI
 import SwiftData
 
+enum VisseVinilTabs {
+    case mapa
+    case buscar
+    case colecao
+    case perfil
+}
+
 struct ContentView: View {
+    @State private var tabSelecionada: VisseVinilTabs = .colecao
     var body: some View {
-        TabView {
-            Tab("Explorar", systemImage: "magnifyingglass") {
-                BuscarView()
-            }
-            Tab("Coleção", systemImage: "music.note.square.stack.fill") {
-                ListaDiscosView()
-            }
-            Tab("Mapa", systemImage: "map") {
+        TabView(selection: $tabSelecionada) {
+            Tab("Mapa", systemImage: "map", value: .mapa) {
                 MapaView()
             }
-            Tab("Perfil", systemImage: "person") {
+            Tab("Buscar", systemImage: "magnifyingglass", value: .buscar) {
+                BuscarView()
+            }
+            Tab("Coleção", systemImage: "music.note.square.stack.fill", value: .colecao) {
+                ListaDiscosView()
+            }
+            Tab("Perfil", systemImage: "person", value: .perfil) {
                 PerfilView()
             }
         }
