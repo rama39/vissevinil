@@ -8,6 +8,12 @@
 import Foundation
 import SwiftData
 
+enum TipoEvento: String, Codable {
+    case adicionou
+    case tirouParaOuvir
+    case comentou
+}
+
 @Model
 final class Evento {
     var data: Date = Date()

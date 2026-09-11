@@ -12,6 +12,7 @@ import SwiftData
 final class Caixa {
     var rgba: RGBAColor? = nil
     
+    @Relationship(deleteRule: .noAction)
     var discos: [Disco] = []
     
     init() {
