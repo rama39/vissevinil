@@ -6,10 +6,9 @@
 //
 
 import SwiftUI
-import SwiftData
 
 @Observable
-class DiscogsViewModel {
+class DiscogsSearchViewModel {
     var releases: [DiscogsRelease] = []
     var isLoading = false
     var errorMessage: String? = nil

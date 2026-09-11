@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct TestSearchView: View {
-    @State private var viewModel = DiscogsViewModel()
+struct PesquisaGlobalView: View {
+    @State private var viewModel = DiscogsSearchViewModel()
     @State private var searchText = ""
     
     var body: some View {
@@ -50,8 +50,8 @@ struct TestSearchView: View {
 
 #Preview {
     TabView {
-        Tab("Explorar", systemImage: "magnifyingglass") {
-            TestSearchView()
+        Tab("Buscar", systemImage: "magnifyingglass") {
+            PesquisaGlobalView()
         }
     }
 }
