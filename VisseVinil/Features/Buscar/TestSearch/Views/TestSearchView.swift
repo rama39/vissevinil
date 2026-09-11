@@ -1,0 +1,57 @@
+//
+//  TestSearchView.swift
+//  VisseVinil
+//
+//  Created by Rian Antony Medeiros de Abreu on 07/09/26.
+//
+
+import SwiftUI
+
+struct TestSearchView: View {
+    @State private var viewModel = DiscogsViewModel()
+    @State private var searchText = ""
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                // Exibição do status ou da listagem
+                if viewModel.isLoading {
+                    Spacer()
+                    ProgressView("Buscando no Discogs...")
+                    Spacer()
+                } else if viewModel.releases.isEmpty {
+                    Spacer()
+                    Text("Nenhum vinil encontrado.")
+                        .foregroundColor(.gray)
+                    Spacer()
+                } else {
+                    List(viewModel.releases) { release in
+                        NavigationLink {
+                            ReleaseDetailView(release: release)
+                        } label: {
+                            ReleaseRow(release: release)
+                        }
+                    }
+                    .listStyle(PlainListStyle())
+                }
+            }
+            .navigationTitle("Pesquisar Discos")
+            .searchable(text: $searchText, placement: .automatic, prompt: "Pesquisar Disco")
+            
+            .toolbarVisibility( .hidden, for: .tabBar)
+            .onSubmit(of: .search, {
+                Task {
+                    try await viewModel.searchVinyl(query: searchText)
+                }
+            })
+        }
+    }
+}
+
+#Preview {
+    TabView {
+        Tab("Explorar", systemImage: "magnifyingglass") {
+            TestSearchView()
+        }
+    }
+}
