@@ -15,20 +15,27 @@ class DiscogsSearchViewModel {
     
     private let personalAccessToken = "CEUvWbxdlZFYYLxbWqjzkGOQKbCEhHzHjJEHKFzE"
     private let userAgent = "VisseVinil/0.0 (iOS; SwiftUI)"
-
-    func searchVinyl(query: String) async throws {
-        guard !query.isEmpty else { return }
-        guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return }
+    
+    private func getDiscogsRequest(query: String) -> URLRequest? {
+        guard !query.isEmpty else { return nil }
+        guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return nil }
         
         let urlString =
         //"https://api.discogs.com/database/search?title=\(encodedQuery)&type=master&per_page=10&page=1"
         "https://api.discogs.com/database/search?q=\(encodedQuery)&type=master&format=vinyl&per_page=10&page=1"
-        guard let url = URL(string: urlString) else { return }
+        guard let url = URL(string: urlString) else { return nil }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
         request.setValue("Discogs token=\(personalAccessToken)", forHTTPHeaderField: "Authorization")
+        
+        return request
+    }
+
+    func searchVinyl(query: String) async throws {
+        
+        guard let request = getDiscogsRequest(query: query) else { return }
         
         self.isLoading = true
         self.errorMessage = nil
