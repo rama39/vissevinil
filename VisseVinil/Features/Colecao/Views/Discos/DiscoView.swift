@@ -8,7 +8,7 @@
 import SwiftUI
 import SwiftData
 
-struct DiscoSheetView: View {
+struct DiscoView: View {
     @Bindable var discoSelecionado: Disco
     var body: some View {
         VStack {
@@ -26,7 +26,7 @@ struct DiscoSheetView: View {
     container.mainContext.insert(mockDisco)
     
     return NavigationStack {
-        DiscoSheetView(discoSelecionado: mockDisco)
+        DiscoView(discoSelecionado: mockDisco)
     }
         .modelContainer(container)
 }

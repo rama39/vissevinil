@@ -46,7 +46,7 @@ struct ListaDiscosView: View {
             }
             .sheet(item: $discoSelecionado) { discoSelecionado in
                 NavigationStack {
-                    DiscoSheetView(discoSelecionado: discoSelecionado)
+                    DiscoView(discoSelecionado: discoSelecionado)
                 }
             }
         }
