@@ -20,7 +20,8 @@ class Localizador: NSObject {
     }
 }
 
-
+// Model
+// Ponto de interesse do mapa
 struct Local: Identifiable {
     let id = UUID()
     let nome: String
