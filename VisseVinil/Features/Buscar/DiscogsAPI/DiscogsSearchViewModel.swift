@@ -16,13 +16,14 @@ class DiscogsSearchViewModel {
     private let personalAccessToken = "CEUvWbxdlZFYYLxbWqjzkGOQKbCEhHzHjJEHKFzE"
     private let userAgent = "VisseVinil/0.0 (iOS; SwiftUI)"
     
-    private func getDiscogsRequest(query: String) -> URLRequest? {
-        guard !query.isEmpty else { return nil }
+    private func getDiscogsRequest(query: String, tag: DiscogsGenre?) -> URLRequest? {
+        guard !query.isEmpty || tag != nil else { return nil }
         guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return nil }
         
-        let urlString =
+        var urlString =
         //"https://api.discogs.com/database/search?title=\(encodedQuery)&type=master&per_page=10&page=1"
         "https://api.discogs.com/database/search?q=\(encodedQuery)&type=master&format=vinyl&per_page=10&page=1"
+        if let tag { urlString += "&genre=\(tag.rawValue)" }
         guard let url = URL(string: urlString) else { return nil }
         
         var request = URLRequest(url: url)
@@ -33,9 +34,10 @@ class DiscogsSearchViewModel {
         return request
     }
 
-    func searchVinyl(query: String) async throws {
+    func searchVinyl(query: String, tag: DiscogsGenre?) async throws {
         
-        guard let request = getDiscogsRequest(query: query) else { return }
+        guard let request =
+                getDiscogsRequest(query: query, tag: tag) else { return }
         
         self.isLoading = true
         self.errorMessage = nil

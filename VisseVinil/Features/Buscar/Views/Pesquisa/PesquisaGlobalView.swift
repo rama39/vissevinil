@@ -53,9 +53,14 @@ struct PesquisaGlobalView: View {
             .toolbarVisibility( .hidden, for: .tabBar)
             .onSubmit(of: .search, {
                 Task {
-                    try await viewModel.searchVinyl(query: searchText)
+                    try await viewModel.searchVinyl(query: searchText, tag: tagSelecionada)
                 }
             })
+            .onChange(of: tagSelecionada) {
+                Task {
+                    try await viewModel.searchVinyl(query: searchText, tag: tagSelecionada)
+                }
+            }
         }
     }
 }
