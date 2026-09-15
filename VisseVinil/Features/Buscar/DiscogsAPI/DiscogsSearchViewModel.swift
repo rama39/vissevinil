@@ -13,7 +13,7 @@ class DiscogsSearchViewModel {
     var isLoading = false
     var errorMessage: String? = nil
     
-    private let personalAccessToken = "CEUvWbxdlZFYYLxbWqjzkGOQKbCEhHzHjJEHKFzE"
+    private let personalAccessToken = "zdAKBXOdFlUYuBVvMALPDcuQjKZoEDvvudzmwLYm"
     private let userAgent = "VisseVinil/0.0 (iOS; SwiftUI)"
     
     private func getDiscogsRequest(query: String, tag: DiscogsGenre?) -> URLRequest? {
