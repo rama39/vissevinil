@@ -18,13 +18,21 @@ class DiscogsSearchViewModel {
     
     private func getDiscogsRequest(query: String, tag: DiscogsGenre?) -> URLRequest? {
         guard !query.isEmpty || tag != nil else { return nil }
-        guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) else { return nil }
         
-        var urlString =
-        //"https://api.discogs.com/database/search?title=\(encodedQuery)&type=master&per_page=10&page=1"
-        "https://api.discogs.com/database/search?q=\(encodedQuery)&type=master&format=vinyl&per_page=10&page=1"
-        if let tag { urlString += "&genre=\(tag.rawValue)" }
-        guard let url = URL(string: urlString) else { return nil }
+        var components = URLComponents(string: "https://api.discogs.com/database/search")!
+        var queryItems = [
+            URLQueryItem(name: "q", value: query),
+            URLQueryItem(name: "type", value: "master"),
+            URLQueryItem(name: "format", value: "vinyl"),
+            URLQueryItem(name: "per_page", value: "10"),
+            URLQueryItem(name: "page", value: "1")
+        ]
+        if let tag {
+            queryItems.append(URLQueryItem(name: "genre", value: tag.rawValue))
+        }
+        components.queryItems = queryItems
+
+        guard let url = components.url else { return nil }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
