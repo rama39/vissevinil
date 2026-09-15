@@ -10,10 +10,22 @@ import SwiftUI
 struct PesquisaGlobalView: View {
     @State private var viewModel = DiscogsSearchViewModel()
     @State private var searchText = ""
+    @State var tagSelecionada: DiscogsGenre? = nil
     
     var body: some View {
         NavigationView {
             VStack {
+                ScrollView(.horizontal) {
+                    HStack {
+                        ForEach(DiscogsGenre.allCases, id: \.self) { genero in
+                            GeneroTagView(
+                                genero: genero,
+                                tagSelecionada: $tagSelecionada
+                            )
+                        }
+                    }
+                }.padding()
+                .scrollIndicators(.hidden)
                 // Exibição do status ou da listagem
                 if viewModel.isLoading {
                     Spacer()
