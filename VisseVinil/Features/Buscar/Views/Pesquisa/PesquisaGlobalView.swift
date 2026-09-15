@@ -50,7 +50,7 @@ struct PesquisaGlobalView: View {
             .navigationTitle("Pesquisar Discos")
             .searchable(text: $searchText, placement: .automatic, prompt: "Pesquisar Disco")
             
-            .toolbarVisibility( .hidden, for: .tabBar)
+            //.toolbarVisibility( .hidden, for: .tabBar)
             .onSubmit(of: .search, {
                 Task {
                     try await viewModel.searchVinyl(query: searchText, tag: tagSelecionada)
