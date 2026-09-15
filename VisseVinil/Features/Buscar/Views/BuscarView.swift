@@ -9,21 +9,16 @@ import SwiftUI
 import SwiftData
 
 struct BuscarView: View {
-    
-    
-    
     var body: some View {
-        NavigationStack {
-            VStack {
-                
-            }
-            .navigationTitle("Início")
-            .navigationBarTitleDisplayMode(.large)
-        }
+        PesquisaGlobalView()
     }
 }
 
 #Preview {
-    BuscarView()
-        .modelContainer(for: appSchema, inMemory: true)
+    TabView {
+        Tab("Buscar", systemImage: "magnifyingglass") {
+            BuscarView()
+                .modelContainer(for: appSchema, inMemory: true)
+        }
+    }
 }
