@@ -13,49 +13,58 @@ struct PesquisaGlobalView: View {
     @State var tagSelecionada: DiscogsGenre? = nil
     
     var body: some View {
-        NavigationView {
-            VStack {
-                ScrollView(.horizontal) {
-                    HStack {
-                        ForEach(DiscogsGenre.allCases, id: \.self) { genero in
-                            GeneroTagView(
-                                genero: genero,
-                                tagSelecionada: $tagSelecionada
-                            )
+        NavigationStack {
+            List {
+                Section {
+                    // Exibição do status ou da listagem
+                    if viewModel.isLoading {
+                        HStack {
+                            Spacer()
+                            ProgressView("Buscando no Discogs...")
+                            Spacer()
+                        }
+                        .listRowSeparator(.hidden)
+                    } else if viewModel.releases.isEmpty {
+                        HStack {
+                            Spacer()
+                            Text("Nenhum vinil encontrado.")
+                                .foregroundColor(.gray)
+                            Spacer()
+                        }
+                        .listRowSeparator(.hidden)
+                    } else {
+                        ForEach(viewModel.releases) { release in
+                            NavigationLink {
+                                ReleaseDetailView(release: release)
+                            } label: {
+                                ReleaseRow(release: release)
+                            }
                         }
                     }
-                }.padding()
-                .scrollIndicators(.hidden)
-                // Exibição do status ou da listagem
-                if viewModel.isLoading {
-                    Spacer()
-                    ProgressView("Buscando no Discogs...")
-                    Spacer()
-                } else if viewModel.releases.isEmpty {
-                    Spacer()
-                    Text("Nenhum vinil encontrado.")
-                        .foregroundColor(.gray)
-                    Spacer()
-                } else {
-                    List(viewModel.releases) { release in
-                        NavigationLink {
-                            ReleaseDetailView(release: release)
-                        } label: {
-                            ReleaseRow(release: release)
+                } header: {
+                    ScrollView(.horizontal) {
+                        HStack {
+                            ForEach(DiscogsGenre.allCases, id: \.self) { genero in
+                                GeneroTagView(
+                                    genero: genero,
+                                    tagSelecionada: $tagSelecionada
+                                )
+                            }
                         }
                     }
-                    .listStyle(PlainListStyle())
+                    .scrollIndicators(.hidden)
                 }
             }
             .navigationTitle("Pesquisar Discos")
             .searchable(text: $searchText, placement: .automatic, prompt: "Pesquisar Disco")
             
-            //.toolbarVisibility( .hidden, for: .tabBar)
-            .onSubmit(of: .search, {
+            .listStyle(.plain)
+            
+            .onSubmit(of: .search) {
                 Task {
                     try await viewModel.searchVinyl(query: searchText, tag: tagSelecionada)
                 }
-            })
+            }
             .onChange(of: tagSelecionada) {
                 Task {
                     try await viewModel.searchVinyl(query: searchText, tag: tagSelecionada)
