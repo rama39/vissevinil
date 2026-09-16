@@ -11,6 +11,7 @@ struct PesquisaGlobalView: View {
     @State private var viewModel = DiscogsSearchViewModel()
     @State private var searchText = ""
     @State var tagSelecionada: DiscogsGenre? = nil
+    @State var tipoSelecionado: TipoDeBusca = TipoDeBusca.disco
     
     var body: some View {
         NavigationStack {
@@ -42,17 +43,27 @@ struct PesquisaGlobalView: View {
                         }
                     }
                 } header: {
-                    ScrollView(.horizontal) {
+                    VStack {
                         HStack {
-                            ForEach(DiscogsGenre.allCases, id: \.self) { genero in
-                                GeneroTagView(
-                                    genero: genero,
-                                    tagSelecionada: $tagSelecionada
+                            ForEach(TipoDeBusca.allCases, id: \.self) { tipo in
+                                TipoDeBuscaView (
+                                    tipo: tipo,
+                                    tipoSelecionado: $tipoSelecionado
                                 )
                             }
                         }
+                        ScrollView(.horizontal) {
+                            HStack {
+                                ForEach(DiscogsGenre.allCases, id: \.self) { genero in
+                                    GeneroTagView(
+                                        genero: genero,
+                                        tagSelecionada: $tagSelecionada
+                                    )
+                                }
+                            }
+                        }
+                        .scrollIndicators(.hidden)
                     }
-                    .scrollIndicators(.hidden)
                 }
             }
             .navigationTitle("Pesquisar Discos")
