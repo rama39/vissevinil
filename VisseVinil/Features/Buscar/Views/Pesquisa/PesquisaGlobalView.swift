@@ -73,12 +73,29 @@ struct PesquisaGlobalView: View {
             
             .onSubmit(of: .search) {
                 Task {
-                    try await viewModel.searchVinyl(query: searchText, tag: tagSelecionada)
+                    try await viewModel.searchVinyl(
+                        query: searchText,
+                        tag: tagSelecionada,
+                        tipo: tipoSelecionado
+                    )
                 }
             }
             .onChange(of: tagSelecionada) {
                 Task {
-                    try await viewModel.searchVinyl(query: searchText, tag: tagSelecionada)
+                    try await viewModel.searchVinyl(
+                        query: searchText,
+                        tag: tagSelecionada,
+                        tipo: tipoSelecionado
+                    )
+                }
+            }
+            .onChange(of: tipoSelecionado) {
+                Task {
+                    try await viewModel.searchVinyl(
+                        query: searchText,
+                        tag: tagSelecionada,
+                        tipo: tipoSelecionado
+                    )
                 }
             }
         }

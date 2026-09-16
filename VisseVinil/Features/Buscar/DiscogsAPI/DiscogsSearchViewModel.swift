@@ -16,19 +16,34 @@ class DiscogsSearchViewModel {
     private let personalAccessToken = "zdAKBXOdFlUYuBVvMALPDcuQjKZoEDvvudzmwLYm"
     private let userAgent = "VisseVinil/0.0 (iOS; SwiftUI)"
     
-    private func getDiscogsRequest(query: String, tag: DiscogsGenre?) -> URLRequest? {
+    // get query item
+    private func getItem(_ name: String, _ value: String) -> URLQueryItem {
+        return URLQueryItem(name: name, value: value)
+    }
+    
+    private func getDiscogsRequest(
+        query: String,
+        tag: DiscogsGenre?,
+        tipo: TipoDeBusca
+    ) -> URLRequest? {
         guard !query.isEmpty || tag != nil else { return nil }
         
         var components = URLComponents(string: "https://api.discogs.com/database/search")!
-        var queryItems = [
-            URLQueryItem(name: "q", value: query),
-            URLQueryItem(name: "type", value: "master"),
-            URLQueryItem(name: "format", value: "vinyl"),
-            URLQueryItem(name: "per_page", value: "10"),
-            URLQueryItem(name: "page", value: "1")
-        ]
+        var queryItems: [URLQueryItem] = []
+        switch tipo {
+        case .artista:
+            queryItems.append( getItem("artist", query))
+        default:
+            queryItems.append( getItem("q", query) )
+        }
+        queryItems.append(contentsOf: [
+            getItem("type", "master"),
+            getItem("format", "vinyl"),
+            getItem("per_page", "20"),
+            getItem("page", "1")
+        ])
         if let tag {
-            queryItems.append(URLQueryItem(name: "genre", value: tag.rawValue))
+            queryItems.append( getItem("genre", tag.rawValue) )
         }
         components.queryItems = queryItems
 
@@ -42,10 +57,14 @@ class DiscogsSearchViewModel {
         return request
     }
 
-    func searchVinyl(query: String, tag: DiscogsGenre?) async throws {
+    func searchVinyl(
+        query: String,
+        tag: DiscogsGenre?,
+        tipo: TipoDeBusca
+    ) async throws {
         
         guard let request =
-                getDiscogsRequest(query: query, tag: tag) else { return }
+                getDiscogsRequest(query: query, tag: tag, tipo: tipo) else { return }
         
         self.isLoading = true
         self.errorMessage = nil
