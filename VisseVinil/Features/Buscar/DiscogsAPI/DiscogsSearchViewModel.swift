@@ -61,7 +61,7 @@ class DiscogsSearchViewModel {
         query: String,
         tag: DiscogsGenre?,
         tipo: TipoDeBusca
-    ) async throws {
+    ) async {
         
         guard let request =
                 getDiscogsRequest(query: query, tag: tag, tipo: tipo) else { return }
