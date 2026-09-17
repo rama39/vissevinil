@@ -9,6 +9,7 @@ import SwiftUI
 
 struct PesquisaGlobalView: View {
     @State private var viewModel = DiscogsSearchViewModel()
+    
     @State private var searchText = ""
     @State var tagSelecionada: DiscogsGenre? = nil
     @State var tipoSelecionado: TipoDeBusca = TipoDeBusca.disco
@@ -21,7 +22,7 @@ struct PesquisaGlobalView: View {
                     if viewModel.isLoading {
                         HStack {
                             Spacer()
-                            ProgressView("Buscando no Discogs...")
+                            ProgressView("Buscando discos...")
                             Spacer()
                         }
                         .listRowSeparator(.hidden)
