@@ -37,7 +37,7 @@ struct PesquisaGlobalView: View {
                     } else {
                         ForEach(viewModel.releases) { release in
                             NavigationLink {
-                                ReleaseDetailView(release: release)
+                                ReleaseDetailView(releaseId: release.id)
                             } label: {
                                 ReleaseRow(release: release)
                             }
