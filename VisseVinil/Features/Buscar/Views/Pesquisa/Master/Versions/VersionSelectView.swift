@@ -51,17 +51,21 @@ struct VersionSelectView: View {
                     }
                     .listRowSeparator(.hidden)
                 }
-                else if searchedVersions.isEmpty {
-                    HStack {
-                        Spacer()
-                        Text("Nenhuma versão encontrada")
-                            .foregroundColor(.gray)
-                        Spacer()
-                    }
-                    .listRowSeparator(.hidden)
-                } else {
-                    ForEach(searchedVersions) { version in
-                        VersionRow(version: version)
+                else {
+                    Group {
+                        if searchedVersions.isEmpty {
+                            HStack {
+                                Spacer()
+                                Text("Nenhuma versão encontrada")
+                                    .foregroundColor(.gray)
+                                Spacer()
+                            }
+                            .listRowSeparator(.hidden)
+                        } else {
+                            ForEach(searchedVersions) { version in
+                                VersionRow(version: version)
+                            }
+                        }
                     }
                     .searchable(text: $localSearch)
                 }
