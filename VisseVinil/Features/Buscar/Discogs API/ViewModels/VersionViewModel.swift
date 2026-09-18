@@ -28,7 +28,7 @@ class VersionViewModel {
         id: Int
     ) -> URLRequest? {
         guard let url =
-            URL(string: "https://api.discogs.com/masters/\(id)/versions?format=Vinyl&sort=released&sort_order=asc&per_page=50&page=1")
+            URL(string: "https://api.discogs.com/masters/\(id)/versions?format=Vinyl&sort=released&sort_order=asc&per_page=1000&page=1")
         else { return nil }
         
         var request = URLRequest(url: url)
