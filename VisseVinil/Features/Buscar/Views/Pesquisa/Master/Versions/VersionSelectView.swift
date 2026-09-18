@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct AdicionandoDiscoView: View {
-    @State private var releaseViewModel = DiscogsMasterVersionViewModel()
-    @Binding var discoAdicionado: DiscogsMasterResponse?
-    @State var master: DiscogsMasterResponse
+struct VersionSelectView: View {
+    @State private var releaseViewModel = VersionViewModel()
+    @State var master: MasterResponse
+    @Binding var discoAdicionado: MasterResponse?
     var body: some View {
         NavigationStack {
             List {
@@ -33,7 +33,7 @@ struct AdicionandoDiscoView: View {
                 else if let masterversion = releaseViewModel.masterversion,
                         let versions = masterversion.versions{
                     ForEach(versions) { version in
-                        AdicionadoDiscoOuterView(version: version)
+                        VersionRow(version: version)
                     }
                 }
             }

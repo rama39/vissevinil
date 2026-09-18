@@ -1,12 +1,4 @@
 //
-//  DiscogsMasterViewModel 2.swift
-//  VisseVinil
-//
-//  Created by Rian Antony Medeiros de Abreu on 17/09/26.
-//
-
-
-//
 //  DiscogsMasterViewModel.swift
 //  VisseVinil
 //
@@ -16,19 +8,19 @@
 import SwiftUI
 
 @Observable
-class DiscogsMasterVersionViewModel {
-    var masterversion: DiscogsMasterVersionResponse? = nil
+class MasterViewModel {
+    var master: MasterResponse? = nil
     var isLoading = false
     var errorMessage: String? = nil
     
     private let personalAccessToken = "zdAKBXOdFlUYuBVvMALPDcuQjKZoEDvvudzmwLYm"
     private let userAgent = "VisseVinil/0.0 (iOS; SwiftUI)"
     
-    private func getDiscogsMasterVersionRequest(
+    private func getDiscogsMasterRequest(
         id: Int
     ) -> URLRequest? {
         guard let url =
-            URL(string: "https://api.discogs.com/masters/\(id)/versions?format=Vinyl&sort=released&sort_order=asc&per_page=50&page=1")
+            URL(string: "https://api.discogs.com/masters/\(id)")
         else { return nil }
         
         var request = URLRequest(url: url)
@@ -39,7 +31,7 @@ class DiscogsMasterVersionViewModel {
         return request
     }
     
-    private func getMasterVersion(request: URLRequest) async {
+    private func performRequest(request: URLRequest) async {
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
             
@@ -53,15 +45,15 @@ class DiscogsMasterVersionViewModel {
             if httpResponse.statusCode == 200 {
                 do {
                     let decodedResponse =
-                    try JSONDecoder().decode(DiscogsMasterVersionResponse.self, from: data)
-                    self.masterversion = decodedResponse
+                    try JSONDecoder().decode(MasterResponse.self, from: data)
+                    self.master = decodedResponse
                 } catch {
                     self.errorMessage = "Erro de mapeamento interno."
                     print("Erro ao decodificar sucesso: \(error)")
                 }
             } else {
                 do {
-                    let errorResponse = try JSONDecoder().decode(DiscogsErrorResponse.self, from: data)
+                    let errorResponse = try JSONDecoder().decode(ErrorResponse.self, from: data)
                     self.errorMessage = errorResponse.message
                 } catch {
                     self.errorMessage = "Ocorreu um erro no servidor (Status \(httpResponse.statusCode))."
@@ -73,18 +65,18 @@ class DiscogsMasterVersionViewModel {
             self.errorMessage = "Erro carregando disco"
         }
     }
+    
 
-    func requestVinyl(
+    func requestMaster(
         id: Int
     ) async {
         
-        guard let versionRequest =
-                getDiscogsMasterVersionRequest(id: id) else { return }
+        guard let request = getDiscogsMasterRequest(id: id) else { return }
         
         self.isLoading = true
         self.errorMessage = nil
         
-        await getMasterVersion(request: versionRequest)
+        await performRequest(request: request)
         
         self.isLoading = false
     }

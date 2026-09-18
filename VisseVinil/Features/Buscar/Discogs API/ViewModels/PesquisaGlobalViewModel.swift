@@ -7,8 +7,9 @@
 
 import SwiftUI
 
+/// Viewmodel do endpoint search do discogs
 @Observable
-class DiscogsSearchViewModel {
+class PesquisaGlobalViewModel {
     var releases: [DiscogsRelease] = []
     var isLoading = false
     var errorMessage: String? = nil
@@ -21,7 +22,7 @@ class DiscogsSearchViewModel {
         return URLQueryItem(name: name, value: value)
     }
     
-    private func getDiscogsRequest(
+    private func getDiscogsSearchRequest(
         query: String,
         tag: DiscogsGenre?,
         tipo: TipoDeBusca
@@ -56,19 +57,8 @@ class DiscogsSearchViewModel {
         
         return request
     }
-
-    func searchVinyl(
-        query: String,
-        tag: DiscogsGenre?,
-        tipo: TipoDeBusca
-    ) async {
-        
-        guard let request =
-                getDiscogsRequest(query: query, tag: tag, tipo: tipo) else { return }
-        
-        self.isLoading = true
-        self.errorMessage = nil
-        
+    
+    private func performSearch(request: URLRequest) async {
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
             
@@ -77,7 +67,7 @@ class DiscogsSearchViewModel {
             
             if httpResponse.statusCode == 200 {
                 do {
-                    let decodedResponse = try JSONDecoder().decode(DiscogsSearchResponse.self, from: data)
+                    let decodedResponse = try JSONDecoder().decode(PesquisaGlobalResponse.self, from: data)
                     self.releases = decodedResponse.results
                 } catch {
                     self.errorMessage = "Erro de mapeamento interno."
@@ -85,7 +75,7 @@ class DiscogsSearchViewModel {
                 }
             } else {
                 do {
-                    let errorResponse = try JSONDecoder().decode(DiscogsErrorResponse.self, from: data)
+                    let errorResponse = try JSONDecoder().decode(ErrorResponse.self, from: data)
                     self.errorMessage = errorResponse.message
                 } catch {
                     self.errorMessage = "Ocorreu um erro no servidor (Status \(httpResponse.statusCode))."
@@ -96,6 +86,19 @@ class DiscogsSearchViewModel {
         } catch {
             self.errorMessage = "Erro carregando discos"
         }
+    }
+
+    func search(
+        query: String,
+        tag: DiscogsGenre?,
+        tipo: TipoDeBusca
+    ) async {
+        
+        guard let request = getDiscogsSearchRequest(query: query, tag: tag, tipo: tipo) else { return }
+        self.isLoading = true
+        self.errorMessage = nil
+        
+        await performSearch(request: request)
         
         self.isLoading = false
     }

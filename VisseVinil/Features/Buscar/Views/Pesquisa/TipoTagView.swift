@@ -1,5 +1,5 @@
 //
-//  GeneroTagView 2.swift
+//  TipoTagView.swift
 //  VisseVinil
 //
 //  Created by Rian Antony Medeiros de Abreu on 16/09/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TipoDeBuscaView: View {
+struct TipoTagView: View {
     let tipo: TipoDeBusca
     @Binding var tipoSelecionado: TipoDeBusca
     var selecionado: Bool { tipoSelecionado == tipo }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct InfoRow: View {
+struct MasterInfoRow: View {
     let title: String
     let value: String?
     

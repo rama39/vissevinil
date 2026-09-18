@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ReleaseRow: View {
+struct SearchRow: View {
     
     @State var release: DiscogsRelease
     

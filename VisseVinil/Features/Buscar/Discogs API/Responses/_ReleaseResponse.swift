@@ -12,7 +12,7 @@
 import Foundation
 
 // MARK: - DiscogsReleaseResponse
-struct DiscogsReleaseResponse: Codable {
+struct _ReleaseResponse: Codable {
     let title: String?
     let id: Int?
     let artists: [ReleaseArtist]?

@@ -12,7 +12,7 @@
 import Foundation
 
 // MARK: - DiscogsMasterResponse
-struct DiscogsMasterResponse: Codable, Identifiable {
+struct MasterResponse: Codable, Identifiable {
     let styles: [String]?
     let genres: [String]?
     let videos: [MasterVideo]?

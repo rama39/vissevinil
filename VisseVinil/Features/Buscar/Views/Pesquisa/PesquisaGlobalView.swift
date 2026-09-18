@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct PesquisaGlobalView: View {
-    @State private var viewModel = DiscogsSearchViewModel()
+    @State private var searchViewModel = PesquisaGlobalViewModel()
     
     @State private var searchText = ""
     @State var tagSelecionada: DiscogsGenre? = nil
@@ -19,14 +19,14 @@ struct PesquisaGlobalView: View {
             List {
                 Section {
                     // Exibição do status ou da listagem
-                    if viewModel.isLoading {
+                    if searchViewModel.isLoading {
                         HStack {
                             Spacer()
                             ProgressView("Buscando discos...")
                             Spacer()
                         }
                         .listRowSeparator(.hidden)
-                    } else if viewModel.releases.isEmpty {
+                    } else if searchViewModel.releases.isEmpty {
                         HStack {
                             Spacer()
                             Text("Nenhum vinil encontrado.")
@@ -35,11 +35,11 @@ struct PesquisaGlobalView: View {
                         }
                         .listRowSeparator(.hidden)
                     } else {
-                        ForEach(viewModel.releases) { release in
+                        ForEach(searchViewModel.releases) { master in //search filters for master vinyl versions
                             NavigationLink {
-                                ReleaseDetailView(releaseId: release.id)
+                                MasterView(master_id: master.id)
                             } label: {
-                                ReleaseRow(release: release)
+                                SearchRow(release: master)
                             }
                         }
                     }
@@ -47,7 +47,7 @@ struct PesquisaGlobalView: View {
                     VStack {
                         HStack {
                             ForEach(TipoDeBusca.allCases, id: \.self) { tipo in
-                                TipoDeBuscaView (
+                                TipoTagView (
                                     tipo: tipo,
                                     tipoSelecionado: $tipoSelecionado
                                 )
@@ -79,7 +79,7 @@ struct PesquisaGlobalView: View {
     }
     private func performSearch() {
         Task {
-            await viewModel.searchVinyl(query: searchText, tag: tagSelecionada, tipo: tipoSelecionado)
+            await searchViewModel.search(query: searchText, tag: tagSelecionada, tipo: tipoSelecionado)
         }
     }
 }

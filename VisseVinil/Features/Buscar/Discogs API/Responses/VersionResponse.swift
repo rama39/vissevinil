@@ -13,7 +13,7 @@
 import Foundation
 
 // MARK: - DiscogsMasterVersionResponse
-struct DiscogsMasterVersionResponse: Codable {
+struct VersionResponse: Codable {
     let pagination: MasterVersionPagination?
     let versions: [MasterVersionVersion]?
 

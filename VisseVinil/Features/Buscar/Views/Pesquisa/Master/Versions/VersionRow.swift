@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AdicionadoDiscoOuterView: View {
+struct VersionRow: View {
     @State var version: MasterVersionVersion
     var body: some View {
         HStack {
