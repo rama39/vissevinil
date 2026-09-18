@@ -14,6 +14,9 @@ class PesquisaGlobalViewModel {
     var isLoading = false
     var errorMessage: String? = nil
     
+    private var currentPage = 1
+    private var pagination: SearchPagination?
+    
     private let personalAccessToken = "zdAKBXOdFlUYuBVvMALPDcuQjKZoEDvvudzmwLYm"
     private let userAgent = "VisseVinil/0.0 (iOS; SwiftUI)"
     
@@ -41,7 +44,7 @@ class PesquisaGlobalViewModel {
             getItem("type", "master"),
             getItem("format", "vinyl"),
             getItem("per_page", "20"),
-            getItem("page", "1")
+            getItem("page", String(currentPage))
         ])
         if let tag {
             queryItems.append( getItem("genre", tag.rawValue) )
@@ -68,7 +71,8 @@ class PesquisaGlobalViewModel {
             if httpResponse.statusCode == 200 {
                 do {
                     let decodedResponse = try JSONDecoder().decode(PesquisaGlobalResponse.self, from: data)
-                    self.releases = decodedResponse.results
+                    self.releases += decodedResponse.results
+                    self.pagination = decodedResponse.pagination
                 } catch {
                     self.errorMessage = "Erro de mapeamento interno."
                     print("Erro ao decodificar sucesso: \(error)")
@@ -101,5 +105,13 @@ class PesquisaGlobalViewModel {
         await performSearch(request: request)
         
         self.isLoading = false
+    }
+    
+    func movePage() {
+        
+        guard let pagination else { return }
+        if pagination.pages == currentPage { return }
+        
+        currentPage += 1
     }
 }

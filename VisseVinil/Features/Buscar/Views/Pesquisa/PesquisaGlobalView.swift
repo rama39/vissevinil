@@ -18,15 +18,7 @@ struct PesquisaGlobalView: View {
         NavigationStack {
             List {
                 Section {
-                    // Exibição do status ou da listagem
-                    if searchViewModel.isLoading {
-                        HStack {
-                            Spacer()
-                            ProgressView("Buscando discos...")
-                            Spacer()
-                        }
-                        .listRowSeparator(.hidden)
-                    } else if searchViewModel.releases.isEmpty {
+                    if searchViewModel.releases.isEmpty {
                         HStack {
                             Spacer()
                             Text("Nenhum vinil encontrado.")
@@ -41,7 +33,22 @@ struct PesquisaGlobalView: View {
                             } label: {
                                 SearchRow(release: master)
                             }
+                            .onAppear {
+                                if master.id == searchViewModel.releases[searchViewModel.releases.count-1].id {
+                                    searchViewModel.movePage()
+                                    performSearch()
+                                }
+                            }
                         }
+                    }
+                    // Exibição do status ou da listagem
+                    if searchViewModel.isLoading {
+                        HStack {
+                            Spacer()
+                            ProgressView("Buscando discos...")
+                            Spacer()
+                        }
+                        .listRowSeparator(.hidden)
                     }
                 } header: {
                     VStack {
