@@ -10,11 +10,14 @@ import SwiftData
 
 @Model
 final class Caixa {
-    var rgba: RGBAColor? = nil
+    var title: String
+    var rgba: RGBAColor
     
     @Relationship(deleteRule: .noAction)
-    var discos: [Disco] = []
+    var discos: [DiscoModel] = []
     
-    init() {
+    init(title: String, rgba: RGBAColor) {
+        self.title = title
+        self.rgba = rgba
     }
 }
