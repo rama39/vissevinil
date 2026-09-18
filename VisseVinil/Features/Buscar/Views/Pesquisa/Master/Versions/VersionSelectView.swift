@@ -12,7 +12,25 @@ struct VersionSelectView: View {
     @State var master: MasterResponse
     @Binding var selectedMaster: MasterResponse?
     
-    
+    @State var localSearch = ""
+    var searchedVersions: [MasterVersion] {
+        
+        guard let masterversion = versionViewModel.masterversion,
+              let versions = masterversion.versions
+        else { return [] }
+        
+        return versions.filter({ version in
+            
+            let searchName = [
+                master.artists?.map{$0.name ?? ""}.joined(separator: ", ") ?? "",
+                master.title ?? "", version.country ?? "", version.released ?? ""
+            ].joined(separator: " ")
+            
+            return localSearch.isEmpty ||
+                   searchName.localizedCaseInsensitiveContains(localSearch)
+            
+        })
+    }
     
     var body: some View {
         NavigationStack {
@@ -33,11 +51,19 @@ struct VersionSelectView: View {
                     }
                     .listRowSeparator(.hidden)
                 }
-                else if let masterversion = versionViewModel.masterversion,
-                        let versions = masterversion.versions{
-                    ForEach(versions) { version in
+                else if searchedVersions.isEmpty {
+                    HStack {
+                        Spacer()
+                        Text("Nenhuma versão encontrada")
+                            .foregroundColor(.gray)
+                        Spacer()
+                    }
+                    .listRowSeparator(.hidden)
+                } else {
+                    ForEach(searchedVersions) { version in
                         VersionRow(version: version)
                     }
+                    .searchable(text: $localSearch)
                 }
             }
             .toolbar {

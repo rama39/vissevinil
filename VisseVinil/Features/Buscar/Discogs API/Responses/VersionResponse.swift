@@ -15,7 +15,7 @@ import Foundation
 // MARK: - DiscogsMasterVersionResponse
 struct VersionResponse: Codable {
     let pagination: MasterVersionPagination?
-    let versions: [MasterVersionVersion]?
+    let versions: [MasterVersion]?
 
     enum CodingKeys: String, CodingKey {
         case pagination = "pagination"
@@ -45,7 +45,7 @@ struct MasterVersionUrls: Codable {
 }
 
 // MARK: - Version
-struct MasterVersionVersion: Codable, Identifiable {
+struct MasterVersion: Codable, Identifiable {
     let status: String?
     let stats: MasterVersionStats?
     let thumb: String?

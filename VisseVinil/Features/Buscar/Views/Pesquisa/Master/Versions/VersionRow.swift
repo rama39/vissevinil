@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct VersionRow: View {
-    @State var version: MasterVersionVersion
+    @State var version: MasterVersion
     var body: some View {
         HStack {
             if  let thumbUrl = version.thumb,
