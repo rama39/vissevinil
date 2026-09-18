@@ -70,6 +70,8 @@ struct VersionSelectView: View {
                     .searchable(text: $localSearch)
                 }
             }
+            .navigationTitle("Versões")
+            .navigationBarTitleDisplayMode(.automatic)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button { selectedMaster = nil } label: {
