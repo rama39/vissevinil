@@ -9,12 +9,12 @@ import Foundation
 import SwiftData
 
 @Model
-final class Disco {
+final class DiscoModel {
     var nome: String = "Disco"
     var posicao: Int
     
-    @Relationship(deleteRule: .cascade, inverse: \Evento.disco)
-    var eventos: [Evento] = []
+    @Relationship(deleteRule: .cascade, inverse: \EventoModel.disco)
+    var eventos: [EventoModel] = []
     
     init(posicao: Int) {
         self.posicao = posicao
