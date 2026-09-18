@@ -9,11 +9,11 @@ import Foundation
 import SwiftData
 
 @Model
-final class Caixa {
+final class CaixaModel {
     var title: String
     var rgba: RGBAColor
     
-    @Relationship(deleteRule: .noAction)
+    @Relationship(deleteRule: .nullify, inverse: \DiscoModel.caixa)
     var discos: [DiscoModel] = []
     
     init(title: String, rgba: RGBAColor) {

@@ -25,6 +25,8 @@ final class DiscoModel {
     @Relationship(deleteRule: .cascade, inverse: \EventoModel.disco)
     var eventos: [EventoModel] = []
     
+    var caixa: CaixaModel?
+    
     init(
         title: String, artists: [String], year: String, country: String, genres: [String], styles: [String],
         id: Int,
