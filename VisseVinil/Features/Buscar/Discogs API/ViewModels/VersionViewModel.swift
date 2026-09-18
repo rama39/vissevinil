@@ -74,7 +74,7 @@ class VersionViewModel {
         }
     }
 
-    func requestVinyl(
+    func requestVersions(
         id: Int
     ) async {
         

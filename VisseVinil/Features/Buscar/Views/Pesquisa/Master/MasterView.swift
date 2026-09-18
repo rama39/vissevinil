@@ -11,7 +11,7 @@ struct MasterView: View {
     let master_id: Int //snake case to match API documentation
     @State private var masterViewModel = MasterViewModel()
     
-    @State var discoAdicionado: MasterResponse? = nil
+    @State var selectedMaster: MasterResponse? = nil
     @State var tempMaster: MasterResponse? = nil
     
     var body: some View {
@@ -54,15 +54,15 @@ struct MasterView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
-                    discoAdicionado = tempMaster
+                    selectedMaster = tempMaster
                 } label: {
                     Image(systemName: "plus")
                 }
             }
         }
         
-        .fullScreenCover(item: $discoAdicionado) { master in
-            VersionSelectView(master: master, discoAdicionado: $discoAdicionado)
+        .fullScreenCover(item: $selectedMaster) { master in
+            VersionSelectView(master: master, selectedMaster: $selectedMaster)
         }
         
         .onAppear {

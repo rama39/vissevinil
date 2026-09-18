@@ -8,20 +8,23 @@
 import SwiftUI
 
 struct VersionSelectView: View {
-    @State private var releaseViewModel = VersionViewModel()
+    @State private var versionViewModel = VersionViewModel()
     @State var master: MasterResponse
-    @Binding var discoAdicionado: MasterResponse?
+    @Binding var selectedMaster: MasterResponse?
+    
+    
+    
     var body: some View {
         NavigationStack {
             List {
-                if releaseViewModel.isLoading {
+                if versionViewModel.isLoading {
                     HStack {
                         Spacer()
                         ProgressView("Carregando disco...")
                         Spacer()
                     }
                     .listRowSeparator(.hidden)
-                } else if releaseViewModel.masterversion == nil {
+                } else if versionViewModel.masterversion == nil {
                     HStack {
                         Spacer()
                         Text("Erro carregando vinil.")
@@ -30,7 +33,7 @@ struct VersionSelectView: View {
                     }
                     .listRowSeparator(.hidden)
                 }
-                else if let masterversion = releaseViewModel.masterversion,
+                else if let masterversion = versionViewModel.masterversion,
                         let versions = masterversion.versions{
                     ForEach(versions) { version in
                         VersionRow(version: version)
@@ -39,7 +42,7 @@ struct VersionSelectView: View {
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button { discoAdicionado = nil } label: {
+                    Button { selectedMaster = nil } label: {
                         Image(systemName: "xmark")
                     }
                 }
@@ -47,7 +50,7 @@ struct VersionSelectView: View {
         }
         .onAppear {
             Task {
-                await releaseViewModel.requestVinyl(id: master.id ?? 0)
+                await versionViewModel.requestVersions(id: master.id ?? 0)
             }
         }
     }
