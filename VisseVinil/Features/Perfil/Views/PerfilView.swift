@@ -3,16 +3,58 @@
 //  VisseVinil
 //
 //  Created by Rian Antony Medeiros de Abreu on 03/09/26.
-//
+
 
 import SwiftUI
+import SwiftData
 
 struct PerfilView: View {
-    var body: some View {
-        Text("Perfil")
-    }
-}
+    @Environment(\.modelContext) private var modelContext
+    @Query private var perfis: [PerfilModel]
 
-#Preview {
-    PerfilView()
+    var body: some View {
+        ZStack {
+            Color(red: 0.98, green: 0.97, blue: 0.95).ignoresSafeArea()
+
+            if let profile = perfis.first {
+                ScrollView {
+                    VStack(spacing: 32) {
+                        ProfileHeaderView(profile: profile) {
+                            // TODO: navegar para tela de edição de perfil
+                        }
+
+                        if !profile.favoriteRecords.isEmpty {
+                            VStack(alignment: .leading, spacing: 14) {
+                                Text("Discos favoritos")
+                                    .font(.system(size: 20, weight: .semibold))
+                                    .foregroundStyle(Color(red: 0.60, green: 0.38, blue: 0.20))
+                                    .padding(.horizontal, 20)
+
+                                DiscosFavCarrossel(records: profile.favoriteRecords)
+                            }
+                        }
+
+                        if !profile.myRecords.isEmpty {
+                            RecordSectionView(title: "Meus Discos", records: profile.myRecords, showLocation: true) {
+                                // TODO: navegar para a lista completa de discos do usuário
+                            }
+                        }
+
+                        if !profile.wishlistRecords.isEmpty {
+                            RecordSectionView(title: "Wishlist", records: profile.wishlistRecords) {
+                                // TODO: navegar para a wishlist completa
+                            }
+                        }
+                    }
+                    .padding(.top, 12)
+                    .padding(.bottom, 24)
+                }
+            }
+        }
+        .onAppear {
+            // Só cria um perfil se ainda não existir nenhum salvo.
+            guard perfis.isEmpty else { return }
+            modelContext.insert(PerfilModel.exemplo)
+        }
+    }
 }
