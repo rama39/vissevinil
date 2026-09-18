@@ -13,7 +13,8 @@
 import Foundation
 
 // MARK: - DiscogsSearchResponse
-struct DiscogsSearchResponse: Codable {
+/// Response do endpoint search do Discogs
+struct PesquisaGlobalResponse: Codable {
     let pagination: Pagination
     let results: [DiscogsRelease]
 
@@ -97,8 +98,4 @@ struct Community: Codable {
         case want = "want"
         case have = "have"
     }
-}
-
-struct DiscogsErrorResponse: Decodable, Sendable {
-    let message: String
 }

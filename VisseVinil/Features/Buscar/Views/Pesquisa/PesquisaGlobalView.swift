@@ -8,42 +8,78 @@
 import SwiftUI
 
 struct PesquisaGlobalView: View {
-    @State private var viewModel = DiscogsSearchViewModel()
+    @State private var searchViewModel = PesquisaGlobalViewModel()
+    
     @State private var searchText = ""
+    @State var tagSelecionada: DiscogsGenre? = nil
+    @State var tipoSelecionado: TipoDeBusca = TipoDeBusca.disco
     
     var body: some View {
-        NavigationView {
-            VStack {
-                // Exibição do status ou da listagem
-                if viewModel.isLoading {
-                    Spacer()
-                    ProgressView("Buscando no Discogs...")
-                    Spacer()
-                } else if viewModel.releases.isEmpty {
-                    Spacer()
-                    Text("Nenhum vinil encontrado.")
-                        .foregroundColor(.gray)
-                    Spacer()
-                } else {
-                    List(viewModel.releases) { release in
-                        NavigationLink {
-                            ReleaseDetailView(release: release)
-                        } label: {
-                            ReleaseRow(release: release)
+        NavigationStack {
+            List {
+                Section {
+                    // Exibição do status ou da listagem
+                    if searchViewModel.isLoading {
+                        HStack {
+                            Spacer()
+                            ProgressView("Buscando discos...")
+                            Spacer()
+                        }
+                        .listRowSeparator(.hidden)
+                    } else if searchViewModel.releases.isEmpty {
+                        HStack {
+                            Spacer()
+                            Text("Nenhum vinil encontrado.")
+                                .foregroundColor(.gray)
+                            Spacer()
+                        }
+                        .listRowSeparator(.hidden)
+                    } else {
+                        ForEach(searchViewModel.releases) { master in //search filters for master vinyl versions
+                            NavigationLink {
+                                MasterView(master_id: master.id)
+                            } label: {
+                                SearchRow(release: master)
+                            }
                         }
                     }
-                    .listStyle(PlainListStyle())
+                } header: {
+                    VStack {
+                        HStack {
+                            ForEach(TipoDeBusca.allCases, id: \.self) { tipo in
+                                TipoTagView (
+                                    tipo: tipo,
+                                    tipoSelecionado: $tipoSelecionado
+                                )
+                            }
+                        }
+                        ScrollView(.horizontal) {
+                            HStack {
+                                ForEach(DiscogsGenre.allCases, id: \.self) { genero in
+                                    GeneroTagView(
+                                        genero: genero,
+                                        tagSelecionada: $tagSelecionada
+                                    )
+                                }
+                            }
+                        }
+                        .scrollIndicators(.hidden)
+                    }
                 }
             }
             .navigationTitle("Pesquisar Discos")
             .searchable(text: $searchText, placement: .automatic, prompt: "Pesquisar Disco")
             
-            .toolbarVisibility( .hidden, for: .tabBar)
-            .onSubmit(of: .search, {
-                Task {
-                    try await viewModel.searchVinyl(query: searchText)
-                }
-            })
+            .listStyle(.plain)
+            
+            .onSubmit(of: .search) { performSearch() }
+            .onChange(of: tagSelecionada) { performSearch() }
+            .onChange(of: tipoSelecionado) { performSearch() }
+        }
+    }
+    private func performSearch() {
+        Task {
+            await searchViewModel.search(query: searchText, tag: tagSelecionada, tipo: tipoSelecionado)
         }
     }
 }
