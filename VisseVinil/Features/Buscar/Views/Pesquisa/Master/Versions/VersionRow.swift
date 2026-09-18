@@ -33,6 +33,7 @@ struct VersionRow: View {
                 Text(version.title ?? "")
                 Text("\(version.country ?? "?"), \(version.released ?? "?")")
             }
+            Spacer()
         }
     }
 }
