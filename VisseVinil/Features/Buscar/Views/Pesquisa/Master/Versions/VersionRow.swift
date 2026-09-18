@@ -29,9 +29,9 @@ struct VersionRow: View {
                     .frame(width: 100, height: 100)
                     .foregroundColor(.gray)
             }
-            VStack {
+            VStack(alignment: .leading) {
                 Text(version.title ?? "")
-                Text("\(version.country ?? "")")
+                Text("\(version.country ?? "?"), \(version.released ?? "?")")
             }
         }
     }
