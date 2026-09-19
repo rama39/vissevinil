@@ -15,20 +15,7 @@ struct ColecaoPesquisaRow: View {
         
         HStack(alignment: .top, spacing: 12) {
             // Carrega a imagem da capa de forma assíncrona
-            if let thumb = disco.thumb,
-               let uiImage = UIImage(data: thumb) {
-                Image(uiImage: uiImage)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 60, height: 60)
-                .cornerRadius(4)
-                .clipped()
-            } else {
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(Color.gray.opacity(0.3))
-                    .frame(width: 60, height: 60)
-                    .overlay(Image(systemName: "music.note"))
-            }
+            frameThumb(disco.thumbData, frame: 60, radius: 4)
             
             VStack(alignment: .leading, spacing: 4) {
                 Text(disco.title)

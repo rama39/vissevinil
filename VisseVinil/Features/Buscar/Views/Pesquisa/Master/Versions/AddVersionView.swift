@@ -35,6 +35,7 @@ struct AddVersionView: View {
             country: version.country ?? "",
             genres: master.genres ?? [],
             styles: master.styles ?? [],
+            thumbData: version.thumbData,
             id: version.id ?? 0,
             posicao: discos.count
         )

@@ -28,10 +28,12 @@ final class _DiscoModel {
     var caixa: CaixaModel?
     
     @Attribute(.externalStorage)
-    var thumb: Data? = nil
+    var thumbData: Data?
     
     init(
-        title: String, artists: [String], year: String, country: String, genres: [String], styles: [String],
+        title: String, artists: [String], year: String, country: String,
+        genres: [String], styles: [String],
+        thumbData: Data?,
         id: Int,
         posicao: Int
     ) {
@@ -41,6 +43,7 @@ final class _DiscoModel {
         self.country = country
         self.genres = genres
         self.styles = styles
+        self.thumbData = thumbData
         self.id = id
         self.posicao = posicao
     }

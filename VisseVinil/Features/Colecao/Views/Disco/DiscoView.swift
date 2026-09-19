@@ -13,6 +13,7 @@ struct DiscoView: View {
     
     var body: some View {
         VStack {
+            frameThumb(disco.thumbData)
             Text("Conteúdo do disco")
         }
         .navigationTitle(disco.title)
