@@ -85,6 +85,15 @@ class VersionViewModel {
         
         await performRequest(request: versionRequest)
         
+        if nil != masterversion,
+           nil != masterversion!.versions {
+            for i in masterversion!.versions!.indices {
+                if let thumb = masterversion!.versions![i].thumb {
+                    masterversion!.versions![i].thumbData = await getThumb(thumb: thumb)
+                }
+            }
+        }
+        
         self.isLoading = false
     }
 }
