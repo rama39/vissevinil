@@ -12,6 +12,7 @@ import SwiftData
 final class _DiscoModel {
     var title: String
     var artists: [String]
+    var artistsListed: String { artists.joined(separator: ", ") }
     var year: String
     var country: String
     var genres: [String]
