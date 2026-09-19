@@ -13,8 +13,8 @@ final class CaixaModel {
     var title: String
     var rgba: RGBAColor
     
-    @Relationship(deleteRule: .nullify, inverse: \DiscoModel.caixa)
-    var discos: [DiscoModel] = []
+    @Relationship(deleteRule: .nullify, inverse: \_DiscoModel.caixa)
+    var discos: [_DiscoModel] = []
     
     init(title: String, rgba: RGBAColor) {
         self.title = title

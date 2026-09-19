@@ -9,7 +9,7 @@ import Foundation
 import SwiftData
 
 @Model
-final class DiscoModel {
+final class _DiscoModel {
     var title: String
     var artists: [String]
     var year: String
@@ -26,6 +26,9 @@ final class DiscoModel {
     var eventos: [EventoModel] = []
     
     var caixa: CaixaModel?
+    
+    @Attribute(.externalStorage)
+    var thumb: Data? = nil
     
     init(
         title: String, artists: [String], year: String, country: String, genres: [String], styles: [String],
