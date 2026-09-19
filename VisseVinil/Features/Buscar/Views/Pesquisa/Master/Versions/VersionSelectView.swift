@@ -43,7 +43,7 @@ struct VersionSelectView: View {
                 if versionViewModel.isLoading {
                     HStack {
                         Spacer()
-                        ProgressView("Carregando disco...")
+                        ProgressView("Carregando versões...")
                         Spacer()
                     }
                     .listRowSeparator(.hidden)
@@ -78,7 +78,6 @@ struct VersionSelectView: View {
                                         saveDisco(version: version)
                                     }
                                 }, saved: savedIndex != nil)
-                                Text("\(version.id)")
                             }
                         }
                     }
