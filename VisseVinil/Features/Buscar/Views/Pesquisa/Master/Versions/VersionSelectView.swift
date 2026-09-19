@@ -63,7 +63,7 @@ struct VersionSelectView: View {
                             .listRowSeparator(.hidden)
                         } else {
                             ForEach(searchedVersions) { version in
-                                VersionRow(version: version)
+                                VersionRow(master: master, version: version)
                             }
                         }
                     }

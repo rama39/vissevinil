@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension Caixa {
+extension CaixaModel {
     var cor: Color {
         get { Color(rgba) }
         set { rgba = newValue.toRGBA }

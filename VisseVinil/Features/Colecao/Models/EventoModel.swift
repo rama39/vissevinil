@@ -15,12 +15,12 @@ enum TipoEvento: String, Codable {
 }
 
 @Model
-final class Evento {
+final class EventoModel {
     var data: Date = Date()
     var tipo: TipoEvento
     var comentario: String?
     
-    var disco: Disco?
+    var disco: _DiscoModel?
     
     init(_ tipo: TipoEvento, _ comentario: String = "") {
         self.tipo = tipo

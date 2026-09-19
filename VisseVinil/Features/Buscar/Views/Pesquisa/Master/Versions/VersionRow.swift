@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct VersionRow: View {
+    @State var master: MasterResponse
     @State var version: MasterVersion
     var body: some View {
         HStack {
+            AddVersionView(master: master, version: version)
             if  let thumbUrl = version.thumb,
                 let url = URL(string: thumbUrl) {
                 AsyncImage(url: url) { image in
