@@ -59,7 +59,7 @@ struct MasterVersion: Codable, Identifiable {
     let catno: String?
     let resourceURL: String?
     let year: Int?
-    let id: Int?
+    let id: Int
 
     enum CodingKeys: String, CodingKey {
         case status = "status"

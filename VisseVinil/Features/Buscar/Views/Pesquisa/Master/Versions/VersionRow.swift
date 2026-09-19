@@ -8,11 +8,16 @@
 import SwiftUI
 
 struct VersionRow: View {
-    @State var master: MasterResponse
-    @State var version: MasterVersion
+    
+    let master: MasterResponse
+    let version: MasterVersion
+    
+    let action: ()->Void
+    let saved: Bool
+    
     var body: some View {
         HStack {
-            AddVersionView(master: master, version: version)
+            AddVersionView(master: master, version: version, action: action, saved: saved)
             frameThumb(version.thumbData)
             VStack(alignment: .leading) {
                 Text(version.title ?? "")
