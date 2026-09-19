@@ -114,4 +114,23 @@ class PesquisaGlobalViewModel {
         
         currentPage += 1
     }
+    
+    private func resetPage() {
+        currentPage = 1
+        self.releases = []
+        self.pagination = nil
+    }
+    
+    func resetSearch(
+        query: String,
+        tag: DiscogsGenre?,
+        tipo: TipoDeBusca
+    ) async {
+        
+        resetPage()
+        
+        await search(query: query, tag: tag, tipo: tipo)
+        
+    }
+    
 }

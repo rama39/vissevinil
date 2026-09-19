@@ -36,7 +36,7 @@ struct PesquisaGlobalView: View {
                             .onAppear {
                                 if master.id == searchViewModel.releases[searchViewModel.releases.count-1].id {
                                     searchViewModel.movePage()
-                                    performSearch()
+                                    search()
                                 }
                             }
                         }
@@ -79,14 +79,25 @@ struct PesquisaGlobalView: View {
             
             .listStyle(.plain)
             
-            .onSubmit(of: .search) { performSearch() }
-            .onChange(of: tagSelecionada) { performSearch() }
-            .onChange(of: tipoSelecionado) { performSearch() }
+            .onSubmit(of: .search) { resetSearch() }
+            .onChange(of: tagSelecionada) { resetSearch() }
+            .onChange(of: tipoSelecionado) { resetSearch() }
         }
     }
-    private func performSearch() {
+    private func search() {
         Task {
-            await searchViewModel.search(query: searchText, tag: tagSelecionada, tipo: tipoSelecionado)
+            await searchViewModel.search(
+                query: searchText,
+                tag: tagSelecionada,
+                tipo: tipoSelecionado)
+        }
+    }
+    private func resetSearch() {
+        Task {
+            await searchViewModel.resetSearch(
+                query: searchText,
+                tag: tagSelecionada,
+                tipo: tipoSelecionado)
         }
     }
 }
