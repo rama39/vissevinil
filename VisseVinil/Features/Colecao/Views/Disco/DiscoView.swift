@@ -9,9 +9,13 @@ import SwiftUI
 
 struct DiscoView: View {
     
-    var disco: _DiscoModel
+    @Bindable var disco: _DiscoModel
     
     var body: some View {
-        Text(disco.title)
+        VStack {
+            Text("Conteúdo do disco")
+        }
+        .navigationTitle(disco.title)
+        .navigationBarTitleDisplayMode(.automatic)
     }
 }
