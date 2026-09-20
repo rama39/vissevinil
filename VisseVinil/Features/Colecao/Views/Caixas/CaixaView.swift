@@ -8,11 +8,35 @@
 import SwiftUI
 
 struct CaixaView: View {
+    
+    @Bindable var caixa: CaixaModel
+    
+    @State var adicionandoDisco: Bool = false
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List(caixa.discos) { disco in
+            NavigationLink {
+                DiscoView(disco: disco)
+            } label: {
+                ColecaoPesquisaRow(disco: disco)
+            }
+        }
+        .navigationTitle($caixa.title)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    adicionandoDisco.toggle()
+                } label: {
+                    Image(systemName: "plus")
+                }
+            }
+        }
+        .sheet(isPresented: $adicionandoDisco) {
+            AddDiscoView(caixa: caixa, adicionandoDisco: $adicionandoDisco)
+        }
     }
 }
 
-#Preview {
-    CaixaView()
-}
+//#Preview {
+//    CaixaView()
+//}
