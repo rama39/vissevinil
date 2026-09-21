@@ -13,7 +13,8 @@ struct EditPerfilView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var perfis: [PerfilModel]
     
-    var tempPerfil = PerfilModel(name: "Marrocos")
+    @State var tempPerfil = TempPerfil(name: "")
+    @Binding var editando: Bool
     
     var body: some View {
         NavigationStack{
@@ -35,7 +36,7 @@ struct EditPerfilView: View {
                     .buttonStyle(.borderedProminent)
                 Form{
                     Section{
-                        TextField(tempPerfil.name, text: .constant(""))
+                        TextField(tempPerfil.name, text: $tempPerfil.name)
                       
                         
                     }
@@ -46,7 +47,13 @@ struct EditPerfilView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(role: .confirm, action: {
-                        print("Pressed")
+                        let userPerfil = perfis.first
+                        // if userPerfil != nil
+                        // let novouserPerfil = userPerfil!
+                        if let userPerfil { // verifica se conseguiu/existe um user perfil
+                            tempPerfil.toData(perfil: userPerfil)
+                        }
+                        editando = false
                     }, label: {
                         Image(systemName:"checkmark")
                     } )
@@ -54,9 +61,9 @@ struct EditPerfilView: View {
                 }
                 ToolbarItem(placement: .topBarLeading) {
                     Button(action: {
-                        print("Pressed")
+                        editando = false
                     }, label: {
-                        Image(systemName:"checkmark")
+                        Image(systemName:"xmark")
                     } )
                     
                 }
@@ -73,5 +80,22 @@ struct EditPerfilView: View {
 }
 
 #Preview {
-    EditPerfilView()
+    @Previewable @State var tabSelecionada: VisseVinilTabs = .perfil
+    
+        TabView(selection: $tabSelecionada) {
+            Tab("Mapa", systemImage: "map", value: .mapa) {
+                MapaView()
+            }
+            Tab("Buscar", systemImage: "magnifyingglass", value: .buscar) {
+                BuscarView()
+            }
+            Tab("Coleção", systemImage: "music.note.square.stack.fill", value: .colecao) {
+                ColecaoView()
+            }
+            Tab("Perfil", systemImage: "person", value: .perfil) {
+                PerfilView()
+            }
+        }
+        .modelContainer(for: appSchema, inMemory: true)
+
 }

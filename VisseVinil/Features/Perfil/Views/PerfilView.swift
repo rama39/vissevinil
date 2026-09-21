@@ -11,6 +11,8 @@ import SwiftData
 struct PerfilView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var perfis: [PerfilModel]
+    
+    @State var editando: Bool = false
 
     var body: some View {
         ZStack {
@@ -20,6 +22,7 @@ struct PerfilView: View {
                 ScrollView {
                     VStack(spacing: 32) {
                         ProfileHeaderView(profile: profile) {
+                            onEditTapped: do {editando = true}
                             // TODO: navegar para tela de edição de perfil
                         }
 
@@ -56,6 +59,9 @@ struct PerfilView: View {
             guard perfis.isEmpty else { return }
             modelContext.insert(PerfilModel.exemplo)
         }
+        .fullScreenCover(isPresented: $editando, content: {
+            EditPerfilView(editando: $editando)
+        })
     }
 }
 
