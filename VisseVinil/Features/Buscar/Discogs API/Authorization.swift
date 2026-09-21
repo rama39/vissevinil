@@ -7,7 +7,10 @@
 
 import Foundation
 
-private let personalAccessToken = "zdAKBXOdFlUYuBVvMALPDcuQjKZoEDvvudzmwLYm"
+// I know this is not private
+private let consumerKey = "DttubofUrVvYcUjshepw"
+private let consumerSecret = "eGuEYkUAZGEELQdujUqcYKpzIUmqZDuq"
 
+// If you change this version, tell me so I can change the app name in Discogs
 let userAgent = "VisseVinil/0.0 (iOS; SwiftUI)"
-let authorization = "Discogs token=\(personalAccessToken)"
+let authorization = "Discogs key=\(consumerKey), secret=\(consumerSecret)"
