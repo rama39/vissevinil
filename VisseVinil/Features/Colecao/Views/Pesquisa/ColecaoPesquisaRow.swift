@@ -23,7 +23,7 @@ struct ColecaoPesquisaRow: View {
                     .lineLimit(2)
                 
                 HStack {
-                    Text("\(disco.year), \(disco.country)")
+                    Text("\(disco.released), \(disco.country)")
                 }
                 .font(.subheadline)
                 .foregroundColor(.secondary)

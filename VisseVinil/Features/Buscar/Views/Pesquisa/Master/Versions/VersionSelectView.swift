@@ -102,22 +102,25 @@ struct VersionSelectView: View {
     }
     
     
-    private func getDiscoModel(version: MasterVersion) -> _DiscoModel { _DiscoModel(
-            title: version.title ?? "",
-            artists: master.artists?.map{$0.name ?? ""} ?? [],
-            year: version.released ?? "",
-            country: version.country ?? "",
-            genres: master.genres ?? [],
-            styles: master.styles ?? [],
-            thumbData: version.thumbData,
-            id: version.id,
-            posicao: discos.count
-        )
+    private func getDiscoModel(version: MasterVersion) -> _DiscoModel {
+//        _DiscoModel(
+//            title: version.title ?? "",
+//            artists: master.artists?.map{$0.name ?? ""} ?? [],
+//            year: version.released ?? "",
+//            country: version.country ?? "",
+//            genres: master.genres ?? [],
+//            styles: master.styles ?? [],
+//            thumbData: version.thumbData,
+//            id: version.id,
+//            posicao: discos.count
+//        )
+        _DiscoModel(master: master, version: version, posicao: discos.count)
     }
     
     private func saveDisco(version: MasterVersion) {
         withAnimation {
             let newDisco = getDiscoModel(version: version)
+            print("\(master)")
             modelContext.insert(newDisco)
             let newEvento = EventoModel(.adicionou)
             newEvento.disco = newDisco

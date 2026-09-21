@@ -23,9 +23,9 @@ struct DiscoView: View {
             Section("Informações do disco") {
                 MasterInfoRow(title: "Título", value: disco.title)
                 MasterInfoRow(title: "Artista", value: disco.artistsListed)
-                MasterInfoRow(title: "Lançamento", value: disco.year)
-                MasterInfoRow(title: "Gêneros", value: disco.genres.joined(separator: ", "))
-                MasterInfoRow(title: "Subgêneros", value: disco.styles.joined(separator: ", "))
+                MasterInfoRow(title: "Lançamento", value: disco.released)
+                MasterInfoRow(title: "Gêneros", value: disco.genresListed)
+                MasterInfoRow(title: "Subgêneros", value: disco.stylesListed)
             }
         }
         .listStyle(.plain)
