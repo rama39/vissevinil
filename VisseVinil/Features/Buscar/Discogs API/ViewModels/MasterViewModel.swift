@@ -13,9 +13,6 @@ class MasterViewModel {
     var isLoading = false
     var errorMessage: String? = nil
     
-    private let personalAccessToken = "zdAKBXOdFlUYuBVvMALPDcuQjKZoEDvvudzmwLYm"
-    private let userAgent = "VisseVinil/0.0 (iOS; SwiftUI)"
-    
     private func getDiscogsMasterRequest(
         id: Int
     ) -> URLRequest? {
@@ -26,7 +23,7 @@ class MasterViewModel {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
-        request.setValue("Discogs token=\(personalAccessToken)", forHTTPHeaderField: "Authorization")
+        request.setValue(authorization, forHTTPHeaderField: "Authorization")
         
         return request
     }

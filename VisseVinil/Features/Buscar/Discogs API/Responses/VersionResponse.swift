@@ -15,7 +15,7 @@ import Foundation
 // MARK: - DiscogsMasterVersionResponse
 struct VersionResponse: Codable {
     let pagination: MasterVersionPagination?
-    let versions: [MasterVersion]?
+    var versions: [MasterVersion]?
 
     enum CodingKeys: String, CodingKey {
         case pagination = "pagination"
@@ -49,6 +49,7 @@ struct MasterVersion: Codable, Identifiable {
     let status: String?
     let stats: MasterVersionStats?
     let thumb: String?
+    var thumbData: Data? // not in response, added later if thumb!
     let format: String?
     let country: String?
     let title: String?
@@ -57,13 +58,13 @@ struct MasterVersion: Codable, Identifiable {
     let majorFormats: [String]?
     let catno: String?
     let resourceURL: String?
-    let year: Int?
-    let id: Int?
+    let id: Int
 
     enum CodingKeys: String, CodingKey {
         case status = "status"
         case stats = "stats"
         case thumb = "thumb"
+        case thumbData = "thumbData"
         case format = "format"
         case country = "country"
         case title = "title"
@@ -72,7 +73,6 @@ struct MasterVersion: Codable, Identifiable {
         case majorFormats = "major_formats"
         case catno = "catno"
         case resourceURL = "resource_url"
-        case year = "year"
         case id = "id"
     }
 }

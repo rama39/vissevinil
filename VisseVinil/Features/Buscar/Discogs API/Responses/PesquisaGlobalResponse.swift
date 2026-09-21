@@ -15,7 +15,7 @@ import Foundation
 // MARK: - DiscogsSearchResponse
 /// Response do endpoint search do Discogs
 struct PesquisaGlobalResponse: Codable {
-    let pagination: Pagination
+    let pagination: SearchPagination
     let results: [DiscogsRelease]
 
     enum CodingKeys: String, CodingKey {
@@ -25,7 +25,7 @@ struct PesquisaGlobalResponse: Codable {
 }
 
 // MARK: - Pagination
-struct Pagination: Codable {
+struct SearchPagination: Codable {
     let perPage: Int
     let pages: Int
     let page: Int

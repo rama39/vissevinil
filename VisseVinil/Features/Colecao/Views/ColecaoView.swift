@@ -7,46 +7,50 @@
 
 import SwiftUI
 
-//var names = ["a", "b", "c", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l"]
-
 struct ColecaoView: View {
-//    @State var addingName = false
-//    @State var newName: String = ""
+    
+    private enum ModeoVisualizacao: String, CaseIterable, Identifiable {
+        case discos
+        case caixas
+        var id: String { self.rawValue }
+        var iconName: String {
+            switch self {
+            case .discos: return "list.bullet.rectangle.portrait"
+            case .caixas: return "square.stack"
+            }
+        }
+    }
+    
+    @AppStorage("Modo de Visualização da Coleção (discos/caixas)")
+    private var modoVisualizacao: ModeoVisualizacao = .discos
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-        /*NavigationStack {
-            List {
-                ForEach(names, id: \.self) { name in
-                    Text(name)
+        NavigationStack {
+            Group {
+                switch modoVisualizacao {
+                case .caixas:
+                    CaixasGridView()
+                        .navigationTitle("Caixas da Coleção")
+                default:
+                    ColecaoPesquisaView()
+                        .navigationTitle("Discos da Coleção")
                 }
             }
-            .navigationTitle("Prateleira Rock")
-            .navigationBarTitleDisplayMode(.automatic)
             .toolbar {
-                ToolbarItem {
-                    Button {
-                        newName = ""
-                        addingName = true
+                ToolbarItem(placement: .topBarLeading) {
+                    Menu {
+                        Picker("", selection: $modoVisualizacao) {
+                            ForEach(ModeoVisualizacao.allCases) { modo in
+                                Label(modo.rawValue, systemImage: modo.iconName)
+                                    .tag(modo)
+                            }
+                        }
                     } label: {
-                        Image(systemName: "plus")
-                    }
+                        Image(systemName: "ellipsis")
+                    }.glassEffect()
                 }
             }
-            .sheet(isPresented: $addingName) {
-                HStack {
-                    TextField("Nome do sla", text: $newName)
-                    Button(role:.confirm) {
-                        if !newName.isEmpty {
-                            names.append(newName)
-                        }
-                        addingName = false
-                    } label: {
-                        Image(systemName: "checkmark")
-                    }
-                }.padding()
-                .presentationDetents([.fraction(0.2)])
-            }
-        }*/
+        }
     }
 }
 
