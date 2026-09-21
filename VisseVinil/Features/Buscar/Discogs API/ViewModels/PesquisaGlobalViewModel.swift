@@ -17,9 +17,6 @@ class PesquisaGlobalViewModel {
     private var currentPage = 1
     private var pagination: SearchPagination?
     
-    private let personalAccessToken = "zdAKBXOdFlUYuBVvMALPDcuQjKZoEDvvudzmwLYm"
-    private let userAgent = "VisseVinil/0.0 (iOS; SwiftUI)"
-    
     // get query item
     private func getItem(_ name: String, _ value: String) -> URLQueryItem {
         return URLQueryItem(name: name, value: value)
@@ -56,7 +53,7 @@ class PesquisaGlobalViewModel {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
-        request.setValue("Discogs token=\(personalAccessToken)", forHTTPHeaderField: "Authorization")
+        request.setValue(authorization, forHTTPHeaderField: "Authorization")
         
         return request
     }
