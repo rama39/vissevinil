@@ -1,5 +1,5 @@
 //
-//  MKCoordinateRegionExtension.swift
+//  Extensions.swift
 //  VisseVinil
 //
 //  Created by Gabriel Alves Gadelha de Melo on 21/09/26.

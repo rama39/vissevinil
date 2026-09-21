@@ -25,19 +25,62 @@ Apple, por isso o NSObject;
  **/
 @MainActor
 @Observable
-class Locator: NSObject {
-    // classe do framework CoreLocation responsável por conversar com o GPS do dispositivo
-    private let maneger = CLLocationManager()
+class Locator: NSObject, CLLocationManagerDelegate {
     
     //===============================================================================================
-    // Pedir o acesso à localização do usuário
     
-    func requestLocation() {
-        maneger.requestWhenInUseAuthorization()
+    //--------------------------------------------------------------------------------------
+    // Classe do framework CoreLocation responsável por conversar com o GPS do dispositivo
+    private let manager = CLLocationManager()
+    // Salva a última localização conhecida
+    var currentLocalization: CLLocationCoordinate2D?
+    //--------------------------------------------------------------------------------------
+    
+    //===============================================================================================
+    
+    //--------------------------------------------------------------------------------------
+    // Como Locator herda de NSObject e essa classe já tem um init, precisamos sobrescrever
+    override init() {
+        // Chama o init original da classe mãe
+        super.init()
+        // Locator "escuta" CLLocationManager
+        manager.delegate = self
     }
+    //--------------------------------------------------------------------------------------
+    
     //===============================================================================================
+    
+    //--------------------------------------------------------------------------------------
+    // Pedir o acesso à localização do usuário
+    func requestLocation() {
+        manager.requestWhenInUseAuthorization()
+        // Liga o GPS e começa a receber atualizações da posição
+        manager.startUpdatingLocation()
+    }
+    //--------------------------------------------------------------------------------------
+    
+    //===============================================================================================
+    /*
+     Esse é o método do protocolo CLLocationManagerDelegate, é uma exigência da Apple: pra "escutar
+     atualizações de localização. O sistema chama esse método sozinho, automaticamente, toda vez que
+     o GPS tem uma posição nova
+    */
+    //--------------------------------------------------------------------------------------
+    // Essa função específica é a exceção, ela pode rodar fora da main thread
+    nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        // Guarda a localização mais recente do usuário
+        guard let lastLocalization = locations.last else { return }
+        // Cria uma nova tarefa assíncrona que roda especificamente na main thread, já que
+        // currentLocalization precisa ser atualizada na main thread
+        Task {
+            @MainActor in
+            currentLocalization = lastLocalization.coordinate
+        }
+    }
+    //--------------------------------------------------------------------------------------
 }
 
+//===================================================================================================
 // View Principal do mapa
 struct RecifeMapView: View {
     
@@ -75,6 +118,7 @@ struct RecifeMapView: View {
         _cameraPosition = State(initialValue: .userLocation(fallback: .region(metropolyRegion)))
     }
     
+    //===============================================================================================
     /**
      =================================================================================
      Faz o mapa mostrar a "Principal" Região Metropolitana do Recife  e "prende" o usuário nela.
@@ -93,11 +137,31 @@ struct RecifeMapView: View {
         ) {
             UserAnnotation() // Exibe o usuário no mapa
         }
+        .mapStyle(.standard(pointsOfInterest: .excludingAll))
+        .onChange(of: locator.currentLocalization) { _, newLocalization in setCameraWith(newLocalization) }
         .onAppear {
             locator.requestLocation() // Solicita a localização do usuário
         }
     }
+    
+    //===============================================================================================
+    private func setCameraWith(_ localization: CLLocationCoordinate2D?) {
+        
+        // Se a variável estiver vazia, seta como a região inteira e retorna
+        guard let localization else {
+            cameraPosition = .region(metropolyRegion)
+            return
+        }
+        // Caso contrário, se estiver dentro da região, mostra a localização do usuário
+        if metropolyRegion.isIn(localization) {
+            cameraPosition = .userLocation(fallback: .region(metropolyRegion))
+        } else {
+            cameraPosition = .region(metropolyRegion)
+        }
+    }
+    //===============================================================================================
 }
+//========================================================================================================
 
 #Preview {
     RecifeMapView()
