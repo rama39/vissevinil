@@ -26,24 +26,15 @@ struct ColecaoPesquisaView: View {
     @State var discoSelecionado: DiscoModel? = nil
     
     var body: some View {
-        NavigationStack {
-            List {
-                ForEach(discosBuscados) { disco in
-                    NavigationLink {
-                        DiscoView(disco: disco)
-                    } label: {
-                        ColecaoPesquisaRow(disco: disco)
-                    }
-                }
-                .onDelete(perform: deleteItems)
-            }
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button(action: {}) {
-                        Image(systemName: "ellipsis")
-                    }
+        List {
+            ForEach(discosBuscados) { disco in
+                NavigationLink {
+                    DiscoView(disco: disco)
+                } label: {
+                    ColecaoPesquisaRow(disco: disco)
                 }
             }
+            .onDelete(perform: deleteItems)
         }
     }
     

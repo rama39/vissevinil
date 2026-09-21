@@ -12,10 +12,23 @@ struct DiscoView: View {
     @Bindable var disco: _DiscoModel
     
     var body: some View {
-        VStack {
-            frameThumb(disco.thumbData)
-            Text("Conteúdo do disco")
+        List {
+            guessThumb(disco.thumbData)
+                .resizable().scaledToFit().padding()
+                .listRowSeparator(.hidden)
+            Text(disco.title)
+                .listRowSeparator(.hidden)
+            Text(disco.artistsListed)
+            
+            Section("Informações do disco") {
+                MasterInfoRow(title: "Título", value: disco.title)
+                MasterInfoRow(title: "Artista", value: disco.artistsListed)
+                MasterInfoRow(title: "Lançamento", value: disco.year)
+                MasterInfoRow(title: "Gêneros", value: disco.genres.joined(separator: ", "))
+                MasterInfoRow(title: "Subgêneros", value: disco.styles.joined(separator: ", "))
+            }
         }
+        .listStyle(.plain)
         .navigationTitle(disco.title)
         .navigationBarTitleDisplayMode(.automatic)
     }
