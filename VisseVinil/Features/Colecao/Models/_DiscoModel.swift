@@ -108,6 +108,8 @@ final class _DiscoModel {
     
     // posicao na coleção
     var posicao: Int
+    var favorito: Bool = false
+    var wishlist: Bool = false
     
     // relacionamentos
     @Relationship(deleteRule: .cascade, inverse: \EventoModel.disco)
