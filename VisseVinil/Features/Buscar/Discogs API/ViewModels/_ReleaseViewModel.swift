@@ -14,9 +14,6 @@ class _ReleaseViewModel {
     var isLoading = false
     var errorMessage: String? = nil
     
-    private let personalAccessToken = "zdAKBXOdFlUYuBVvMALPDcuQjKZoEDvvudzmwLYm"
-    private let userAgent = "VisseVinil/0.0 (iOS; SwiftUI)"
-    
     private func getDiscogsRequest(
         id: Int
     ) -> URLRequest? {
@@ -27,7 +24,7 @@ class _ReleaseViewModel {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
-        request.setValue("Discogs token=\(personalAccessToken)", forHTTPHeaderField: "Authorization")
+        request.setValue(authorization, forHTTPHeaderField: "Authorization")
         
         return request
     }

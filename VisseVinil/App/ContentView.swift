@@ -26,7 +26,7 @@ struct ContentView: View {
                 BuscarView()
             }
             Tab("Coleção", systemImage: "music.note.square.stack.fill", value: .colecao) {
-                ListaDiscosView()
+                ColecaoView()
             }
             Tab("Perfil", systemImage: "person", value: .perfil) {
                 PerfilView()

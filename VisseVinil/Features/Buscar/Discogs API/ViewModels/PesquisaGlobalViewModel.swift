@@ -14,8 +14,8 @@ class PesquisaGlobalViewModel {
     var isLoading = false
     var errorMessage: String? = nil
     
-    private let personalAccessToken = "zdAKBXOdFlUYuBVvMALPDcuQjKZoEDvvudzmwLYm"
-    private let userAgent = "VisseVinil/0.0 (iOS; SwiftUI)"
+    private var currentPage = 1
+    private var pagination: SearchPagination?
     
     // get query item
     private func getItem(_ name: String, _ value: String) -> URLQueryItem {
@@ -41,7 +41,7 @@ class PesquisaGlobalViewModel {
             getItem("type", "master"),
             getItem("format", "vinyl"),
             getItem("per_page", "20"),
-            getItem("page", "1")
+            getItem("page", String(currentPage))
         ])
         if let tag {
             queryItems.append( getItem("genre", tag.rawValue) )
@@ -53,7 +53,7 @@ class PesquisaGlobalViewModel {
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
-        request.setValue("Discogs token=\(personalAccessToken)", forHTTPHeaderField: "Authorization")
+        request.setValue(authorization, forHTTPHeaderField: "Authorization")
         
         return request
     }
@@ -68,7 +68,8 @@ class PesquisaGlobalViewModel {
             if httpResponse.statusCode == 200 {
                 do {
                     let decodedResponse = try JSONDecoder().decode(PesquisaGlobalResponse.self, from: data)
-                    self.releases = decodedResponse.results
+                    self.releases += decodedResponse.results
+                    self.pagination = decodedResponse.pagination
                 } catch {
                     self.errorMessage = "Erro de mapeamento interno."
                     print("Erro ao decodificar sucesso: \(error)")
@@ -102,4 +103,31 @@ class PesquisaGlobalViewModel {
         
         self.isLoading = false
     }
+    
+    func movePage() {
+        
+        guard let pagination else { return }
+        if pagination.pages == currentPage { return }
+        
+        currentPage += 1
+    }
+    
+    private func resetPage() {
+        currentPage = 1
+        self.releases = []
+        self.pagination = nil
+    }
+    
+    func resetSearch(
+        query: String,
+        tag: DiscogsGenre?,
+        tipo: TipoDeBusca
+    ) async {
+        
+        resetPage()
+        
+        await search(query: query, tag: tag, tipo: tipo)
+        
+    }
+    
 }

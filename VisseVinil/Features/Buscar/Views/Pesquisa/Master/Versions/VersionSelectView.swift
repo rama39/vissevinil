@@ -6,10 +6,15 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct VersionSelectView: View {
+    @Environment(\.modelContext) private var modelContext
+    func save() { if modelContext.hasChanges { try? modelContext.save() } }
+    @Query private var discos: [_DiscoModel]
+    
     @State private var versionViewModel = VersionViewModel()
-    @State var master: MasterResponse
+    let master: MasterResponse
     @Binding var selectedMaster: MasterResponse?
     
     @State var localSearch = ""
@@ -38,7 +43,7 @@ struct VersionSelectView: View {
                 if versionViewModel.isLoading {
                     HStack {
                         Spacer()
-                        ProgressView("Carregando disco...")
+                        ProgressView("Carregando versões...")
                         Spacer()
                     }
                     .listRowSeparator(.hidden)
@@ -63,7 +68,16 @@ struct VersionSelectView: View {
                             .listRowSeparator(.hidden)
                         } else {
                             ForEach(searchedVersions) { version in
-                                VersionRow(version: version)
+                                let savedIndex = discos.first(
+                                    where: { $0.id == version.id }
+                                )
+                                VersionRow(master: master, version: version, action: {
+                                    if let savedIndex {
+                                        deleteDisco(savedIndex)
+                                    } else {
+                                        saveDisco(version: version)
+                                    }
+                                }, saved: savedIndex != nil)
                             }
                         }
                     }
@@ -84,6 +98,48 @@ struct VersionSelectView: View {
             Task {
                 await versionViewModel.requestVersions(id: master.id ?? 0)
             }
+        }
+    }
+    
+    
+    private func getDiscoModel(version: MasterVersion) -> _DiscoModel {
+//        _DiscoModel(
+//            title: version.title ?? "",
+//            artists: master.artists?.map{$0.name ?? ""} ?? [],
+//            year: version.released ?? "",
+//            country: version.country ?? "",
+//            genres: master.genres ?? [],
+//            styles: master.styles ?? [],
+//            thumbData: version.thumbData,
+//            id: version.id,
+//            posicao: discos.count
+//        )
+        _DiscoModel(master: master, version: version, posicao: discos.count)
+    }
+    
+    private func saveDisco(version: MasterVersion) {
+        withAnimation {
+            let newDisco = getDiscoModel(version: version)
+            print("\(master)")
+            modelContext.insert(newDisco)
+            let newEvento = EventoModel(.adicionou)
+            newEvento.disco = newDisco
+            modelContext.insert(newEvento)
+            save()
+        }
+    }
+
+    private func deleteDisco(_ saved: _DiscoModel) {
+        withAnimation {
+            let deletedDisco = saved
+            let pos = deletedDisco.posicao
+            for i in discos.indices {
+                if discos[i].posicao > pos {
+                    discos[i].posicao -= 1
+                }
+            }
+            modelContext.delete(deletedDisco)
+            save()
         }
     }
 }

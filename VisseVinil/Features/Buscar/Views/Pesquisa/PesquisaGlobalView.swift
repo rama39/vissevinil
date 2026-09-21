@@ -18,15 +18,7 @@ struct PesquisaGlobalView: View {
         NavigationStack {
             List {
                 Section {
-                    // Exibição do status ou da listagem
-                    if searchViewModel.isLoading {
-                        HStack {
-                            Spacer()
-                            ProgressView("Buscando discos...")
-                            Spacer()
-                        }
-                        .listRowSeparator(.hidden)
-                    } else if searchViewModel.releases.isEmpty {
+                    if searchViewModel.releases.isEmpty {
                         HStack {
                             Spacer()
                             Text("Nenhum vinil encontrado.")
@@ -41,7 +33,22 @@ struct PesquisaGlobalView: View {
                             } label: {
                                 SearchRow(release: master)
                             }
+                            .onAppear {
+                                if master.id == searchViewModel.releases[searchViewModel.releases.count-1].id {
+                                    searchViewModel.movePage()
+                                    search()
+                                }
+                            }
                         }
+                    }
+                    // Exibição do status ou da listagem
+                    if searchViewModel.isLoading {
+                        HStack {
+                            Spacer()
+                            ProgressView("Buscando discos...")
+                            Spacer()
+                        }
+                        .listRowSeparator(.hidden)
                     }
                 } header: {
                     VStack {
@@ -72,14 +79,25 @@ struct PesquisaGlobalView: View {
             
             .listStyle(.plain)
             
-            .onSubmit(of: .search) { performSearch() }
-            .onChange(of: tagSelecionada) { performSearch() }
-            .onChange(of: tipoSelecionado) { performSearch() }
+            .onSubmit(of: .search) { resetSearch() }
+            .onChange(of: tagSelecionada) { resetSearch() }
+            .onChange(of: tipoSelecionado) { resetSearch() }
         }
     }
-    private func performSearch() {
+    private func search() {
         Task {
-            await searchViewModel.search(query: searchText, tag: tagSelecionada, tipo: tipoSelecionado)
+            await searchViewModel.search(
+                query: searchText,
+                tag: tagSelecionada,
+                tipo: tipoSelecionado)
+        }
+    }
+    private func resetSearch() {
+        Task {
+            await searchViewModel.resetSearch(
+                query: searchText,
+                tag: tagSelecionada,
+                tipo: tipoSelecionado)
         }
     }
 }
