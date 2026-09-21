@@ -16,6 +16,17 @@ struct DiscoView: View {
             guessThumb(disco.thumbData)
                 .resizable().scaledToFit().padding()
                 .listRowSeparator(.hidden)
+            HStack {
+                if let caixa = disco.caixa {
+                    Text(caixa.title)
+                }
+                Spacer()
+                Button {
+                    disco.favorito.toggle()
+                } label: {
+                    Image(systemName: "heart" + (disco.favorito ? ".fill" : ""))
+                }
+            }
             Text(disco.title)
                 .listRowSeparator(.hidden)
             Text(disco.artistsListed)
