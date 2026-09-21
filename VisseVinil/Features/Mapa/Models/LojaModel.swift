@@ -30,7 +30,7 @@ class Loja {
     // Variáveis que são pesquisas e adquiridas via MapKit
     var officialName: String?
     var category: String?
-    var adress: String?
+    var address: String?
     var fone: String?
     var website: String?
     //-------------------------------------------------------------------
