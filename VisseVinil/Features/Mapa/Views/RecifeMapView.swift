@@ -108,7 +108,7 @@ struct RecifeMapView: View {
     
     // Limitantes do Zoom
     private let minimumZoom: CLLocationDistance = 500
-    private let maximumZoom: CLLocationDistance = 100000
+    private let maximumZoom: CLLocationDistance = 85000
     
     @State private var cameraPosition: MapCameraPosition
     private var locator = Locator()
