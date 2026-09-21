@@ -58,3 +58,25 @@ struct PerfilView: View {
         }
     }
 }
+
+
+#Preview {
+    @Previewable @State var tabSelecionada: VisseVinilTabs = .perfil
+    
+        TabView(selection: $tabSelecionada) {
+            Tab("Mapa", systemImage: "map", value: .mapa) {
+                MapaView()
+            }
+            Tab("Buscar", systemImage: "magnifyingglass", value: .buscar) {
+                BuscarView()
+            }
+            Tab("Coleção", systemImage: "music.note.square.stack.fill", value: .colecao) {
+                ListaDiscosView()
+            }
+            Tab("Perfil", systemImage: "person", value: .perfil) {
+                PerfilView()
+            }
+        }
+        .modelContainer(for: appSchema, inMemory: true)
+
+}

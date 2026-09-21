@@ -30,18 +30,26 @@ final class PerfilModel {
     /// Discos que o usuário deseja adquirir.
     var wishlistRecords: [DiscoModel]
 
+    //========================================================
+    
     init(name: String = "",
          photoImageName: String = "",
          collectingSince: Date = Date(),
          favoriteRecords: [DiscoModel] = [],
          myRecords: [DiscoModel] = [],
          wishlistRecords: [DiscoModel] = []) {
+        
+        
+        
         self.name = name
         self.photoImageName = photoImageName
         self.collectingSince = collectingSince
         self.favoriteRecords = favoriteRecords
         self.myRecords = myRecords
         self.wishlistRecords = wishlistRecords
+        
+        
+        
     }
 
     // MARK: - Texto derivado
