@@ -84,6 +84,49 @@ class Locator: NSObject, CLLocationManagerDelegate {
 // View Principal do mapa
 struct RecifeMapView: View {
     
+    // Declaração da lista de Lojas
+    @State private var lojas: [Loja] = [
+        Loja(nameForSearch: "R Vinil e CDs",
+             coordinate: CLLocationCoordinate2D(latitude: -8.03734, longitude: -34.89216),
+             ig: nil),
+        Loja(nameForSearch: "Vinil Alternativo",
+             coordinate: CLLocationCoordinate2D(latitude: -8.06214, longitude: -34.88369),
+             ig: nil),
+        Loja(nameForSearch: "Pulga Mercado de Discos",
+             coordinate: CLLocationCoordinate2D(latitude: -8.03924, longitude: -34.89467),
+             ig: nil),
+        Loja(nameForSearch: "Taberna do Vinil",
+             coordinate: CLLocationCoordinate2D(latitude: -8.03940, longitude: -34.89471),
+             ig: nil),
+        Loja(nameForSearch: "Bolacha Discos e Coisas",
+             coordinate: CLLocationCoordinate2D(latitude: -8.04789, longitude: -34.89889),
+             ig: nil),
+        Loja(nameForSearch: "Disco de Ouro",
+             coordinate: CLLocationCoordinate2D(latitude: -8.06040, longitude: -34.88291),
+             ig: nil),
+        Loja(nameForSearch: "Blackout Discos",
+             coordinate: CLLocationCoordinate2D(latitude: -8.06003, longitude: -34.88234),
+             ig: nil),
+        Loja(nameForSearch: "Flowers Records Brazil",
+             coordinate: CLLocationCoordinate2D(latitude: -8.06222, longitude: -34.88272),
+             ig: nil),
+        Loja(nameForSearch: "CD & Cia",
+             coordinate: CLLocationCoordinate2D(latitude: -8.06209, longitude: -34.88209),
+             ig: nil),
+        Loja(nameForSearch: "Sebo Pereira",
+             coordinate: CLLocationCoordinate2D(latitude: -8.05799, longitude: -34.88632),
+             ig: nil),
+        Loja(nameForSearch: "Praça do Sebo (Estandes Diversos)",
+             coordinate: CLLocationCoordinate2D(latitude: -8.06306, longitude: -34.87872),
+             ig: nil),
+        Loja(nameForSearch: "Fernando Vinil Discos",
+             coordinate: CLLocationCoordinate2D(latitude: -8.04147, longitude: -34.89415),
+             ig: nil),
+        Loja(nameForSearch: "Sebo da Torre",
+             coordinate: CLLocationCoordinate2D(latitude: -8.04526, longitude: -34.90721),
+             ig: nil)
+    ]
+    
     /*
     ===============================================================================================
      Imagine que existe uma câmera em cima do globo, precisamos definir duas coisas:
@@ -136,6 +179,12 @@ struct RecifeMapView: View {
             )
         ) {
             UserAnnotation() // Exibe o usuário no mapa
+            // para cada loja cria um symbol no mapa
+            ForEach(lojas) { loja in
+                Marker(loja.nameForSearch, systemImage: "storefront", coordinate: loja.coordinate)
+                    .tint(.blue)
+            }
+
         }
         .mapStyle(.standard(pointsOfInterest: .excludingAll))
         .onChange(of: locator.currentLocalization) { _, newLocalization in setCameraWith(newLocalization) }

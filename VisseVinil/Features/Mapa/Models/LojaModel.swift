@@ -8,6 +8,7 @@
 import Foundation
 import SwiftData
 import CoreLocation
+import ClusterMap
 
 /**
 //===========================================================================
@@ -51,10 +52,17 @@ class Loja {
     
     // Tradução de Latitude e longitude para CLLocationCoordinate2D
     var coordinate: CLLocationCoordinate2D {
-        CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        get { CLLocationCoordinate2D(latitude: latitude, longitude: longitude) }
+        set {
+            latitude = newValue.latitude
+            longitude = newValue.longitude
+        }
     }
     
     //=======================================================================
 }
 
 //==================================================================================
+
+// A extension só declara a conformidade — a propriedade já existe acima
+extension Loja: CoordinateIdentifiable {}
