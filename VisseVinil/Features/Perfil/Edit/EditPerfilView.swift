@@ -14,6 +14,7 @@ struct EditPerfilView: View {
     @Query private var perfis: [PerfilModel]
     
     @State var tempPerfil = TempPerfil(name: "")
+    @Binding var perfil: PerfilModel?
     @Binding var editando: Bool
     
     var body: some View {
@@ -36,7 +37,7 @@ struct EditPerfilView: View {
                     .buttonStyle(.borderedProminent)
                 Form{
                     Section{
-                        TextField(tempPerfil.name, text: $tempPerfil.name)
+                        TextField("Nome", text: $tempPerfil.name)
                       
                         
                     }
@@ -47,11 +48,8 @@ struct EditPerfilView: View {
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(role: .confirm, action: {
-                        let userPerfil = perfis.first
-                        // if userPerfil != nil
-                        // let novouserPerfil = userPerfil!
-                        if let userPerfil { // verifica se conseguiu/existe um user perfil
-                            tempPerfil.toData(perfil: userPerfil)
+                        if let perfil { // verifica se conseguiu/existe um user perfil
+                            tempPerfil.toData(perfil: perfil)
                         }
                         editando = false
                     }, label: {
@@ -71,31 +69,40 @@ struct EditPerfilView: View {
             
         }
         .onAppear {
-            // Só cria um perfil se ainda não existir nenhum salvo.
-            guard perfis.isEmpty else { return }
-            modelContext.insert(PerfilModel.exemplo)
+            if let perfil {
+                tempPerfil = perfil.toStruct()
+            }
         }
         
     }
 }
 
 #Preview {
-    @Previewable @State var tabSelecionada: VisseVinilTabs = .perfil
+//    @Previewable @State var tabSelecionada: VisseVinilTabs = .perfil
+//    
+//        TabView(selection: $tabSelecionada) {
+//            Tab("Mapa", systemImage: "map", value: .mapa) {
+//                MapaView()
+//            }
+//            Tab("Buscar", systemImage: "magnifyingglass", value: .buscar) {
+//                BuscarView()
+//            }
+//            Tab("Coleção", systemImage: "music.note.square.stack.fill", value: .colecao) {
+//                ColecaoView()
+//            }
+//            Tab("Perfil", systemImage: "person", value: .perfil) {
+//                PerfilView()
+//            }
+//        }
+//        .modelContainer(for: appSchema, inMemory: true)
     
-        TabView(selection: $tabSelecionada) {
-            Tab("Mapa", systemImage: "map", value: .mapa) {
-                MapaView()
-            }
-            Tab("Buscar", systemImage: "magnifyingglass", value: .buscar) {
-                BuscarView()
-            }
-            Tab("Coleção", systemImage: "music.note.square.stack.fill", value: .colecao) {
-                ColecaoView()
-            }
-            Tab("Perfil", systemImage: "person", value: .perfil) {
-                PerfilView()
-            }
+    @Previewable @State var a: Bool = true
+    TabView {
+        Tab("Perfil", systemImage: "perfil") {
+            //EditPerfilView(editando: $a)
+            PerfilView()
         }
-        .modelContainer(for: appSchema, inMemory: true)
+    }
+    .modelContainer(for: appSchema, inMemory: true)
 
 }

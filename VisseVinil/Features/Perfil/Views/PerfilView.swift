@@ -13,6 +13,8 @@ struct PerfilView: View {
     @Query private var perfis: [PerfilModel]
     
     @State var editando: Bool = false
+    
+    @State var profileRef: PerfilModel? = nil // declarando variavel q armazena o perfil q ta sendo editado, no codigo qnd encontra um perfil q pode ser editado ele permite abrir o fullsccover
 
     var body: some View {
         ZStack {
@@ -22,8 +24,10 @@ struct PerfilView: View {
                 ScrollView {
                     VStack(spacing: 32) {
                         ProfileHeaderView(profile: profile) {
-                            onEditTapped: do {editando = true}
-                            // TODO: navegar para tela de edição de perfil
+                            onEditTapped: do {
+                                editando = true
+                                profileRef = profile
+                            }
                         }
 
                         if !profile.favoriteRecords.isEmpty {
@@ -60,7 +64,7 @@ struct PerfilView: View {
             modelContext.insert(PerfilModel.exemplo)
         }
         .fullScreenCover(isPresented: $editando, content: {
-            EditPerfilView(editando: $editando)
+            EditPerfilView(perfil: $profileRef, editando: $editando)
         })
     }
 }
