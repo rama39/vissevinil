@@ -11,10 +11,7 @@ extension TempPerfil {
     // MARK: - Dados básicos do usuário
     func toData(perfil: PerfilModel) {
         perfil.name = self.name
-        perfil.photoImageName  = self.photoImageName
+        perfil.photoImageName = self.photoImageName
         perfil.collectingSince = self.collectingSince
-        perfil.favoriteRecords = self.favoriteRecords
-        perfil.myRecords = self.myRecords
-        perfil.wishlistRecords = self.wishlistRecords
     }
 }

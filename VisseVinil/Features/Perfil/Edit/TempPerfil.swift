@@ -13,40 +13,16 @@ struct TempPerfil {
 
     var name: String
     var photoImageName: String
-    /// Data em que o usuário começou a colecionar discos (usada para calcular
-    /// "coleciona há X anos e Y meses" dinamicamente, em vez de guardar o
-    /// texto pronto).
     var collectingSince: Date
 
-    // MARK: - Discos
-
-    /// Os até 4 discos favoritos, escolhidos pelo usuário no onboarding.
-    var favoriteRecords: [DiscoModel]
-    /// Discos que o usuário já possui na coleção.
-    var myRecords: [DiscoModel]
-    /// Discos que o usuário deseja adquirir.
-    var wishlistRecords: [DiscoModel]
-
     //========================================================
-    
+
     init(name: String = "",
          photoImageName: String = "",
-         collectingSince: Date = Date(),
-         favoriteRecords: [DiscoModel] = [],
-         myRecords: [DiscoModel] = [],
-         wishlistRecords: [DiscoModel] = []) {
-        
-        
-        
+         collectingSince: Date = Date()) {
         self.name = name
         self.photoImageName = photoImageName
         self.collectingSince = collectingSince
-        self.favoriteRecords = favoriteRecords
-        self.myRecords = myRecords
-        self.wishlistRecords = wishlistRecords
-        
-        
-        
     }
 
     // MARK: - Texto derivado
@@ -69,6 +45,4 @@ struct TempPerfil {
         }
         return "coleciona discos há " + parts.joined(separator: " e ")
     }
-
 }
-

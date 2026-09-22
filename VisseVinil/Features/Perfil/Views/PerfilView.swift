@@ -11,10 +11,23 @@ import SwiftData
 struct PerfilView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var perfis: [PerfilModel]
-    
+    @Query private var todosOsDiscos: [_DiscoModel]
+
     @State var editando: Bool = false
-    
-    @State var profileRef: PerfilModel? = nil // declarando variavel q armazena o perfil q ta sendo editado, no codigo qnd encontra um perfil q pode ser editado ele permite abrir o fullsccover
+    @State var profileRef: PerfilModel? = nil
+
+    // Até 4 discos marcados como favorito na coleção real.
+    private var discosFavoritos: [_DiscoModel] {
+        Array(todosOsDiscos.filter { $0.favorito }.prefix(4))
+    }
+    // Discos que já fazem parte da coleção (não estão na wishlist).
+    private var meusDiscos: [_DiscoModel] {
+        todosOsDiscos.filter { !$0.wishlist }
+    }
+    // Discos que o usuário quer adquirir.
+    private var wishlist: [_DiscoModel] {
+        todosOsDiscos.filter { $0.wishlist }
+    }
 
     var body: some View {
         ZStack {
@@ -30,25 +43,25 @@ struct PerfilView: View {
                             }
                         }
 
-                        if !profile.favoriteRecords.isEmpty {
+                        if !discosFavoritos.isEmpty {
                             VStack(alignment: .leading, spacing: 14) {
                                 Text("Discos favoritos")
                                     .font(.system(size: 20, weight: .semibold))
                                     .foregroundStyle(Color(red: 0.60, green: 0.38, blue: 0.20))
                                     .padding(.horizontal, 20)
 
-                                DiscosFavCarrossel(records: profile.favoriteRecords)
+                                DiscosFavCarrossel(records: discosFavoritos)
                             }
                         }
 
-                        if !profile.myRecords.isEmpty {
-                            RecordSectionView(title: "Meus Discos", records: profile.myRecords, showLocation: true) {
+                        if !meusDiscos.isEmpty {
+                            RecordSectionView(title: "Meus Discos", records: meusDiscos, showLocation: true) {
                                 // TODO: navegar para a lista completa de discos do usuário
                             }
                         }
 
-                        if !profile.wishlistRecords.isEmpty {
-                            RecordSectionView(title: "Wishlist", records: profile.wishlistRecords) {
+                        if !wishlist.isEmpty {
+                            RecordSectionView(title: "Wishlist", records: wishlist) {
                                 // TODO: navegar para a wishlist completa
                             }
                         }
@@ -61,32 +74,10 @@ struct PerfilView: View {
         .onAppear {
             // Só cria um perfil se ainda não existir nenhum salvo.
             guard perfis.isEmpty else { return }
-            modelContext.insert(PerfilModel.exemplo)
+            modelContext.insert(PerfilModel())
         }
         .fullScreenCover(isPresented: $editando, content: {
             EditPerfilView(perfil: $profileRef, editando: $editando)
         })
     }
-}
-
-
-#Preview {
-    @Previewable @State var tabSelecionada: VisseVinilTabs = .perfil
-    
-        TabView(selection: $tabSelecionada) {
-            Tab("Mapa", systemImage: "map", value: .mapa) {
-                MapaView()
-            }
-            Tab("Buscar", systemImage: "magnifyingglass", value: .buscar) {
-                BuscarView()
-            }
-            Tab("Coleção", systemImage: "music.note.square.stack.fill", value: .colecao) {
-                ColecaoView()
-            }
-            Tab("Perfil", systemImage: "person", value: .perfil) {
-                PerfilView()
-            }
-        }
-        .modelContainer(for: appSchema, inMemory: true)
-
 }
