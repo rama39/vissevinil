@@ -23,7 +23,6 @@ struct ColecaoPesquisaView: View {
         })
     }
     
-    @State var discoSelecionado: DiscoModel? = nil
     
     var body: some View {
         List {
