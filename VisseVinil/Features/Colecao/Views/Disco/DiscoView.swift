@@ -22,9 +22,9 @@ struct DiscoView: View {
                 }
                 Spacer()
                 Button {
-                    disco.favorito.toggle()
+                    disco.curtido.toggle()
                 } label: {
-                    Image(systemName: "heart" + (disco.favorito ? ".fill" : ""))
+                    Image(systemName: "heart" + (disco.curtido ? ".fill" : ""))
                 }
             }
             Text(disco.title)
