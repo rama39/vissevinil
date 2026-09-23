@@ -55,7 +55,7 @@ struct DiscosFavCarrossel: View {
     }
 
     var body: some View {
-        VStack(spacing: 14) {
+        VStack(spacing: 2) {
             coverFlow
 
             if records.indices.contains(selectedIndex) {
@@ -141,7 +141,7 @@ struct DiscosFavCarrossel: View {
             .contentShape(Rectangle())
             .gesture(dragGesture)
         }
-        .frame(height: itemHeight + 20)
+        .frame(height: itemHeight + 4)
         .clipped()
     }
 

@@ -16,9 +16,10 @@ struct PerfilView: View {
     @State var editando: Bool = false
     @State var profileRef: PerfilModel? = nil
 
-    // Até 4 discos marcados como favorito na coleção real.
+    // TEMPORÁRIO: 4 discos do Bob Marley, até o onboarding deixar o usuário
+    // escolher os favoritos de verdade. Ver DiscosFavoritosMock.swift.
     private var discosFavoritos: [_DiscoModel] {
-        Array(todosOsDiscos.filter { $0.favorito }.prefix(4))
+        todosOsDiscos.filter({ disco in disco.favorito })
     }
     // Discos que já fazem parte da coleção (não estão na wishlist).
     private var meusDiscos: [_DiscoModel] {
@@ -43,13 +44,13 @@ struct PerfilView: View {
                             }
                         }
 
-                        if !discosFavoritos.isEmpty {
-                            VStack(alignment: .leading, spacing: 14) {
-                                Text("Discos favoritos")
-                                    .font(.system(size: 20, weight: .semibold))
-                                    .foregroundStyle(Color(red: 0.60, green: 0.38, blue: 0.20))
-                                    .padding(.horizontal, 20)
+                        VStack(alignment: .leading, spacing: 14) {
+                            Text("Discos favoritos")
+                                .font(.system(size: 20, weight: .semibold))
+                                .foregroundStyle(Color(red: 0.60, green: 0.38, blue: 0.20))
+                                .padding(.horizontal, 20)
 
+                                if !discosFavoritos.isEmpty {
                                 DiscosFavCarrossel(records: discosFavoritos)
                             }
                         }
