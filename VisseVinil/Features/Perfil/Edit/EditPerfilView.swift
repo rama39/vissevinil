@@ -13,9 +13,12 @@ struct EditPerfilView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var perfis: [PerfilModel]
     
+    @State private var date = Date()
     @State var tempPerfil = TempPerfil(name: "")
     @Binding var perfil: PerfilModel?
     @Binding var editando: Bool
+    
+    @State var escolhendoFavoritos = false
     
     var body: some View {
         NavigationStack{
@@ -23,6 +26,12 @@ struct EditPerfilView: View {
                 ZStack {
                     Color.gray.opacity(0.2)
                     Image(tempPerfil.photoImageName)
+                    
+                    if tempPerfil.photoImageName == ""{
+                        Image(systemName: "opticaldisc.fill")
+                            .resizable()
+                            .frame(width: 115, height: 115)
+                    }
                 }
                 .frame(width: 130, height: 130)
                 .clipShape(Circle())
@@ -38,8 +47,11 @@ struct EditPerfilView: View {
                 Form{
                     Section{
                         TextField("Nome", text: $tempPerfil.name)
-                      
+                        DatePicker("Data de início da coleção", selection: $date, displayedComponents: [.date])
                         
+                    }
+                    Section{ // fazer como o add disco view - botao quw adiciona a listinha que o
+                        EscolherFavoritos(adicionarFavorito: $escolhendoFavoritos)
                     }
                 }
            }
@@ -66,7 +78,9 @@ struct EditPerfilView: View {
                     
                 }
             }
-            
+            .sheet(isPresented: $escolhendoFavoritos ){
+                //AddFavoritoView(discosFavoritos: $tempPerfil, adicionandoDisco: $escolhendoFavoritos)
+            }
         }
         .onAppear {
             if let perfil {
