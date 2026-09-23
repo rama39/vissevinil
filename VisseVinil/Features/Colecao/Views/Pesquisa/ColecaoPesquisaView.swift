@@ -8,6 +8,7 @@
 import SwiftUI
 import SwiftData
 
+//TODO: rename to ColecaoDiscosView e ColecaoDiscosRow
 struct ColecaoPesquisaView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var discos: [_DiscoModel]

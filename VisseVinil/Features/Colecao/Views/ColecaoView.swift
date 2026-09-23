@@ -47,7 +47,7 @@ struct ColecaoView: View {
                         }
                     } label: {
                         Image(systemName: "ellipsis")
-                    }.glassEffect()
+                    }
                 }
             }
         }

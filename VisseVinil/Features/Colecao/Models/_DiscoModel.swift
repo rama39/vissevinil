@@ -108,7 +108,8 @@ final class _DiscoModel {
     
     // posicao na coleção
     var posicao: Int
-    var favorito: Bool = false
+    var curtido: Bool = false  // disco curtido, aparece primeir na busca
+    var favorito: Bool = false // disco aparece no carrossel do perfil de favs
     var wishlist: Bool = false
     
     // relacionamentos
