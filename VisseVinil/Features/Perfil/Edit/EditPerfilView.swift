@@ -79,7 +79,8 @@ struct EditPerfilView: View {
                 }
             }
             .sheet(isPresented: $escolhendoFavoritos ){
-                //AddFavoritoView(discosFavoritos: $tempPerfil, adicionandoDisco: $escolhendoFavoritos)
+                AddFavoritoView(discosFavoritos: .constant([]), adicionandoDisco: $escolhendoFavoritos)
+            
             }
         }
         .onAppear {

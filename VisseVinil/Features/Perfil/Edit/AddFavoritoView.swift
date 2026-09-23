@@ -11,27 +11,49 @@ import SwiftData
 struct AddFavoritoView: View {
     @Environment(\.modelContext) private var modelContext
     func save() { if modelContext.hasChanges { try? modelContext.save() } }
+    @Query var discos: [_DiscoModel]
     
     @Binding var discosFavoritos: [_DiscoModel]
     @Binding var adicionandoDisco: Bool
+    @State var pesquisa: String = ""
     
     var body: some View {
-        List(discosFavoritos) {disco in
-            HStack {
-                //let contains = caixa.discos.contains(disco)
-//                if !contains {
-//                    Button {
-//                        
-//                    } label: {
-//                        //ColecaoPesquisaRow(disco: disco)
-//                    }
-//                }
-                ColecaoPesquisaRow(disco: disco)
+        
+        NavigationStack{
+            List(discos.filter({disco in
+                pesquisa.isEmpty ||
+                disco.title.localizedCaseInsensitiveContains(pesquisa)
+            })) {disco in
+                HStack {
+                    Button {
+                        disco.favorito.toggle()
+                    } label: {
+                        Image(systemName: (disco.favorito ? "checkmark.circle.fill": "circle"))
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 22, height: 22)
+                    }
+                    ColecaoPesquisaRow(disco: disco)
+                }
             }
+            .navigationTitle("Adicionar discos favoritos")
+            .navigationBarTitleDisplayMode(.inline)
+//            .toolbar{
+//                ToolbarItem (placement: .topBarLeading){
+//                    Button(role: .cancel) {
+//                        adicionandoDisco = false
+//                    } label: {
+//                        Image(systemName: "xmark")
+//                    }
+//
+//                }
+            .searchable(text: $pesquisa)
+            }
+            
         }
     }
-}
 
-//#Preview {
-//    AddFavoritoView()
-//}
+
+#Preview {
+    AddFavoritoView(discosFavoritos: .constant([]), adicionandoDisco: .constant(true))
+}
