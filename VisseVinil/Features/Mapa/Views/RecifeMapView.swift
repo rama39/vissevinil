@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MapKit
+import ClusterMapSwiftUI
 
 /*
 ===============================================================================================
@@ -155,6 +156,7 @@ struct RecifeMapView: View {
     
     @State private var cameraPosition: MapCameraPosition
     private var locator = Locator()
+    @State private var shopClusterManager = ShopClusterManager()
     
     // Funciona basicamente como um constructor de RecifeMapView
     init() {
@@ -178,20 +180,48 @@ struct RecifeMapView: View {
                 maximumDistance: maximumZoom
             )
         ) {
-            UserAnnotation() // Exibe o usuário no mapa
-            // para cada loja cria um symbol no mapa
-            ForEach(lojas) { loja in
+            UserAnnotation()
+
+            ForEach(shopClusterManager.visibleLojas) { loja in
                 Marker(loja.nameForSearch, systemImage: "storefront", coordinate: loja.coordinate)
                     .tint(.blue)
             }
 
+            ForEach(shopClusterManager.visibleGroups) { group in
+                Annotation("", coordinate: group.coordinate) {
+                    ZStack {
+                        Circle()
+                            .fill(Color.orange)
+                            .frame(width: 40, height: 40)
+                        Text("+\(group.count)")
+                            .font(.caption.bold())
+                            .foregroundStyle(.white)
+                    }
+                }
+            }
         }
         .mapStyle(.standard(pointsOfInterest: .excludingAll))
-        .onChange(of: locator.currentLocalization) { _, newLocalization in setCameraWith(newLocalization) }
+        .readSize { newSize in
+            shopClusterManager.mapSize = newSize
+        }
+        .onChange(of: shopClusterManager.mapSize) { _, newSize in
+            guard newSize != .zero else { return }
+            shopClusterManager.updateClusters(region: metropolyRegion)
+        }
+        .onMapCameraChange(frequency: .onEnd) { context in
+            shopClusterManager.updateClusters(region: context.region)
+        }
+        .onChange(of: locator.currentLocalization) { _, newLocalization in
+            setCameraWith(newLocalization)
+        }
+        .task {
+            await shopClusterManager.setLojas(lojas)
+        }
         .onAppear {
-            locator.requestLocation() // Solicita a localização do usuário
+            locator.requestLocation()
         }
     }
+    
     
     //===============================================================================================
     private func setCameraWith(_ localization: CLLocationCoordinate2D?) {

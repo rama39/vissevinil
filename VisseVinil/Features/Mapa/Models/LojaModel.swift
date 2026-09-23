@@ -62,7 +62,35 @@ class Loja {
     //=======================================================================
 }
 
-//==================================================================================
-
-// A extension só declara a conformidade — a propriedade já existe acima
+//=====================================================================================
+// A extension só declara a conformidade, a propriedade já existe acima
 extension Loja: CoordinateIdentifiable {}
+
+//=====================================================================================
+
+/*
+ -----------------------------------------------------------------------------------
+ Permite Loja ser usada como ClusterManager<Loja>, a biblioteca exige que qualquer
+ tipo que ela gerencia tenha uma propriedade coordinate com get/set
+ -----------------------------------------------------------------------------------
+ Hashable -> esse tipo sabe se transformar num número (hash) que representa sua
+ identidade, e sabe comparar se dois valores são iguais
+ -----------------------------------------------------------------------------------
+*/
+extension Loja: Hashable {
+    // Implementa a funcionalidade de Equatable, exigida de baixo dos panos
+    static func == (lhs: Loja, rhs: Loja) -> Bool {
+        // ("comparar se são iguais")
+        lhs.persistentModelID == rhs.persistentModelID
+    }
+    // "virar um número resumido"
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(persistentModelID)
+    }
+}
+
+//=====================================================================================
+
+extension Loja: @unchecked Sendable {}
+
+//=====================================================================================
