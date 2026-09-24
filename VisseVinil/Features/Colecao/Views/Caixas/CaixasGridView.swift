@@ -17,21 +17,25 @@ struct CaixasGridView: View {
         let columns = caixas.count > 3 ?
             [GridItem(.flexible()), GridItem(.flexible())] :
             [GridItem(.flexible())]
-        LazyVGrid(columns: columns) {
-            ForEach(caixas) { caixa in
-                NavigationLink {
-                    CaixaView(caixa: caixa)
-                } label: {
-                    CaixaOuterView(caixa: caixa, count: caixas.count)
-                }
-                .contextMenu {
-                    Button {
-                        deleteCaixa(caixa)
+        ScrollView {
+            LazyVGrid(columns: columns) {
+                ForEach(caixas) { caixa in
+                    NavigationLink {
+                        CaixaView(caixa: caixa)
                     } label: {
-                        Label("Deletar", systemImage: "trash")
+                        CaixaOuterView(caixa: caixa, count: caixas.count)
+                    }
+                    .buttonStyle(.plain)
+                    .contextMenu {
+                        Button {
+                            deleteCaixa(caixa)
+                        } label: {
+                            Label("Deletar", systemImage: "trash")
+                        }
                     }
                 }
             }
+            .padding()
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
