@@ -21,6 +21,6 @@ func guessThumb(_ thumbData: Data?) -> Image {
 //                }
 //                .clipShape(RoundedRectangle(cornerRadius: 8))
     } else {
-        Image(systemName: "music.note")
+        Image(systemName: "play.square")
     }
 }
