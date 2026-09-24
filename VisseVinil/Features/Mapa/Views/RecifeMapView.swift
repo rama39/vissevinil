@@ -226,6 +226,7 @@ struct RecifeMapView: View {
             .mapStyle(.standard(pointsOfInterest: .excludingAll))
             .onMapCameraChange(frequency: .onEnd) { context in
                 currentRegion = context.region
+                shopClusterManager.limparForcadosSeAfastado(distanciaAtual: context.camera.distance)
                 tarefaDeAtualizacao?.cancel()
                 tarefaDeAtualizacao = Task {
                     try? await Task.sleep(for: .seconds(0.3))

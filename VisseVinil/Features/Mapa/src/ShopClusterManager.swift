@@ -29,6 +29,14 @@ class ShopClusterManager {
             idsForcadosASeparar.insert(loja.persistentModelID)
         }
     }
+    
+    private let distanciaLimiteParaLimpar: CLLocationDistance = 1500
+
+    func limparForcadosSeAfastado(distanciaAtual: CLLocationDistance) {
+        if distanciaAtual > distanciaLimiteParaLimpar {
+            idsForcadosASeparar.removeAll()
+        }
+    }
 
     func updateClusters(mapProxy: MapProxy, spacingInPixels: Int = 60) async {
         guard let epsilon = mapProxy.degrees(fromPixels: spacingInPixels) else { return }
