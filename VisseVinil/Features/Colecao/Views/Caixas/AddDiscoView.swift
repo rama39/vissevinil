@@ -11,7 +11,7 @@ import SwiftData
 struct AddDiscoView: View {
     @Environment(\.modelContext) private var modelContext
     func save() { if modelContext.hasChanges { try? modelContext.save() } }
-    @Query private var discos: [_DiscoModel]
+    @Query private var discos: [DiscoModel]
     
     @Bindable var caixa: CaixaModel
     @Binding var adicionandoDisco: Bool

@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import SwiftData
 
-let appSchema: [any PersistentModel.Type] = [_DiscoModel.self, CaixaModel.self, EventoModel.self, PerfilModel.self]
+let appSchema: [any PersistentModel.Type] = [DiscoModel.self, CaixaModel.self, EventoModel.self, PerfilModel.self]
 
 @main
 struct VisseVinilApp: App {

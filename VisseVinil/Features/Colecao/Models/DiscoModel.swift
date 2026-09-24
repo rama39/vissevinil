@@ -67,7 +67,7 @@ import SwiftData
  */
 
 @Model
-final class _DiscoModel {
+final class DiscoModel {
     
     // MARK: - master data
     var genres: [String]?

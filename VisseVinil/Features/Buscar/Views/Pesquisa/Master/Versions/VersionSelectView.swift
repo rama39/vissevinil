@@ -11,7 +11,7 @@ import SwiftData
 struct VersionSelectView: View {
     @Environment(\.modelContext) private var modelContext
     func save() { if modelContext.hasChanges { try? modelContext.save() } }
-    @Query private var discos: [_DiscoModel]
+    @Query private var discos: [DiscoModel]
     
     @State private var versionViewModel = VersionViewModel()
     let master: MasterResponse
@@ -102,8 +102,8 @@ struct VersionSelectView: View {
     }
     
     
-    private func getDiscoModel(version: MasterVersion) -> _DiscoModel {
-//        _DiscoModel(
+    private func getDiscoModel(version: MasterVersion) -> DiscoModel {
+//        DiscoModel(
 //            title: version.title ?? "",
 //            artists: master.artists?.map{$0.name ?? ""} ?? [],
 //            year: version.released ?? "",
@@ -114,7 +114,7 @@ struct VersionSelectView: View {
 //            id: version.id,
 //            posicao: discos.count
 //        )
-        _DiscoModel(master: master, version: version, posicao: discos.count)
+        DiscoModel(master: master, version: version, posicao: discos.count)
     }
     
     private func saveDisco(version: MasterVersion) {
@@ -129,7 +129,7 @@ struct VersionSelectView: View {
         }
     }
 
-    private func deleteDisco(_ saved: _DiscoModel) {
+    private func deleteDisco(_ saved: DiscoModel) {
         withAnimation {
             let deletedDisco = saved
             let pos = deletedDisco.posicao

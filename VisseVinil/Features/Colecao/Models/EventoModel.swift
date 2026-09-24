@@ -20,7 +20,7 @@ final class EventoModel {
     var tipo: TipoEvento
     var comentario: String?
     
-    var disco: _DiscoModel?
+    var disco: DiscoModel?
     
     init(_ tipo: TipoEvento, _ comentario: String = "") {
         self.tipo = tipo

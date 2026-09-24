@@ -11,22 +11,22 @@ import SwiftData
 struct PerfilView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var perfis: [PerfilModel]
-    @Query private var todosOsDiscos: [_DiscoModel]
+    @Query private var todosOsDiscos: [DiscoModel]
 
     @State var editando: Bool = false
     @State var profileRef: PerfilModel? = nil
 
     // TEMPORÁRIO: 4 discos do Bob Marley, até o onboarding deixar o usuário
     // escolher os favoritos de verdade. Ver DiscosFavoritosMock.swift.
-    private var discosFavoritos: [_DiscoModel] {
+    private var discosFavoritos: [DiscoModel] {
         todosOsDiscos.filter({ disco in disco.favorito })
     }
     // Discos que já fazem parte da coleção (não estão na wishlist).
-    private var meusDiscos: [_DiscoModel] {
+    private var meusDiscos: [DiscoModel] {
         todosOsDiscos.filter { !$0.wishlist }
     }
     // Discos que o usuário quer adquirir.
-    private var wishlist: [_DiscoModel] {
+    private var wishlist: [DiscoModel] {
         todosOsDiscos.filter { $0.wishlist }
     }
 

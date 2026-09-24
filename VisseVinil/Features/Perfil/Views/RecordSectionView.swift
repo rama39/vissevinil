@@ -9,10 +9,10 @@ import SwiftUI
 
 struct RecordSectionView: View {
     let title: String
-    let records: [_DiscoModel]
+    let records: [DiscoModel]
     var showLocation: Bool = false
     var onSeeAllTapped: () -> Void = {}
-    var onRecordTapped: (_DiscoModel) -> Void = { _ in }
+    var onRecordTapped: (DiscoModel) -> Void = { _ in }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -44,7 +44,7 @@ struct RecordSectionView: View {
 
 /// Card individual de disco: capa + título + artista + (opcional) localização.
 struct RecordCardView: View {
-    let record: _DiscoModel
+    let record: DiscoModel
     var showLocation: Bool = false
 
     private let cardWidth: CGFloat = 155
@@ -96,7 +96,7 @@ struct RecordCardView: View {
 }
 
 #Preview {
-    let disco1 = _DiscoModel(
+    let disco1 = DiscoModel(
         master_title: "Igor",
         artists: [MasterArtist(join: nil, name: "Tyler, The Creator", anv: nil, tracks: nil, role: nil, resourceURL: nil, id: nil)],
         master_id: nil,
@@ -104,7 +104,7 @@ struct RecordCardView: View {
         id: 0,
         posicao: 0
     )
-    let disco2 = _DiscoModel(
+    let disco2 = DiscoModel(
         master_title: "Igor",
         artists: [MasterArtist(join: nil, name: "Tyler, The Creator", anv: nil, tracks: nil, role: nil, resourceURL: nil, id: nil)],
         master_id: nil,

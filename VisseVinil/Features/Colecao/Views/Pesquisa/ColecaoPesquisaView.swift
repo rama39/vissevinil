@@ -11,10 +11,10 @@ import SwiftData
 //TODO: rename to ColecaoDiscosView e ColecaoDiscosRow
 struct ColecaoPesquisaView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var discos: [_DiscoModel]
+    @Query private var discos: [DiscoModel]
     
     @State private var bufferBusca = ""
-    var discosBuscados: [_DiscoModel] {
+    var discosBuscados: [DiscoModel] {
         discos.filter { disco in
             if bufferBusca.isEmpty { return true }
             return disco.title

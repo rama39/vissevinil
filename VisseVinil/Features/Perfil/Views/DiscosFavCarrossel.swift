@@ -14,7 +14,7 @@ import Combine
 /// - capas laterais: giradas no eixo Y, menores, mais turvas e sobrepostas;
 /// - todas as capas recebem uma reflexão abaixo, como no Cover Flow clássico.
 struct DiscosFavCarrossel: View {
-    let records: [_DiscoModel]
+    let records: [DiscoModel]
     var autoAdvanceInterval: TimeInterval = 3.0
 
     // MARK: - Cover Flow tuning
@@ -37,7 +37,7 @@ struct DiscosFavCarrossel: View {
     private var itemHeight: CGFloat { coverSize + 8 + reflectionHeight }
     private var itemStride: CGFloat { coverSize + stackSpacing }
 
-    init(records: [_DiscoModel], autoAdvanceInterval: TimeInterval = 3.0) {
+    init(records: [DiscoModel], autoAdvanceInterval: TimeInterval = 3.0) {
         self.records = records
         self.autoAdvanceInterval = autoAdvanceInterval
         self.timer = Timer.publish(
@@ -195,7 +195,7 @@ struct DiscosFavCarrossel: View {
 
 /// Capa do disco + reflexo invertido e esmaecido.
 private struct FavoriteDiscoCard: View {
-    let record: _DiscoModel
+    let record: DiscoModel
     let coverSize: CGFloat
     let reflectionHeight: CGFloat
 
@@ -251,9 +251,9 @@ private struct FavoriteDiscoCard: View {
     }
 }
 
-/// Monta um _DiscoModel só com o que o preview precisa (título e artista).
-private func previewDisco(title: String, artist: String, posicao: Int) -> _DiscoModel {
-    _DiscoModel(
+/// Monta um DiscoModel só com o que o preview precisa (título e artista).
+private func previewDisco(title: String, artist: String, posicao: Int) -> DiscoModel {
+    DiscoModel(
         master_title: title,
         artists: [MasterArtist(join: nil, name: artist, anv: nil, tracks: nil, role: nil, resourceURL: nil, id: nil)],
         master_id: nil,

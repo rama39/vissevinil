@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ColecaoPesquisaRow: View {
     
-    var disco: _DiscoModel
+    var disco: DiscoModel
     
     var body: some View {
         

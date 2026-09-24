@@ -11,9 +11,9 @@ import SwiftData
 struct AddFavoritoView: View {
     @Environment(\.modelContext) private var modelContext
     func save() { if modelContext.hasChanges { try? modelContext.save() } }
-    @Query var discos: [_DiscoModel]
+    @Query var discos: [DiscoModel]
     
-    @Binding var discosFavoritos: [_DiscoModel]
+    @Binding var discosFavoritos: [DiscoModel]
     @Binding var adicionandoDisco: Bool
     @State var pesquisa: String = ""
     

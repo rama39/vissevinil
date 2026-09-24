@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension _DiscoModel {
+extension DiscoModel {
     /// Capa a partir dos bytes já baixados do Discogs (thumbData).
     var coverImage: Image? {
         guard let thumbData, let uiImage = UIImage(data: thumbData) else { return nil }

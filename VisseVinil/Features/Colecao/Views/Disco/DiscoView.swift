@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DiscoView: View {
     
-    @Bindable var disco: _DiscoModel
+    @Bindable var disco: DiscoModel
     
     var body: some View {
         List {
