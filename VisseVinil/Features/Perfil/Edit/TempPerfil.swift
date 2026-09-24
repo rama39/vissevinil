@@ -1,24 +1,18 @@
 //
-//  PerfilModel.swift
+//  TempPerfil.swift
 //  VisseVinil
 //
-//  Created by Pedro Augusto Santos de Sousa on 16/09/26.
+//  Created by Maria Eduarda Marrocos Honda on 21/09/26.
 //
 
 import Foundation
-import SwiftUI
-import SwiftData
 
-@Model
-final class PerfilModel {
+struct TempPerfil {
 
     // MARK: - Dados básicos do usuário
 
     var name: String
     var photoImageName: String
-    /// Data em que o usuário começou a colecionar discos (usada para calcular
-    /// "coleciona há X anos e Y meses" dinamicamente, em vez de guardar o
-    /// texto pronto).
     var collectingSince: Date
 
     //========================================================

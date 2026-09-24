@@ -9,10 +9,10 @@ import SwiftUI
 
 struct RecordSectionView: View {
     let title: String
-    let records: [DiscoModel]
+    let records: [_DiscoModel]
     var showLocation: Bool = false
     var onSeeAllTapped: () -> Void = {}
-    var onRecordTapped: (DiscoModel) -> Void = { _ in }
+    var onRecordTapped: (_DiscoModel) -> Void = { _ in }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -31,7 +31,7 @@ struct RecordSectionView: View {
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 14) {
-                    ForEach(records) { record in
+                    ForEach(records, id: \.id) { record in
                         RecordCardView(record: record, showLocation: showLocation)
                             .onTapGesture { onRecordTapped(record) }
                     }
@@ -44,7 +44,7 @@ struct RecordSectionView: View {
 
 /// Card individual de disco: capa + título + artista + (opcional) localização.
 struct RecordCardView: View {
-    let record: DiscoModel
+    let record: _DiscoModel
     var showLocation: Bool = false
 
     private let cardWidth: CGFloat = 155
@@ -52,8 +52,8 @@ struct RecordCardView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Group {
-                if let uiImage = UIImage(named: record.coverImageName) {
-                    Image(uiImage: uiImage)
+                if let coverImage = record.coverImage {
+                    coverImage
                         .resizable()
                         .scaledToFill()
                 } else {
@@ -72,12 +72,12 @@ struct RecordCardView: View {
                     .font(.system(size: 16, weight: .semibold))
                     .foregroundStyle(.black.opacity(0.85))
                     .lineLimit(1)
-                Text(record.artist)
+                Text(record.artistsListed)
                     .font(.system(size: 13))
                     .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
                     .lineLimit(1)
 
-                if showLocation, let location = record.location {
+                if showLocation, let location = record.locationName {
                     HStack(spacing: 6) {
                         Circle()
                             .fill(record.locationColor ?? .gray)
@@ -96,13 +96,27 @@ struct RecordCardView: View {
 }
 
 #Preview {
-    let previewRecords = [
-        DiscoModel(title: "Igor", artist: "Tyler, The Creator", coverImageName: "igor",
-                   location: "Estante sala", locationColorHex: "F49AC2"),
-        DiscoModel(title: "Igor", artist: "Tyler, The Creator", coverImageName: "igor",
-                   location: "Caixa casa de Gabri...", locationColorHex: "34C759")
-    ]
+    let disco1 = _DiscoModel(
+        master_title: "Igor",
+        artists: [MasterArtist(join: nil, name: "Tyler, The Creator", anv: nil, tracks: nil, role: nil, resourceURL: nil, id: nil)],
+        master_id: nil,
+        title: "Igor",
+        id: 0,
+        posicao: 0
+    )
+    let disco2 = _DiscoModel(
+        master_title: "Igor",
+        artists: [MasterArtist(join: nil, name: "Tyler, The Creator", anv: nil, tracks: nil, role: nil, resourceURL: nil, id: nil)],
+        master_id: nil,
+        title: "Igor",
+        id: 1,
+        posicao: 1
+    )
+    let caixa1 = CaixaModel(title: "Estante sala", rgba: RGBAColor(r: 244, g: 154, b: 194, a: 255))
+    let caixa2 = CaixaModel(title: "Caixa casa de Gabriel", rgba: RGBAColor(r: 52, g: 199, b: 89, a: 255))
+    disco1.caixa = caixa1
+    disco2.caixa = caixa2
 
-    return RecordSectionView(title: "Meus Discos", records: previewRecords, showLocation: true)
+    return RecordSectionView(title: "Meus Discos", records: [disco1, disco2], showLocation: true)
         .background(Color(red: 0.98, green: 0.97, blue: 0.95))
 }
