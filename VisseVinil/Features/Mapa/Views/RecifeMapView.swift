@@ -33,6 +33,7 @@ class Locator: NSObject, CLLocationManagerDelegate {
     //--------------------------------------------------------------------------------------
     // Classe do framework CoreLocation responsável por conversar com o GPS do dispositivo
     private let manager = CLLocationManager()
+    
     // Salva a última localização conhecida
     var currentLocalization: CLLocationCoordinate2D?
     //--------------------------------------------------------------------------------------
@@ -155,73 +156,157 @@ struct RecifeMapView: View {
     private let maximumZoom: CLLocationDistance = 85000
     
     @State private var cameraPosition: MapCameraPosition
-    private var locator = Locator()
     @State private var shopClusterManager = ShopClusterManager()
+    @State private var tarefaDeAtualizacao: Task<Void, Never>?
+    @State private var lojaSelecionada: Loja?
+    @State private var currentRegion: MKCoordinateRegion
+    @State private var screenHeight: CGFloat = 0
+    private var locator = Locator()
     
     // Funciona basicamente como um constructor de RecifeMapView
     init() {
         _cameraPosition = State(initialValue: .userLocation(fallback: .region(metropolyRegion)))
+        _currentRegion = State(initialValue: metropolyRegion)
     }
     
+    var body: some View {
+        GeometryReader { geometry in
+            mapaCompleto
+                .onAppear { screenHeight = geometry.size.height }
+                .onChange(of: geometry.size) { _, novoTamanho in
+                    screenHeight = novoTamanho.height
+                }
+        }
+    }
     //===============================================================================================
     /**
      =================================================================================
      Faz o mapa mostrar a "Principal" Região Metropolitana do Recife  e "prende" o usuário nela.
      =================================================================================
      **/
-    var body: some View {
-        
-        // Cria o mapa com as bordas limitantes
-        Map(
-            position: $cameraPosition,
-            bounds: MapCameraBounds(
-                centerCoordinateBounds: metropolyRegion,
-                minimumDistance: minimumZoom,
-                maximumDistance: maximumZoom
-            )
-        ) {
-            UserAnnotation()
+    private var mapaCompleto: some View {
+        MapReader { mapProxy in
+            Map(
+                position: $cameraPosition,
+                bounds: MapCameraBounds(
+                    centerCoordinateBounds: metropolyRegion,
+                    minimumDistance: minimumZoom,
+                    maximumDistance: maximumZoom
+                ),
+                selection: $lojaSelecionada
+            ) {
+                UserAnnotation()
 
-            ForEach(shopClusterManager.visibleLojas) { loja in
-                Marker(loja.nameForSearch, systemImage: "storefront", coordinate: loja.coordinate)
-                    .tint(.blue)
-            }
+                ForEach(shopClusterManager.visibleLojas) { loja in
+                    Marker(loja.nameForSearch, systemImage: "storefront", coordinate: loja.coordinate)
+                        .tint(.blue)
+                        .tag(loja)
+                }
 
-            ForEach(shopClusterManager.visibleGroups) { group in
-                Annotation("", coordinate: group.coordinate) {
-                    ZStack {
-                        Circle()
-                            .fill(Color.orange)
-                            .frame(width: 40, height: 40)
-                        Text("+\(group.count)")
-                            .font(.caption.bold())
-                            .foregroundStyle(.white)
+                ForEach(shopClusterManager.visibleGroups) { group in
+                    Annotation("", coordinate: group.coordinate) {
+                        ZStack {
+                            Circle()
+                                .fill(.orange.gradient)
+                                .background(Circle().fill(.ultraThinMaterial))
+                                .overlay(Circle().strokeBorder(.white.opacity(0.6), lineWidth: 1.5))
+                                .shadow(color: .black.opacity(0.25), radius: 6, x: 0, y: 3)
+                                .frame(width: 56, height: 56)
+
+                            Text("+\(group.count)")
+                                .font(.callout.bold())
+                                .foregroundStyle(.white)
+                        }
+                        .onTapGesture {
+                            zoomToFit(group)
+                        }
                     }
                 }
             }
-        }
-        .mapStyle(.standard(pointsOfInterest: .excludingAll))
-        .readSize { newSize in
-            shopClusterManager.mapSize = newSize
-        }
-        .onChange(of: shopClusterManager.mapSize) { _, newSize in
-            guard newSize != .zero else { return }
-            shopClusterManager.updateClusters(region: metropolyRegion)
-        }
-        .onMapCameraChange(frequency: .onEnd) { context in
-            shopClusterManager.updateClusters(region: context.region)
-        }
-        .onChange(of: locator.currentLocalization) { _, newLocalization in
-            setCameraWith(newLocalization)
-        }
-        .task {
-            await shopClusterManager.setLojas(lojas)
-        }
-        .onAppear {
-            locator.requestLocation()
+            .mapStyle(.standard(pointsOfInterest: .excludingAll))
+            .onMapCameraChange(frequency: .onEnd) { context in
+                currentRegion = context.region
+                tarefaDeAtualizacao?.cancel()
+                tarefaDeAtualizacao = Task {
+                    try? await Task.sleep(for: .seconds(0.3))
+                    guard !Task.isCancelled else { return }
+                    await shopClusterManager.updateClusters(mapProxy: mapProxy)
+                }
+            }
+            .onChange(of: lojaSelecionada) { _, novaLoja in
+                guard let loja = novaLoja else { return }
+                centralizarParaSheet(loja: loja, mapProxy: mapProxy)
+            }
+            .onChange(of: locator.currentLocalization) { _, newLocalization in
+                setCameraWith(newLocalization)
+            }
+            .task {
+                shopClusterManager.setLojas(lojas)
+                await shopClusterManager.updateClusters(mapProxy: mapProxy)
+            }
+            .onAppear {
+                locator.requestLocation()
+            }
+            .sheet(item: $lojaSelecionada) { loja in
+                LojaDetailView(loja: loja)
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.visible)
+            }
         }
     }
     
+    private func centralizarParaSheet(loja: Loja, mapProxy: MapProxy) {
+        guard screenHeight > 0,
+              let pontoAtual = mapProxy.convert(loja.coordinate, to: .local) else { return }
+
+        let pontoAlvo = CGPoint(x: pontoAtual.x, y: screenHeight / 2 - 24)
+
+        guard let coordenadaNoAlvo = mapProxy.convert(pontoAlvo, from: .local) else { return }
+
+        let deltaLat = coordenadaNoAlvo.latitude - loja.latitude
+        let deltaLon = coordenadaNoAlvo.longitude - loja.longitude
+
+        let novoCentro = CLLocationCoordinate2D(
+            latitude: currentRegion.center.latitude - deltaLat,
+            longitude: currentRegion.center.longitude - deltaLon
+        )
+
+        withAnimation(.easeInOut(duration: 0.4)) {
+            cameraPosition = .region(MKCoordinateRegion(center: novoCentro, span: currentRegion.span))
+        }
+    }
+    
+    private func zoomToFit(_ grupo: GroupOfShops) {
+        let latitudes = grupo.lojas.map { $0.latitude }
+        let longitudes = grupo.lojas.map { $0.longitude }
+
+        guard let latMin = latitudes.min(), let latMax = latitudes.max(),
+              let lonMin = longitudes.min(), let lonMax = longitudes.max() else { return }
+
+        let centro = CLLocationCoordinate2D(
+            latitude: (latMin + latMax) / 2,
+            longitude: (lonMin + lonMax) / 2
+        )
+
+        let span = MKCoordinateSpan(
+            latitudeDelta: max((latMax - latMin) * 2.2, 0.0015),
+            longitudeDelta: max((lonMax - lonMin) * 2.2, 0.0015)
+        )
+
+        // Cálculo à parte, SÓ pra decidir se é um caso "sem solução por zoom" — não afeta a câmera
+        let localizacoes = grupo.lojas.map { CLLocation(latitude: $0.latitude, longitude: $0.longitude) }
+        let localizacaoCentro = CLLocation(latitude: centro.latitude, longitude: centro.longitude)
+        let raioMaximo = localizacoes.map { $0.distance(from: localizacaoCentro) }.max() ?? 0
+        let distanciaEquivalente = raioMaximo * 3
+
+        if distanciaEquivalente < minimumZoom {
+            shopClusterManager.forcarSeparacao(grupo.lojas)
+        }
+
+        withAnimation(.easeInOut(duration: 1.6)) {
+            cameraPosition = .region(MKCoordinateRegion(center: centro, span: span))
+        }
+    }
     
     //===============================================================================================
     private func setCameraWith(_ localization: CLLocationCoordinate2D?) {

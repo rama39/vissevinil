@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		18C158023061B4400083499F /* ClusterMap in Frameworks */ = {isa = PBXBuildFile; productRef = 18C158013061B4400083499F /* ClusterMap */; };
 		18C158043061B4400083499F /* ClusterMapSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 18C158033061B4400083499F /* ClusterMapSwiftUI */; };
+		18C1580B30645C380083499F /* Clusterables in Frameworks */ = {isa = PBXBuildFile; productRef = 18C1580A30645C380083499F /* Clusterables */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				18C1580B30645C380083499F /* Clusterables in Frameworks */,
 				18C158043061B4400083499F /* ClusterMapSwiftUI in Frameworks */,
 				18C158023061B4400083499F /* ClusterMap in Frameworks */,
 			);
@@ -74,6 +76,7 @@
 			packageProductDependencies = (
 				18C158013061B4400083499F /* ClusterMap */,
 				18C158033061B4400083499F /* ClusterMapSwiftUI */,
+				18C1580A30645C380083499F /* Clusterables */,
 			);
 			productName = VisseVinil;
 			productReference = 211563113049A7C0000B4F34 /* VisseVinil.app */;
@@ -105,6 +108,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				18C158003061B4400083499F /* XCRemoteSwiftPackageReference "ClusterMap" */,
+				18C1580930645C380083499F /* XCRemoteSwiftPackageReference "Clusterables" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 211563123049A7C0000B4F34 /* Products */;
@@ -356,6 +360,14 @@
 				minimumVersion = 2.1.1;
 			};
 		};
+		18C1580930645C380083499F /* XCRemoteSwiftPackageReference "Clusterables" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/tomhoag/Clusterables";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.5.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -368,6 +380,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 18C158003061B4400083499F /* XCRemoteSwiftPackageReference "ClusterMap" */;
 			productName = ClusterMapSwiftUI;
+		};
+		18C1580A30645C380083499F /* Clusterables */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 18C1580930645C380083499F /* XCRemoteSwiftPackageReference "Clusterables" */;
+			productName = Clusterables;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
