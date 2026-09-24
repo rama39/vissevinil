@@ -13,6 +13,8 @@ struct CaixasGridView: View {
     func save() { if modelContext.hasChanges { try? modelContext.save() } }
     @Query private var caixas: [CaixaModel]
     
+    @State var newCaixa: CaixaModel? = nil
+    
     var body: some View {
         let columns = caixas.count > 3 ?
             [GridItem(.flexible()), GridItem(.flexible())] :
@@ -39,17 +41,23 @@ struct CaixasGridView: View {
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button { newCaixa() }
+                Button { newCaixa = CaixaModel(title: "", rgba: Color.brown.toRGBA) }
                 label: { Image(systemName: "plus") }
             }
         }
+        .sheet(item: $newCaixa) { _ in
+            AddCaixaView(newCaixa: $newCaixa, addCaixa: {
+                if let newCaixa,
+                   !newCaixa.title.isEmpty{
+                    addCaixa(newCaixa: newCaixa)
+                }
+            })
+        }
     }
     
-    private func newCaixa() {
+    private func addCaixa(newCaixa: CaixaModel) {
         withAnimation {
-            let newCaixa = CaixaModel (
-                title: "Nova Caixa",
-                rgba: Color.brown.toRGBA )
+            let newCaixa = newCaixa
             modelContext.insert(newCaixa)
             save()
         }
