@@ -27,7 +27,8 @@ struct CaixaOuterView: View {
             .clipShape(RoundedRectangle(cornerRadius: 8))
         VStack(spacing: 0) {
             ZStack {
-                Color.gray
+                // Parece meio duvidoso mas funciona
+                Color(uiColor: .secondarySystemBackground).ignoresSafeArea()
                 if count == 1 {
                     VStack(alignment: .leading) {
                         thumb
