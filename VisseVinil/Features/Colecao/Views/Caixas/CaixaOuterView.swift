@@ -57,7 +57,7 @@ struct CaixaOuterView: View {
                     Spacer()
                 }
             }
-            caixa.cor.frame(height: 24).ignoresSafeArea()
+            caixa.cor.frame(height: count > 4 ? 16 : 24).ignoresSafeArea()
         }
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .shadow(radius: 5)
