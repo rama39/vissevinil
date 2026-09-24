@@ -12,6 +12,8 @@ struct CaixaOuterView: View {
     @Bindable var caixa: CaixaModel
     let count: Int
     
+    let helperAnimacao = Namespace()
+    
     var body: some View {
         let titleSubtitle =
             VStack(alignment: .leading, spacing: 0) {
@@ -37,6 +39,7 @@ struct CaixaOuterView: View {
                     if count == 1 {
                         VStack(alignment: .leading) {
                             thumb
+                                .matchedGeometryEffect(id: "capaAnimada", in: helperAnimacao.wrappedValue)
                             titleSubtitle
                         }.padding()
                     } else {
@@ -44,6 +47,7 @@ struct CaixaOuterView: View {
                             titleSubtitle
                             Spacer()
                             thumb
+                                .matchedGeometryEffect(id: "capaAnimada", in: helperAnimacao.wrappedValue)
                                 .containerRelativeFrame([.horizontal], { size, axis in
                                     switch count {
                                     case 2: size * 0.40
