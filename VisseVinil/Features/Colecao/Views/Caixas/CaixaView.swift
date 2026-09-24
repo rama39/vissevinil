@@ -22,6 +22,7 @@ struct CaixaView: View {
             }
         }
         .navigationTitle($caixa.title)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
