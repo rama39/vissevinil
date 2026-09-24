@@ -103,18 +103,7 @@ struct VersionSelectView: View {
     
     
     private func getDiscoModel(version: MasterVersion) -> DiscoModel {
-//        DiscoModel(
-//            title: version.title ?? "",
-//            artists: master.artists?.map{$0.name ?? ""} ?? [],
-//            year: version.released ?? "",
-//            country: version.country ?? "",
-//            genres: master.genres ?? [],
-//            styles: master.styles ?? [],
-//            thumbData: version.thumbData,
-//            id: version.id,
-//            posicao: discos.count
-//        )
-        DiscoModel(master: master, version: version, posicao: discos.count)
+        DiscoModel(master: master, version: version, posicao: (discos.map{$0.posicao}.max() ?? -1) + 1)
     }
     
     private func saveDisco(version: MasterVersion) {
@@ -133,10 +122,8 @@ struct VersionSelectView: View {
         withAnimation {
             let deletedDisco = saved
             let pos = deletedDisco.posicao
-            for i in discos.indices {
-                if discos[i].posicao > pos {
-                    discos[i].posicao -= 1
-                }
+            for disco in discos where disco.posicao > pos {
+                disco.posicao -= 1
             }
             modelContext.delete(deletedDisco)
             save()
