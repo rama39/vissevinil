@@ -16,7 +16,7 @@ struct CaixasGridView: View {
     @State var newCaixa: CaixaModel? = nil
     
     var body: some View {
-        let columns = caixas.count > 3 ?
+        let columns = caixas.count > 4 ?
             [GridItem(.flexible()), GridItem(.flexible())] :
             [GridItem(.flexible())]
         ScrollView {
