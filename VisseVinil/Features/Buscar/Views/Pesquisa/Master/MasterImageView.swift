@@ -22,7 +22,7 @@ struct MasterImageView: View {
             }
             .clipShape(RoundedRectangle(cornerRadius: 8))
         } else {
-            Image(systemName: "music.note")
+            Image(systemName: "play.square")
                 .resizable()
                 .scaledToFit()
                 .foregroundColor(.gray)
