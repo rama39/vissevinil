@@ -17,7 +17,7 @@ struct AddDiscoView: View {
     @Binding var adicionandoDisco: Bool
     
     var body: some View {
-        List(discos) {disco in
+        List(discos.filter({$0.caixa == nil})) {disco in
             let contains = caixa.discos.contains(disco)
             if !contains {
                 Button {
