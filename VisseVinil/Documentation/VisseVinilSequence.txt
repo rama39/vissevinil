@@ -1,0 +1,54 @@
+title VisseVinil
+
+participant PesquisaGlobalView
+participant PesquisaGlobalViewModel
+participant MasterView
+participant MasterViewModel
+participant VersionSelectView
+participant VersionViewModel
+database modelContext
+database Discogs
+
+activate PesquisaGlobalView
+
+  PesquisaGlobalView->PesquisaGlobalViewModel: search()
+  activate PesquisaGlobalViewModel
+    PesquisaGlobalViewModel->(3)Discogs:performSearch()
+
+    Discogs->(3)PesquisaGlobalViewModel:(data, response)
+
+    PesquisaGlobalViewModel->PesquisaGlobalView:releases
+  deactivate PesquisaGlobalViewModel
+
+  PesquisaGlobalView->MasterView: master_id
+  activate MasterView
+  
+    MasterView->MasterViewModel:requestMaster()
+    activate MasterViewModel
+      MasterViewModel->(3)Discogs:performRequest()
+      MasterViewModel(3)<-Discogs:(data, response)
+      MasterViewModel->MasterView:master
+    deactivate MasterViewModel
+  
+    MasterView->VersionSelectView:selectedMaster = master
+    activate VersionSelectView
+      VersionSelectView->VersionViewModel: requestVersions()
+      activate VersionViewModel
+        VersionViewModel->(3)Discogs:performRequest()
+        VersionViewModel(3)<-Discogs: (data, response)
+        VersionViewModel->VersionSelectView:masterversion
+      deactivate VersionViewModel
+      
+      VersionSelectView->modelContext:saveDisco()
+      activate modelContext
+        modelContext-->VersionSelectView:animation
+      deactivate modelContext
+      
+      VersionSelectView-->MasterView:X
+    deactivate VersionSelectView
+    
+    MasterView-->PesquisaGlobalView:X
+  deactivate MasterView
+
+
+deactivate PesquisaGlobalView
