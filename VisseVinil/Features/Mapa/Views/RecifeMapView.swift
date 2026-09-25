@@ -155,6 +155,10 @@ struct RecifeMapView: View {
     private let minimumZoom: CLLocationDistance = 500
     private let maximumZoom: CLLocationDistance = 85000
     
+    @State private var searchCompleter = SearchCompleter()
+    @State private var textoBusca = ""
+    @State private var pontoPesquisado: Loja?
+    @Environment(\.dismissSearch) private var dismissSearch
     @State private var cameraPosition: MapCameraPosition
     @State private var shopClusterManager = ShopClusterManager()
     @State private var tarefaDeAtualizacao: Task<Void, Never>?
@@ -169,13 +173,21 @@ struct RecifeMapView: View {
         _currentRegion = State(initialValue: metropolyRegion)
     }
     
+    @State private var mapProxyAtual: MapProxy?
+
     var body: some View {
-        GeometryReader { geometry in
-            mapaCompleto
-                .onAppear { screenHeight = geometry.size.height }
-                .onChange(of: geometry.size) { _, novoTamanho in
-                    screenHeight = novoTamanho.height
-                }
+        NavigationStack {
+            GeometryReader { geometry in
+                mapaCompleto
+                    .onAppear { screenHeight = geometry.size.height }
+                    .onChange(of: geometry.size) { _, novoTamanho in
+                        screenHeight = novoTamanho.height
+                    }
+            }
+            .searchable(text: $textoBusca, placement: .navigationBarDrawer(displayMode: .always), prompt: "Buscar local")
+            .onChange(of: textoBusca) { _, novoTexto in
+                searchCompleter.buscar(novoTexto)
+            }
         }
     }
     //===============================================================================================
@@ -222,11 +234,19 @@ struct RecifeMapView: View {
                         }
                     }
                 }
+                
+                if let pesquisado = pontoPesquisado {
+                    Marker(pesquisado.nameForSearch, systemImage: "mappin", coordinate: pesquisado.coordinate)
+                        .tint(.red)
+                }
             }
             .mapStyle(.standard(pointsOfInterest: .excludingAll))
             .onMapCameraChange(frequency: .onEnd) { context in
+               
                 currentRegion = context.region
-                shopClusterManager.limparForcadosSeAfastado(distanciaAtual: context.camera.distance)
+                    searchCompleter.atualizarRegiao(context.region)
+                    shopClusterManager.limparForcadosSeAfastado(distanciaAtual: context.camera.distance)
+                    
                 tarefaDeAtualizacao?.cancel()
                 tarefaDeAtualizacao = Task {
                     try? await Task.sleep(for: .seconds(0.3))
@@ -235,8 +255,11 @@ struct RecifeMapView: View {
                 }
             }
             .onChange(of: lojaSelecionada) { _, novaLoja in
-                guard let loja = novaLoja else { return }
-                centralizarParaSheet(loja: loja, mapProxy: mapProxy)
+                if let loja = novaLoja {
+                    centralizarParaSheet(loja: loja, mapProxy: mapProxy)
+                } else {
+                    pontoPesquisado = nil
+                }
             }
             .onChange(of: locator.currentLocalization) { _, newLocalization in
                 setCameraWith(newLocalization)
@@ -247,13 +270,78 @@ struct RecifeMapView: View {
             }
             .onAppear {
                 locator.requestLocation()
+                mapProxyAtual = mapProxy
             }
             .sheet(item: $lojaSelecionada) { loja in
                 LojaDetailView(loja: loja)
                     .presentationDetents([.medium, .large])
                     .presentationDragIndicator(.visible)
             }
+            .overlay(alignment: .top) {
+                if !searchCompleter.sugestoes.isEmpty {
+                    List(searchCompleter.sugestoes, id: \.self) { sugestao in
+                        Button {
+                            selecionarSugestao(sugestao)
+                        } label: {
+                            VStack(alignment: .leading) {
+                                Text(sugestao.title)
+                                    .font(.body)
+                                if !sugestao.subtitle.isEmpty {
+                                    Text(sugestao.subtitle)
+                                        .font(.caption)
+                                        .foregroundStyle(.secondary)
+                                }
+                            }
+                        }
+                    }
+                    .listStyle(.plain)
+                    .frame(maxHeight: 300)
+                    .background(.regularMaterial)
+                    .cornerRadius(12)
+                    .padding(.horizontal)
+                    .padding(.top, 8)
+                }
+            }
         }
+    }
+    
+    private func selecionarSugestao(_ sugestao: MKLocalSearchCompletion) {
+        Task {
+            let requisicao = MKLocalSearch.Request(completion: sugestao)
+            let busca = MKLocalSearch(request: requisicao)
+
+            do {
+                let resposta = try await busca.start()
+                guard let item = resposta.mapItems.first else { return }
+                selecionarResultado(item)
+            } catch {
+                // busca falhou silenciosamente; poderia mostrar um aviso se quiser
+            }
+        }
+    }
+    
+    private func selecionarResultado(_ item: MKMapItem) {
+        let coordenada = item.location.coordinate
+
+        let novaLoja = Loja(nameForSearch: item.name ?? "Local", coordinate: coordenada)
+        novaLoja.officialName = item.name
+        novaLoja.category = item.pointOfInterestCategory?.rawValue
+        novaLoja.address = item.address?.fullAddress
+        novaLoja.fone = item.phoneNumber
+        novaLoja.website = item.url?.absoluteString
+
+        textoBusca = ""
+        searchCompleter.limpar()
+        dismissSearch()
+
+        pontoPesquisado = novaLoja
+        lojaSelecionada = novaLoja
+    }
+    
+    private func selecionarLojaDaBusca(_ loja: Loja) {
+        textoBusca = ""
+        dismissSearch()
+        lojaSelecionada = loja
     }
     
     private func centralizarParaSheet(loja: Loja, mapProxy: MapProxy) {
