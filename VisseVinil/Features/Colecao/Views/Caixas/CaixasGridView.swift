@@ -53,6 +53,7 @@ struct CaixasGridView: View {
                 }
             })
         }
+        .alertaGuardar($desRemovendoDisco)
     }
     
     private func addCaixa(newCaixa: CaixaModel) {

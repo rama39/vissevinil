@@ -40,31 +40,7 @@ struct ColecaoPesquisaView: View {
             }
             .onDelete(perform: deleteItems)
         }
-        .alert("Guardar Disco", item: $desRemovendoDisco) { disco in
-            // TODO: MAKE BLUE
-            Button("Guardar disco na frente", role: .confirm) {
-                withAnimation {
-                    // TODO: mover à frente
-                    disco.removed = false
-                    desRemovendoDisco = nil
-                }
-            }
-            Button("Guardar disco onde estava", role: .none) {
-                withAnimation {
-                    disco.removed = false
-                    desRemovendoDisco = nil
-                }
-            }
-            Button("Cancelar", role: .cancel) {
-                desRemovendoDisco = nil
-            }
-        } message: { _ in
-            if let disco = desRemovendoDisco {
-                let text = "Disco: \(disco.title) - \(disco.artistsListed)" + (disco.caixa != nil ?
-                    "\nCaixa: \(disco.caixa!.title)" : "")
-                Text(text)
-            }
-        }
+        .alertaGuardar($desRemovendoDisco)
     }
     
 //    private func addItem() {
