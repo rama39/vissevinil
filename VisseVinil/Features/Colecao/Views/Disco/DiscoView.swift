@@ -65,11 +65,14 @@ struct DiscoView: View {
         
         .alert("Você tem certeza?", isPresented: $removendoDaCaixa) {
             // TODO: MAKE BLUE
-            Button("Confirmar", role: .confirm) {
-                disco.removed = true
-                removendoDaCaixa = false
+            NavigationLink {
+                ColecaoView()
+                    .onAppear {
+                        disco.removed = true
+                    }
+            } label: {
+                Text("Confirmar")
             }
-            .tint(.blue)
             Button("Cancelar", role: .cancel) {
                 removendoDaCaixa = false
             }
