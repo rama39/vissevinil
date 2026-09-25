@@ -111,6 +111,7 @@ final class DiscoModel {
     var curtido: Bool = false  // disco curtido, aparece primeir na busca
     var favorito: Bool = false // disco aparece no carrossel do perfil de favs
     var wishlist: Bool = false
+    var removed: Bool = false // disco removido para ouvir
     
     // relacionamentos
     @Relationship(deleteRule: .cascade, inverse: \EventoModel.disco)
