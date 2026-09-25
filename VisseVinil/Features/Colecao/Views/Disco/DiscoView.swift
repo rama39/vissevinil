@@ -70,6 +70,7 @@ struct DiscoView: View {
                     .onAppear {
                         disco.removed = true
                     }
+                    .navigationBarBackButtonHidden(true)
             } label: {
                 Text("Confirmar")
             }
