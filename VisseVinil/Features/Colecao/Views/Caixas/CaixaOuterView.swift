@@ -15,20 +15,21 @@ struct CaixaOuterView: View {
     let helperAnimacao = Namespace()
     
     var body: some View {
+        let discos = caixa.discos.filter({!$0.removed})
         let titleSubtitle =
             VStack(alignment: .leading, spacing: 0) {
                 Text(caixa.title)
                     .font(.headline)
                     .minimumScaleFactor(0.65)
                     .lineLimit(2)
-                Text( "\(caixa.discos.count) Disco\(caixa.discos.count > 1 ? "s" : "")" )
+                Text( "\(discos.count) Disco\(discos.count > 1 ? "s" : "")" )
                     .font(.subheadline)
                     .minimumScaleFactor(0.65)
                     .foregroundStyle(.secondary)
                     .lineLimit(2)
             }
         let thumb =
-        guessThumb(caixa.discos.first?.thumbData)
+        guessThumb(discos.first?.thumbData)
             .resizable().scaledToFit()
             .clipShape(RoundedRectangle(cornerRadius: 8))
         VStack(spacing: 0) {

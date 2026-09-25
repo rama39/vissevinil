@@ -14,7 +14,8 @@ struct CaixaView: View {
     @State var adicionandoDisco: Bool = false
     
     var body: some View {
-        List(caixa.discos) { disco in
+        let discos = caixa.discos.filter({!$0.removed})
+        List(discos) { disco in
             NavigationLink {
                 DiscoView(disco: disco)
             } label: {
