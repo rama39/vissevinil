@@ -15,11 +15,19 @@ struct CaixasGridView: View {
     
     @State var newCaixa: CaixaModel? = nil
     
+    @State var desRemovendoDisco: DiscoModel? = nil
+    
     var body: some View {
         let columns = caixas.count > 4 ?
             [GridItem(.flexible()), GridItem(.flexible())] :
             [GridItem(.flexible())]
         ScrollView {
+            ZStack {
+                Color(uiColor: .secondarySystemBackground).ignoresSafeArea().clipShape(RoundedRectangle(cornerRadius: 8))
+                DiscosRemovidosView(desRemovendoDisco: $desRemovendoDisco)
+                    .padding()
+            }
+            .padding(.horizontal)
             LazyVGrid(columns: columns) {
                 ForEach(caixas) { caixa in
                     NavigationLink {
