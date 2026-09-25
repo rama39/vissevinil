@@ -40,7 +40,7 @@ struct DiscosRemovidosView: View {
                     }.padding(.horizontal, 4)
                 }
             }
-            .tabViewStyle(.page)
+            .tabViewStyle(.page(indexDisplayMode: .never))
             .frame(height: 78)
         }
     }
