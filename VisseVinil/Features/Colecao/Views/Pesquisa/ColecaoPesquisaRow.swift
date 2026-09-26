@@ -38,16 +38,7 @@ struct ColecaoPesquisaRow: View {
                 Spacer()
                 
                 if mostraCaixa, let caixa = disco.caixa {
-                    HStack(spacing: 0) {
-                        caixa.cor.frame(width: 5)
-                        Text(caixa.title).padding(.horizontal, 5)
-                            .font(.subheadline)
-                            .lineLimit(1)
-                            .frame(height: 20)
-                            .background(caixa.cor.opacity(0.3))
-                    }
-                    .frame(height: 20)
-                    .clipShape(RoundedRectangle(cornerRadius: 4))
+                    CaixaTag(caixa: caixa)
                 }
             }
         }
