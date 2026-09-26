@@ -32,7 +32,7 @@ struct CaixaView: View {
                 NavigationLink {
                     DiscoView(disco: disco)
                 } label: {
-                    ColecaoPesquisaRow(disco: disco)
+                    ColecaoPesquisaRow(disco: disco, inCaixa: true)
                 }
             }
             .onDelete(perform: deleteItems)
