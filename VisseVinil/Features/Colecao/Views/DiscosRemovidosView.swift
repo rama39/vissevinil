@@ -21,9 +21,7 @@ struct DiscosRemovidosView: View {
             TabView {
                 ForEach(discosRemovidos) { disco in
                     HStack {
-                        guessThumb(disco.thumbData)
-                            .resizable().scaledToFit().frame(width: 70, height: 70)
-                            .clipShape(RoundedRectangle(cornerRadius: 1))
+                        frameThumb(disco.thumbData)
                         VStack(alignment: .leading) {
                             Text("Disco removido da caixa")
                                 .font(.headline)

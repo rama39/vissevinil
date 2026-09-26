@@ -15,7 +15,7 @@ struct ColecaoPesquisaRow: View {
         
         HStack(alignment: .top, spacing: 12) {
             // Carrega a imagem da capa de forma assíncrona
-            frameThumb(disco.thumbData, frame: 60, radius: 4)
+            frameThumb(disco.thumbData)
             
             VStack(alignment: .leading, spacing: 4) {
                 Text(disco.title)
