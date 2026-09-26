@@ -27,12 +27,16 @@ struct CaixaView: View {
     @State var adicionandoDisco: Bool = false
     
     var body: some View {
-        List(discosBuscados) { disco in
-            NavigationLink {
-                DiscoView(disco: disco)
-            } label: {
-                ColecaoPesquisaRow(disco: disco)
+        List {
+            ForEach(discosBuscados) { disco in
+                NavigationLink {
+                    DiscoView(disco: disco)
+                } label: {
+                    ColecaoPesquisaRow(disco: disco)
+                }
             }
+            .onDelete(perform: deleteItems)
+            
         }
         .navigationTitle($caixa.title)
         .navigationBarTitleDisplayMode(.inline)
@@ -49,6 +53,14 @@ struct CaixaView: View {
             AddDiscoView(caixa: caixa, adicionandoDisco: $adicionandoDisco)
         }
         .searchable(text: $bufferBusca, prompt: "Pesquisar Discos da Caixa")
+    }
+    
+    private func deleteItems(offsets: IndexSet) {
+        withAnimation {
+            for index in offsets {
+                discosBuscados[index].caixa = nil
+            }
+        }
     }
 }
 
