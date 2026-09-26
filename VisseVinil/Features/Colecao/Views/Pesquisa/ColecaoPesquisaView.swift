@@ -46,7 +46,7 @@ struct ColecaoPesquisaView: View {
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                modelContext.delete(discos[index])
+                modelContext.delete(discosBuscados[index])
             }
         }
     }
