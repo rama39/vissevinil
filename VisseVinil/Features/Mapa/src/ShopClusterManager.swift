@@ -16,12 +16,18 @@ class ShopClusterManager {
     private let clusterManager = ClusterManager<Loja>()
     private var lojas: [Loja] = []
     private var idsForcadosASeparar: Set<PersistentIdentifier> = []
+    // Loja selecionada: nunca entra em cluster, pra que o pin dela sempre apareça (e expanda)
+    private var idDestacado: PersistentIdentifier?
 
     var visibleLojas: [Loja] = []
     var visibleGroups: [GroupOfShops] = []
 
     func setLojas(_ lojas: [Loja]) {
         self.lojas = lojas
+    }
+
+    func destacar(_ loja: Loja?) {
+        idDestacado = loja?.persistentModelID
     }
 
     func forcarSeparacao(_ lojasDoGrupo: [Loja]) {
@@ -41,7 +47,10 @@ class ShopClusterManager {
     func updateClusters(mapProxy: MapProxy, spacingInPixels: Int = 60) async {
         guard let epsilon = mapProxy.degrees(fromPixels: spacingInPixels) else { return }
 
-        await clusterManager.update(lojas, epsilon: epsilon)
+        let destacada = lojas.first { $0.persistentModelID == idDestacado }
+        let lojasParaAgrupar = lojas.filter { $0.persistentModelID != idDestacado }
+
+        await clusterManager.update(lojasParaAgrupar, epsilon: epsilon)
 
         var novasLojas: [Loja] = []
         var novosGrupos: [GroupOfShops] = []
@@ -58,6 +67,10 @@ class ShopClusterManager {
                     GroupOfShops(id: UUID(), coordinate: cluster.center, count: cluster.size, lojas: cluster.items)
                 )
             }
+        }
+
+        if let destacada {
+            novasLojas.append(destacada)
         }
 
         withAnimation(.easeInOut(duration: 2.0)) {

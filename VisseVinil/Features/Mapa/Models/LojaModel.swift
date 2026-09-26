@@ -17,6 +17,7 @@ class Loja {
 
     var lastUpdate: Date?
     var ig: String?
+    var favorito: Bool = false
 
     init(nameForSearch: String, coordinate: CLLocationCoordinate2D, ig: String? = nil) {
         self.nameForSearch = nameForSearch
