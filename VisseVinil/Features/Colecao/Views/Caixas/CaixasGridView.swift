@@ -22,12 +22,14 @@ struct CaixasGridView: View {
             [GridItem(.flexible()), GridItem(.flexible())] :
             [GridItem(.flexible())]
         ScrollView {
-            ZStack {
-                Color(uiColor: .secondarySystemBackground).ignoresSafeArea().clipShape(RoundedRectangle(cornerRadius: 8))
-                DiscosRemovidosView(desRemovendoDisco: $desRemovendoDisco)
-                    .padding()
+            if desRemovendoDisco != nil {
+                ZStack {
+                    Color(uiColor: .secondarySystemBackground).ignoresSafeArea().clipShape(RoundedRectangle(cornerRadius: 8))
+                    DiscosRemovidosView(desRemovendoDisco: $desRemovendoDisco)
+                        .padding()
+                }
+                .padding(.horizontal)
             }
-            .padding(.horizontal)
             LazyVGrid(columns: columns) {
                 ForEach(caixas) { caixa in
                     NavigationLink {
