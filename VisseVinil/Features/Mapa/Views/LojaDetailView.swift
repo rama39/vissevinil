@@ -456,9 +456,11 @@ struct LojaDetailView: View {
         tempoAPe = nil
 
         // Em paralelo: tempo a pé e endereço detalhado
+        let destino = loja.coordinate
+        let origem = localizacaoDoUsuario
         async let tempo: TimeInterval? = {
-            guard let origem = localizacaoDoUsuario else { return nil }
-            return await RotaNoMapas.tempoAPe(de: origem, ate: loja.coordinate)
+            guard let origem else { return nil }
+            return await RotaNoMapas.tempoAPe(de: origem, ate: destino)
         }()
 
         if !loja.temEnderecoDetalhado {
