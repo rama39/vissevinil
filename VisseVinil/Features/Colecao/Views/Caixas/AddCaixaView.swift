@@ -10,6 +10,7 @@ import SwiftUI
 struct AddCaixaView: View {
     @Binding var newCaixa: tempCaixa?
     let confirm: () -> Void
+    let navTitle: String
     var body: some View {
         NavigationStack {
             Form {
@@ -28,7 +29,7 @@ struct AddCaixaView: View {
                     )
                 }
             }
-            .navigationTitle("Nova Caixa")
+            .navigationTitle(navTitle)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading, content: {

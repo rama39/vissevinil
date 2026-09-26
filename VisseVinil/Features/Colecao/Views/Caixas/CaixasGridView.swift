@@ -98,7 +98,7 @@ struct CaixasGridView: View {
                     )
                     addCaixa(newCaixa: newCaixaData)
                 }
-            })
+            }, navTitle: "Nova Caixa")
         }
         .sheet(item: $editandoCaixa) { _ in
             AddCaixaView(newCaixa: $editandoCaixa, confirm: {
@@ -107,7 +107,7 @@ struct CaixasGridView: View {
                     editada.title = editandoCaixa.title
                     editada.rgba = editandoCaixa.rgba
                 }
-            })
+            }, navTitle: "Editar caixa")
         }
         .alertaGuardar($desRemovendoDisco)
         .searchable(text: $bufferBusca, prompt: "Pesquisar Caixas")
