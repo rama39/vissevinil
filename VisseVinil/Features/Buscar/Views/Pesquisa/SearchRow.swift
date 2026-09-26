@@ -19,12 +19,12 @@ struct SearchRow: View {
                 AsyncImage(url: thumbUrl) { image in
                     image
                         .resizable()
-                        .scaledToFill()
+                        .scaledToFit()
                 } placeholder: {
                     Color.gray.opacity(0.3)
                 }
-                .frame(width: 60, height: 60)
-                .cornerRadius(4)
+                .frame(width: 70, height: 70)
+                .cornerRadius(8)
                 .clipped()
             } else { placeholder }
             

@@ -9,7 +9,7 @@ import SwiftUI
 
 func frameThumb(
     _ thumbData: Data?,
-    frame: CGFloat = 100,
+    frame: CGFloat = 70,
     radius: CGFloat = 8
 ) -> some View {
     guessThumb(thumbData)
