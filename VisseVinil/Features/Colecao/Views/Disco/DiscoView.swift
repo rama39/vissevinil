@@ -38,7 +38,7 @@ struct DiscoView: View {
             }
             HStack {
                 if let caixa = disco.caixa {
-                    Text(caixa.title)
+                    CaixaTag(caixa: caixa)
                 }
                 Spacer()
                 Button {
