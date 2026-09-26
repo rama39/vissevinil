@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct AddCaixaView: View {
-    @Binding var newCaixa: CaixaModel?
-    let addCaixa: () -> Void
+    @Binding var newCaixa: tempCaixa?
+    let confirm: () -> Void
     var body: some View {
         NavigationStack {
             Form {
@@ -40,7 +40,7 @@ struct AddCaixaView: View {
                 })
                 ToolbarItem(placement: .topBarTrailing, content: {
                     Button(role: .confirm) {
-                        addCaixa()
+                        confirm()
                         newCaixa = nil
                     } label: {
                         Image(systemName: "checkmark")

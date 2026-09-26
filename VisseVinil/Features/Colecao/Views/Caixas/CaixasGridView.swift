@@ -8,6 +8,18 @@
 import SwiftUI
 import SwiftData
 
+struct tempCaixa: Identifiable {
+    var id = UUID()
+    var title: String
+    var rgba: RGBAColor
+    
+    
+    var cor: Color {
+        get { Color(rgba) }
+        set { rgba = newValue.toRGBA }
+    }
+}
+
 struct CaixasGridView: View {
     @Environment(\.modelContext) private var modelContext
     func save() { if modelContext.hasChanges { try? modelContext.save() } }
@@ -26,7 +38,9 @@ struct CaixasGridView: View {
 //        .filter({!$0.removed})
     }
     
-    @State var newCaixa: CaixaModel? = nil
+    @State var newCaixa: tempCaixa? = nil
+    @State var editandoCaixa: tempCaixa? = nil
+    @State var editandoCaixaData: CaixaModel? = nil
     
     @State var desRemovendoDisco: DiscoModel? = nil
     
@@ -52,10 +66,16 @@ struct CaixasGridView: View {
                     }
                     .buttonStyle(.plain)
                     .contextMenu {
-                        Button {
+                        Button(role: .destructive) {
                             deleteCaixa(caixa)
                         } label: {
                             Label("Deletar", systemImage: "trash")
+                        }
+                        Button(role: .confirm) {
+                            editandoCaixa = tempCaixa(title: caixa.title, rgba: caixa.rgba)
+                            editandoCaixaData = caixa
+                        } label: {
+                            Label("Editar", systemImage: "pencil")
                         }
                     }
                 }
@@ -64,15 +84,28 @@ struct CaixasGridView: View {
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                Button { newCaixa = CaixaModel(title: "", rgba: Color.brown.toRGBA) }
+                Button { newCaixa = tempCaixa(title: "", rgba: Color.brown.toRGBA) }
                 label: { Image(systemName: "plus") }
             }
         }
         .sheet(item: $newCaixa) { _ in
-            AddCaixaView(newCaixa: $newCaixa, addCaixa: {
+            AddCaixaView(newCaixa: $newCaixa, confirm: {
                 if let newCaixa,
                    !newCaixa.title.isEmpty{
-                    addCaixa(newCaixa: newCaixa)
+                    let newCaixaData = CaixaModel(
+                        title: newCaixa.title,
+                        rgba: newCaixa.rgba
+                    )
+                    addCaixa(newCaixa: newCaixaData)
+                }
+            })
+        }
+        .sheet(item: $editandoCaixa) { _ in
+            AddCaixaView(newCaixa: $editandoCaixa, confirm: {
+                if let editandoCaixa,
+                   let editada = editandoCaixaData {
+                    editada.title = editandoCaixa.title
+                    editada.rgba = editandoCaixa.rgba
                 }
             })
         }
