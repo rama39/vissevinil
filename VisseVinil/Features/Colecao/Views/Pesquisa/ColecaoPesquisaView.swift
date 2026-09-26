@@ -16,9 +16,8 @@ struct ColecaoPesquisaView: View {
     @State private var bufferBusca = ""
     var discosBuscados: [DiscoModel] {
         discos.filter { disco in
-            if bufferBusca.isEmpty { return true }
-            return disco.title
-                .localizedCaseInsensitiveContains(bufferBusca)
+            bufferBusca.isEmpty ||
+            disco.title.localizedCaseInsensitiveContains(bufferBusca)
         }.sorted(by: {
             $0.posicao > $1.posicao
         })
@@ -40,18 +39,9 @@ struct ColecaoPesquisaView: View {
             }
             .onDelete(perform: deleteItems)
         }
+        .searchable(text: $bufferBusca)
         .alertaGuardar($desRemovendoDisco)
     }
-    
-//    private func addItem() {
-//        withAnimation {
-//            let newDisco = DiscoModel(posicao: discos.count)
-//            modelContext.insert(newDisco)
-//            let newEvento = EventoModel(.adicionou)
-//            newEvento.disco = newDisco
-//            modelContext.insert(newEvento)
-//        }
-//    }
 
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
