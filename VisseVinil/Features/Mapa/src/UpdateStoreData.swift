@@ -103,6 +103,7 @@ class StoreSearch {
         loja.address = item.address?.fullAddress
         loja.latitude = item.location.coordinate.latitude
         loja.longitude = item.location.coordinate.longitude
+        loja.preencherEndereco(com: item)
     }
     //=======================================================================================
 }

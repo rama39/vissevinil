@@ -15,6 +15,15 @@ class Loja {
     var fone: String?
     var website: String?
 
+    // Endereço em partes (seção "Detalhes" da sheet)
+    var rua: String?
+    var numero: String?
+    var bairro: String?
+    var cidade: String?
+    var estado: String?
+    var cep: String?
+    var pais: String?
+
     var lastUpdate: Date?
     var ig: String?
     var favorito: Bool = false

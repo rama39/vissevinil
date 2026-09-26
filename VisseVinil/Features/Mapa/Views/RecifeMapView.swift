@@ -226,6 +226,8 @@ struct RecifeMapView: View {
     @State private var pontoPesquisado: Loja?
     @State private var cameraPosition: MapCameraPosition
     @State private var shopClusterManager = ShopClusterManager()
+    // Escopo compartilhado entre o Map e os botões de localização/bússola fora dele
+    @Namespace private var escopoDoMapa
     @State private var tarefaDeAtualizacao: Task<Void, Never>?
     @State private var lojaSelecionada: Loja?
     @State private var tamanhoMapa: CGSize = .zero
@@ -268,6 +270,20 @@ struct RecifeMapView: View {
             mapaCompleto
                 .ignoresSafeArea()
                 .onGeometryChange(for: CGSize.self) { $0.size } action: { tamanhoMapa = $0 }
+                // Rastreio + bússola: o botão de localização alterna entre seguir o usuário e
+                // seguir com a direção do aparelho (o "farol" de para onde o celular aponta)
+                .overlay(alignment: .topTrailing) {
+                    if !buscaAtiva {
+                        VStack(spacing: 10) {
+                            MapUserLocationButton(scope: escopoDoMapa)
+                            MapCompass(scope: escopoDoMapa)
+                        }
+                        .buttonBorderShape(.circle)
+                        .padding(.trailing, 12)
+                        .padding(.top, 8)
+                    }
+                }
+                .mapScope(escopoDoMapa)
                 .overlay {
                     ZStack {
                         if buscaAtiva {
@@ -366,6 +382,7 @@ struct RecifeMapView: View {
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .background(.ultraThinMaterial)
+        .scrollEdgeEffectStyle(.soft, for: .all)
         .scrollDismissesKeyboard(.immediately)
         .overlay {
             if fixados.isEmpty && favoritos.isEmpty && recentesSalvos.isEmpty {
@@ -399,6 +416,7 @@ struct RecifeMapView: View {
         .listStyle(.plain)
         .scrollContentBackground(.hidden)
         .background(.ultraThinMaterial)
+        .scrollEdgeEffectStyle(.soft, for: .all)
         .scrollDismissesKeyboard(.immediately)
     }
 
@@ -528,7 +546,8 @@ struct RecifeMapView: View {
                     minimumDistance: minimumZoom,
                     maximumDistance: maximumZoom
                 ),
-                selection: $lojaSelecionada
+                selection: $lojaSelecionada,
+                scope: escopoDoMapa
             ) {
                 UserAnnotation()
 
@@ -621,10 +640,14 @@ struct RecifeMapView: View {
                 if let loja = lojaDaSheet {
                     LojaDetailView(
                         loja: loja,
+                        chaveDoLocal: chave(para: loja),
+                        ehLojaCadastrada: lojas.contains(loja),
                         ehFavorito: ehFavorito(loja),
                         onToggleFavorito: { alternarFavorito(loja) },
                         ehFixado: ehFixado(loja),
-                        onToggleFixado: { alternarFixado(loja) }
+                        onToggleFixado: { alternarFixado(loja) },
+                        localizacaoDoUsuario: locator.currentLocalization,
+                        onFechar: fecharSheet
                     )
                     .presentationDetents([.height(alturaSheetReduzida), .large], selection: $detenteDaSheet)
                     .presentationDragIndicator(.visible)
@@ -677,6 +700,11 @@ struct RecifeMapView: View {
             try? await Task.sleep(for: .milliseconds(350))
             acao()
         }
+    }
+
+    private func fecharSheet() {
+        lojaDaSheet = nil
+        lojaSelecionada = nil
     }
 
     private func limparSelecao(mapProxy: MapProxy) {
@@ -794,6 +822,7 @@ struct RecifeMapView: View {
             original.address = item.address?.fullAddress
             original.fone = item.phoneNumber
             original.website = item.url?.absoluteString
+            original.preencherEndereco(com: item)
             abrir(original)
         } else {
             candidata.officialName = item.name
@@ -801,6 +830,7 @@ struct RecifeMapView: View {
             candidata.address = item.address?.fullAddress
             candidata.fone = item.phoneNumber
             candidata.website = item.url?.absoluteString
+            candidata.preencherEndereco(com: item)
             abrir(candidata)
         }
     }
