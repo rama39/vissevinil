@@ -77,7 +77,7 @@ struct CaixasGridView: View {
             })
         }
         .alertaGuardar($desRemovendoDisco)
-        .searchable(text: $bufferBusca)
+        .searchable(text: $bufferBusca, prompt: "Pesquisar Caixas")
     }
     
     private func addCaixa(newCaixa: CaixaModel) {

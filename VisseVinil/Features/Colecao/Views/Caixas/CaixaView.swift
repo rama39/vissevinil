@@ -48,7 +48,7 @@ struct CaixaView: View {
         .sheet(isPresented: $adicionandoDisco) {
             AddDiscoView(caixa: caixa, adicionandoDisco: $adicionandoDisco)
         }
-        .searchable(text: $bufferBusca)
+        .searchable(text: $bufferBusca, prompt: "Pesquisar Discos da Caixa")
     }
 }
 

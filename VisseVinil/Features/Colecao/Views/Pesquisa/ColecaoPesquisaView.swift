@@ -39,7 +39,7 @@ struct ColecaoPesquisaView: View {
             }
             .onDelete(perform: deleteItems)
         }
-        .searchable(text: $bufferBusca)
+        .searchable(text: $bufferBusca, prompt: "Pesquisar Discos da Coleção")
         .alertaGuardar($desRemovendoDisco)
     }
 
