@@ -13,6 +13,19 @@ struct CaixasGridView: View {
     func save() { if modelContext.hasChanges { try? modelContext.save() } }
     @Query private var caixas: [CaixaModel]
     
+    @State private var bufferBusca = ""
+    var caixasBuscadas: [CaixaModel] {
+        caixas
+        .filter { caixa in
+            bufferBusca.isEmpty ||
+            caixa.title.localizedCaseInsensitiveContains(bufferBusca)
+        }
+//        .sorted(by: {
+//            $0.posicao > $1.posicao
+//        })
+//        .filter({!$0.removed})
+    }
+    
     @State var newCaixa: CaixaModel? = nil
     
     @State var desRemovendoDisco: DiscoModel? = nil
@@ -31,7 +44,7 @@ struct CaixasGridView: View {
                 .padding(.horizontal)
             }
             LazyVGrid(columns: columns) {
-                ForEach(caixas) { caixa in
+                ForEach(caixasBuscadas) { caixa in
                     NavigationLink {
                         CaixaView(caixa: caixa)
                     } label: {
@@ -64,6 +77,7 @@ struct CaixasGridView: View {
             })
         }
         .alertaGuardar($desRemovendoDisco)
+        .searchable(text: $bufferBusca)
     }
     
     private func addCaixa(newCaixa: CaixaModel) {
