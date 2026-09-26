@@ -18,6 +18,17 @@ struct DiscoView: View {
             guessThumb(disco.thumbData)
                 .resizable().scaledToFit().padding()
                 .listRowSeparator(.hidden)
+            HStack {
+                if let caixa = disco.caixa {
+                    CaixaTag(caixa: caixa)
+                }
+                Spacer()
+                Button {
+                    disco.curtido.toggle()
+                } label: {
+                    Image(systemName: "heart" + (disco.curtido ? ".fill" : ""))
+                }
+            }.padding(.horizontal)
             if disco.caixa != nil {
                 Button() {
                     withAnimation {
@@ -35,17 +46,6 @@ struct DiscoView: View {
                     }.foregroundStyle(.green)
                 }.listRowSeparator(.hidden)
                     .clipShape(RoundedRectangle(cornerRadius: 100))
-            }
-            HStack {
-                if let caixa = disco.caixa {
-                    CaixaTag(caixa: caixa)
-                }
-                Spacer()
-                Button {
-                    disco.curtido.toggle()
-                } label: {
-                    Image(systemName: "heart" + (disco.curtido ? ".fill" : ""))
-                }
             }
             Text(disco.title)
                 .listRowSeparator(.hidden)
