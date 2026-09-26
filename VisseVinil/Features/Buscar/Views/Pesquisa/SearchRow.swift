@@ -26,28 +26,16 @@ struct SearchRow: View {
                 .frame(width: 60, height: 60)
                 .cornerRadius(4)
                 .clipped()
-            } else {
-                RoundedRectangle(cornerRadius: 4)
-                    .fill(Color.gray.opacity(0.3))
-                    .frame(width: 60, height: 60)
-                    .overlay(Image(systemName: "music.note"))
-            }
+            } else { placeholder }
             
             VStack(alignment: .leading, spacing: 4) {
                 Text(release.title ?? "Disco")
                     .font(.headline)
                     .lineLimit(2)
                 
-                HStack {
-                    if let year = release.year {
-                        Text(year)
-                    }
-                    if let country = release.country {
-                        Text("•  \(country)")
-                    }
-                }
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+                Text(release.yearCountry)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
             }
         }
         .padding(.vertical, 4)
