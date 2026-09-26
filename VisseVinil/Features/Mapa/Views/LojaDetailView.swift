@@ -11,21 +11,26 @@ struct LojaDetailView: View {
     let loja: Loja
     let ehFavorito: Bool
     let onToggleFavorito: () -> Void
+    let ehFixado: Bool
+    let onToggleFixado: () -> Void
 
     var body: some View {
-       
-
-         
         VStack(alignment: .leading, spacing: 12) {
-            HStack {
+            HStack(spacing: 16) {
                 Text(loja.officialName ?? loja.nameForSearch)
                     .font(.title2.bold())
-                
+
                 Spacer()
-                
+
+                Button(action: onToggleFixado) {
+                    Image(systemName: ehFixado ? "pin.fill" : "pin")
+                }
+                .accessibilityLabel(ehFixado ? "Desafixar" : "Fixar")
+
                 Button(action: onToggleFavorito) {
                     Image(systemName: ehFavorito ? "star.fill" : "star")
                 }
+                .accessibilityLabel(ehFavorito ? "Remover dos favoritos" : "Favoritar")
             }
             
             if let category = loja.category {
