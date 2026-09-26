@@ -75,7 +75,9 @@ struct PesquisaGlobalView: View {
                 }
             }
             .navigationTitle("Pesquisar Discos")
-            .searchable(text: $searchText, placement: .automatic, prompt: "Pesquisar Disco")
+            .searchable(text: $searchText, placement: .automatic,
+                        prompt: tipoSelecionado == .disco ?
+                        "Pesquisar Discos" : "Pesquisar Discos por Artista")
             
             .listStyle(.plain)
             
