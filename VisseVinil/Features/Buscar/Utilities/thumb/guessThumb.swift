@@ -8,19 +8,14 @@
 import Foundation
 import SwiftUI
 
-func guessThumb(_ thumbData: Data?) -> Image {
-    if let thumbImage = renderThumb(thumbData) {
-        thumbImage
-//                AsyncImage(url: url) { image in
-//                    image
-//                        .resizable()
-//                        .scaledToFit()
-//                        .frame(width: 100, height: 100)
-//                } placeholder: {
-//                    ProgressView()
-//                }
-//                .clipShape(RoundedRectangle(cornerRadius: 8))
-    } else {
-        Image(systemName: "play.square")
+func guessThumb(_ thumbData: Data?) -> some View {
+    Group {
+        if let thumbImage = renderThumb(thumbData) {
+            thumbImage
+                .resizable()
+                .scaledToFit()
+        } else {
+            noThumb
+        }
     }
 }

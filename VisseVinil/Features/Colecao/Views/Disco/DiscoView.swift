@@ -16,7 +16,7 @@ struct DiscoView: View {
     var body: some View {
         List {
             guessThumb(disco.thumbData)
-                .resizable().scaledToFit().padding()
+                .padding()
                 .listRowSeparator(.hidden)
             HStack {
                 if let caixa = disco.caixa {

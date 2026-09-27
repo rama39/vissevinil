@@ -30,7 +30,6 @@ struct CaixaOuterView: View {
             }
         let thumb =
         guessThumb(discos.first?.thumbData)
-            .resizable().scaledToFit()
             .clipShape(RoundedRectangle(cornerRadius: 8))
         VStack(spacing: 0) {
             ZStack {

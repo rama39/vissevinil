@@ -26,7 +26,7 @@ struct SearchRow: View {
                 .frame(width: 70, height: 70)
                 .cornerRadius(8)
                 .clipped()
-            } else { placeholder }
+            } else { noThumb() }
             
             VStack(alignment: .leading, spacing: 4) {
                 Text(release.title ?? "Disco")

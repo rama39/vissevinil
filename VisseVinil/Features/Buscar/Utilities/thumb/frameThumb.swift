@@ -13,9 +13,6 @@ func frameThumb(
     radius: CGFloat = 8
 ) -> some View {
     guessThumb(thumbData)
-        .resizable()
-        .scaledToFit()
         .frame(width: frame, height: frame)
-        .foregroundColor(.gray)
         .clipShape(RoundedRectangle(cornerRadius: radius))
 }
