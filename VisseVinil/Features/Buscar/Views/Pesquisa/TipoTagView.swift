@@ -26,7 +26,7 @@ struct TipoTagView: View {
                 Text(tipo.rawValue)
                     .font(.subheadline)
                     .padding(.horizontal, 14)
-                    .padding(.vertical, 8)
+                    .padding(.vertical, 6)
                     .foregroundStyle(selecionado ? .white : .primary)
             }
         }
