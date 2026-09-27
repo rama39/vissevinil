@@ -124,12 +124,6 @@ struct CaixasGridView: View {
     private func deleteCaixa(_ caixa: CaixaModel) {
         withAnimation {
             let deletedCaixa = caixa
-//            let pos = deletedDisco.posicao
-//            for i in discos.indices {
-//                if discos[i].posicao > pos {
-//                    discos[i].posicao -= 1
-//                }
-//            }
             modelContext.delete(deletedCaixa)
             save()
         }

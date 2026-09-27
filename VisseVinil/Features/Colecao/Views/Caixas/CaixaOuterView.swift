@@ -15,7 +15,9 @@ struct CaixaOuterView: View {
     let helperAnimacao = Namespace()
     
     var body: some View {
-        let discos = caixa.discos.filter({!$0.removed})
+        let discos = caixa.discos.filter({!$0.removed}).sorted(by: {
+            $0.posicao > $1.posicao
+        })
         let titleSubtitle =
             VStack(alignment: .leading, spacing: 0) {
                 Text(caixa.title)
