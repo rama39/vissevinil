@@ -15,10 +15,10 @@ struct MasterInfoRow: View {
         if let value = value, !value.isEmpty {
             HStack {
                 Text(title)
-                    .foregroundColor(.secondary)
+                    .bold()
                 Spacer()
                 Text(value)
-                    .bold()
+                    .foregroundColor(.secondary)
                     .multilineTextAlignment(.trailing)
             }
         }
