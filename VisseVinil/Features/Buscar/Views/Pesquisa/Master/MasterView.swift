@@ -36,6 +36,7 @@ struct MasterView: View {
                 Group {
                     VStack(alignment: .leading, spacing: 0) {
                         MasterImageView(images: master.images)
+                            .padding(.bottom)
                         // TODO: caixa
                         Text(master.title ?? "")
                             .font(.title2).bold()
