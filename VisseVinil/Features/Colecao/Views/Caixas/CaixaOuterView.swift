@@ -16,7 +16,12 @@ struct CaixaOuterView: View {
     
     var body: some View {
         let discos = caixa.discos.filter({!$0.removed}).sorted(by: {
-            $0.posicao > $1.posicao
+            if let pos0 = $0.posicaoCaixa,
+               let pos1 = $1.posicaoCaixa {
+                pos0 > pos1
+            } else {
+                true
+            }
         })
         let titleSubtitle =
             VStack(alignment: .leading, spacing: 0) {

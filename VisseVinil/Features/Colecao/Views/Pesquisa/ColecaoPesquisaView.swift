@@ -46,7 +46,13 @@ struct ColecaoPesquisaView: View {
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                modelContext.delete(discosBuscados[index])
+                let deletado = discosBuscados[index]
+                for disco in discos {
+                    if disco.posicao > deletado.posicao {
+                        disco.posicao -= 1
+                    }
+                }
+                modelContext.delete(deletado)
             }
         }
     }

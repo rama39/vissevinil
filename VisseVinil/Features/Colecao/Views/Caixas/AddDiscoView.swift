@@ -34,6 +34,11 @@ struct AddDiscoView: View {
                 let contains = caixa.discos.contains(disco)
                 if !contains {
                     Button {
+                        var count = caixa.discos.count
+                        if caixa.discos.map({$0.posicao}).contains(count) {
+                            count += 1
+                        }
+                        disco.posicaoCaixa = caixa.discos.count
                         disco.caixa = caixa
                         save()
                         adicionandoDisco = false

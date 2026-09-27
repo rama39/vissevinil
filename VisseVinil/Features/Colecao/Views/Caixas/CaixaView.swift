@@ -19,7 +19,12 @@ struct CaixaView: View {
             disco.title.localizedCaseInsensitiveContains(bufferBusca)
         }
         .sorted(by: {
-            $0.posicao > $1.posicao
+            if let pos0 = $0.posicaoCaixa,
+               let pos1 = $1.posicaoCaixa {
+                pos0 < pos1
+            } else {
+                true
+            }
         })
         .filter({!$0.removed})
     }
@@ -58,7 +63,16 @@ struct CaixaView: View {
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
             for index in offsets {
-                discosBuscados[index].caixa = nil
+                let deletado = discosBuscados[index]
+                for disco in caixa.discos {
+                    if let pos0 = disco.posicaoCaixa,
+                       let pos1 = deletado.posicaoCaixa,
+                       pos0 > pos1 {
+                        disco.posicaoCaixa! -= 1
+                    }
+                }
+                deletado.posicaoCaixa = nil
+                deletado.caixa = nil
             }
         }
     }
