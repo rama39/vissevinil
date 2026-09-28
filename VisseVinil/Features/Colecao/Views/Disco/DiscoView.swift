@@ -7,6 +7,22 @@
 
 import SwiftUI
 
+struct BotaoDisco: View {
+    let action: () -> Void
+    let image: String
+    let fill: Bool
+    var body: some View {
+        Button {
+            action()
+        } label: {
+            Image(systemName: image + (fill ? ".fill" : ""))
+                .resizable().scaledToFit()
+                .frame(width:25, height: 25)
+        }
+        .buttonStyle(.plain)
+    }
+}
+
 struct DiscoView: View {
     
     @Bindable var disco: DiscoModel
@@ -15,41 +31,60 @@ struct DiscoView: View {
     
     var body: some View {
         List {
-            guessThumb(disco.thumbData)
-                .padding()
-                .listRowSeparator(.hidden)
-            HStack {
-                if let caixa = disco.caixa {
-                    CaixaTag(caixa: caixa)
-                }
-                Spacer()
-                Button {
-                    disco.curtido.toggle()
-                } label: {
-                    Image(systemName: "heart" + (disco.curtido ? ".fill" : ""))
-                }
-            }.padding(.horizontal)
-            if disco.caixa != nil {
-                Button() {
-                    withAnimation {
-                        removendoDaCaixa = true
+            VStack(alignment: .leading, spacing: 0) {
+                guessThumb(disco.thumbData)
+                    .padding(.bottom)
+                
+                HStack {
+                    if let caixa = disco.caixa {
+                        //NavigationLink {
+                        //    CaixaView(caixa: caixa)
+                        //} label: {
+                            CaixaTag(caixa: caixa)
+                        //} .buttonStyle(.plain)
                     }
-                } label: {
-                    ZStack {
-                        Color.green.opacity(0.25)
+                    Spacer()
+                    BotaoDisco(
+                        action: {disco.curtido.toggle()},
+                        image: "heart", fill: disco.curtido
+                    )
+                    .padding(.trailing)
+                    BotaoDisco(
+                        action: {disco.wishlist.toggle()},
+                        image: "bookmark", fill: disco.wishlist
+                    )
+                }
+                .padding(.bottom)
+                
+                Text(disco.title)
+                    .font(.title2).bold()
+                Text(disco.artistsListed)
+                    .foregroundStyle(.secondary)
+                
+                if disco.caixa != nil {
+                    Button() {
+                        withAnimation {
+                            removendoDaCaixa = true
+                        }
+                    } label: {
                         HStack {
                             Image(systemName: "tray.and.arrow.up")
                             Spacer()
                             Text("Pegar Disco")
                             Spacer()
-                        }.padding()
-                    }.foregroundStyle(.green)
-                }.listRowSeparator(.hidden)
-                    .clipShape(RoundedRectangle(cornerRadius: 100))
+                        }
+                        .padding()
+                        .background {Color.green.opacity(0.25)}
+                        .clipShape(RoundedRectangle(cornerRadius: 100))
+                        //.padding()
+                        .foregroundStyle(.green)
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.top)
+                }
             }
-            Text(disco.title)
-                .listRowSeparator(.hidden)
-            Text(disco.artistsListed)
+            .listRowSeparator(.hidden)
+            .padding(.bottom, 0)
             
             Section("Informações do disco") {
                 MasterInfoRow(title: "Título", value: disco.title)
