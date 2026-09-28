@@ -19,11 +19,16 @@ struct MasterIsSavedView: View {
         if savedAs.count > 0 {
             ScrollView(.horizontal) {
                 ForEach(savedAs) { version in
-                    if let caixa = version.caixa {
-                        CaixaTag(caixa: caixa).padding(.trailing)
-                    } else {
-                        Text(version.title).padding(.trailing)
+                    NavigationLink {
+                        DiscoView(disco: version)
+                    } label: {
+                        if let caixa = version.caixa {
+                            CaixaTag(caixa: caixa).padding(.trailing)
+                        } else {
+                            Text(version.title).padding(.trailing)
+                        }
                     }
+                    .buttonStyle(.plain)
                 }
             }
         }
