@@ -32,7 +32,7 @@ struct PerfilView: View {
 
     var body: some View {
         ZStack {
-            Color(red: 0.98, green: 0.97, blue: 0.95).ignoresSafeArea()
+            Color(.systemGroupedBackground).ignoresSafeArea()
 
             if let profile = perfis.first {
                 ScrollView {
@@ -47,7 +47,7 @@ struct PerfilView: View {
                         VStack(alignment: .leading, spacing: 14) {
                             Text("Discos favoritos")
                                 .font(.system(size: 20, weight: .semibold))
-                                .foregroundStyle(Color(red: 0.60, green: 0.38, blue: 0.20))
+                                .foregroundStyle(.primary)
                                 .padding(.horizontal, 20)
 
                                 if !discosFavoritos.isEmpty {
