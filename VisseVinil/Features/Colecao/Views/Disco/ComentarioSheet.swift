@@ -1,0 +1,51 @@
+//
+//  ComentarioSheet.swift
+//  VisseVinil
+//
+//  Created by Rian Antony Medeiros de Abreu on 28/09/26.
+//
+
+import SwiftUI
+import SwiftData
+
+struct ComentarioSheet: View {
+    @Environment(\.modelContext) private var modelContext
+    func save() { if modelContext.hasChanges { try? modelContext.save() } }
+    @Query private var eventos: [EventoModel]
+    
+    @Environment(\.dismiss) private var dismiss
+    
+    let disco: DiscoModel
+    
+    @State var newComentarioText: String = ""
+    
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                TextField("Digite suas anotações aqui...", text: $newComentarioText, axis: .vertical)
+                    .lineLimit(3...)
+                    .font(.body)
+                    .padding()
+                
+                    //.background()
+                    //.clipShape(RoundedRectangle(cornerRadius: 25))
+            }
+                .navigationTitle("Novo Comentário")
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button(role: .confirm) {
+                            guard !newComentarioText.isEmpty
+                                    else { return }
+                            let newEvento = EventoModel(.comentou, newComentarioText)
+                            newEvento.disco = disco
+                            withAnimation {
+                                modelContext.insert(newEvento)
+                                save()
+                                dismiss()
+                            }
+                        }
+                    }
+                }
+        }
+    }
+}

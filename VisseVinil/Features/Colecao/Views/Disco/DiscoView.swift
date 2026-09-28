@@ -43,6 +43,7 @@ struct DiscoView: View {
     @Bindable var disco: DiscoModel
     
     @State var removendoDaCaixa = false
+    @State var adicionandoComentario = false
     
     var body: some View {
         List {
@@ -101,7 +102,39 @@ struct DiscoView: View {
                         BotaoStar(stars: $disco.estrelas, i: i)
                     }
                 }
-            }
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("Eventos")
+                        Spacer()
+                        Button {
+                            adicionandoComentario = true
+                        } label: {
+                            HStack {
+                                Image(systemName: "pencil")
+                                Text("Comentário")
+                            }
+                            .padding(7)
+                            .glassEffect()
+                        }.buttonStyle(.plain)
+                    }
+                    let columns = [GridItem(.flexible(minimum: 50, maximum: 50)), GridItem(.flexible())]
+                    LazyVGrid(columns: columns) {
+                        ForEach(disco.eventos) { evento in
+                            switch evento.tipo {
+                            case .adicionou:
+                                Image(systemName: "plus")
+                                Text("Adicionou o disco à coleção")
+                            case .tirouParaOuvir:
+                                Image(systemName: "tray.and.arrow.up")
+                                Text("adicionou")
+                            case .comentou:
+                                Image(systemName: "bubble")
+                                Text(evento.comentario ?? ")
+                            }
+                        }
+                    }
+                }
+            }.padding(.bottom)
         }
         .listStyle(.plain)
         .navigationTitle(disco.title)
@@ -127,5 +160,7 @@ struct DiscoView: View {
                 Text("Ao confirmar, o disco será removido da caixa.")
             }
         }
+        
+        .sheet(isPresented: $adicionandoComentario, content: {ComentarioSheet(disco: disco)})
     }
 }
