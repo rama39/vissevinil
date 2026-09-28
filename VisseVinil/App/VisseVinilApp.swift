@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import SwiftData
 
-let appSchema: [any PersistentModel.Type] = [Disco.self, Caixa.self, Evento.self, Loja.self,
+let appSchema: [any PersistentModel.Type] = [DiscoModel.self, CaixaModel.self, EventoModel.self, PerfilModel.self, Loja.self,
                                              AvaliacaoDoLocal.self, ProblemaReportado.self, ContatoDoLocal.self]
 
 @main
