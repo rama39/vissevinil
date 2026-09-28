@@ -38,6 +38,8 @@ struct MasterView: View {
                         MasterImageView(images: master.images)
                             .padding(.bottom)
                         // TODO: caixa
+                        MasterIsSavedView(master_id: master.id ?? 0)
+                            .padding(.bottom)
                         Text(master.title ?? "")
                             .font(.title2).bold()
                         Text(master.artists?[0].name ?? "")
