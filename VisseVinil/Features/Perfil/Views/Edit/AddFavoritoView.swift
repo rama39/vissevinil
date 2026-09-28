@@ -20,13 +20,22 @@ struct AddFavoritoView: View {
     var body: some View {
         
         NavigationStack{
-            List(discos.filter({disco in
+            let discosPesquisados = discos
+                .filter({disco in
                 pesquisa.isEmpty ||
                 disco.title.localizedCaseInsensitiveContains(pesquisa)
-            })) {disco in
+            })
+            List(discosPesquisados) {disco in
                 HStack {
                     Button {
-                        disco.favorito.toggle()
+                        if !disco.favorito {
+                            if discos.filter({disco in disco.favorito}).count < 4 {
+                                disco.favorito = true
+                            }
+                        }
+                        else {
+                            disco.favorito = false
+                        }
                     } label: {
                         Image(systemName: (disco.favorito ? "checkmark.circle.fill": "circle"))
                             .resizable()
@@ -38,16 +47,7 @@ struct AddFavoritoView: View {
             }
             .navigationTitle("Adicionar discos favoritos")
             .navigationBarTitleDisplayMode(.inline)
-//            .toolbar{
-//                ToolbarItem (placement: .topBarLeading){
-//                    Button(role: .cancel) {
-//                        adicionandoDisco = false
-//                    } label: {
-//                        Image(systemName: "xmark")
-//                    }
-//
-//                }
-            .searchable(text: $pesquisa)
+            .searchable(text: $pesquisa, prompt: "Pesquisar discos da coleção")
             }
             
         }

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import PhotosUI
 
 struct EditPerfilView: View {
    // criar perfil e substituior o de exemplo
@@ -16,6 +17,7 @@ struct EditPerfilView: View {
     @State private var date = Date()
     @State var tempPerfil = TempPerfil(name: "")
     @Binding var perfil: PerfilModel?
+    @State private var tempimagePhotoName: PhotosPickerItem?
     @Binding var editando: Bool
     
     @State var escolhendoFavoritos = false
@@ -25,12 +27,18 @@ struct EditPerfilView: View {
             VStack{
                 ZStack {
                     Color.gray.opacity(0.2)
-                    Image(tempPerfil.photoImageName)
-                    
-                    if tempPerfil.photoImageName == ""{
-                        Image(systemName: "opticaldisc.fill")
+                    if let profileImage = tempPerfil.photoImageName, let uiImage = UIImage(data: profileImage) {
+                        Image(uiImage: uiImage)
                             .resizable()
-                            .frame(width: 115, height: 115)
+                            .scaledToFill()
+                    } else {
+                        // Placeholder enquanto não há asset cadastrado
+                        ZStack {
+                            Color.gray.opacity(0.2)
+                            Image(systemName: "opticaldisc.fill")
+                                .resizable()
+                                .frame(width: 115, height: 115)
+                        }
                     }
                 }
                 .frame(width: 130, height: 130)
@@ -38,12 +46,14 @@ struct EditPerfilView: View {
                 .overlay(
                     Circle().stroke(Color.gray)
                 )
-                Button (action:{
-                    print("oie")
-                }, label: {
-                    Text("Editar Foto")
-                })
-                    .buttonStyle(.borderedProminent)
+                PhotosPicker(selection: $tempimagePhotoName, matching: .images){
+                    Label("Editar foto", systemImage: "pencil")
+                }
+                .onChange(of: tempimagePhotoName){
+                    Task{
+                        await SalvarFoto()
+                    }
+                }
                 Form{
                     Section{
                         TextField("Nome", text: $tempPerfil.name)
@@ -90,11 +100,20 @@ struct EditPerfilView: View {
         }
         
     }
+    
+    private func SalvarFoto() async {
+        guard let tempimagePhotoName,
+              let data = try? await tempimagePhotoName.loadTransferable(type: Data.self),
+              let perfil
+        else { return }
+        
+        tempPerfil.photoImageName = data
+    }
 }
 
 #Preview {
 //    @Previewable @State var tabSelecionada: VisseVinilTabs = .perfil
-//    
+//
 //        TabView(selection: $tabSelecionada) {
 //            Tab("Mapa", systemImage: "map", value: .mapa) {
 //                MapaView()

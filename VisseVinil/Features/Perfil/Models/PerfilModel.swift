@@ -13,9 +13,10 @@ import SwiftData
 final class PerfilModel {
 
     // MARK: - Dados básicos do usuário
-
+    @Attribute(.externalStorage) var imagePhotoName: Data?
+    //foto opcional p n ser obgriado a colocar
+    
     var name: String
-    var photoImageName: String
     /// Data em que o usuário começou a colecionar discos (usada para calcular
     /// "coleciona há X anos e Y meses" dinamicamente, em vez de guardar o
     /// texto pronto).
@@ -23,11 +24,12 @@ final class PerfilModel {
 
     //========================================================
 
-    init(name: String = "",
-         photoImageName: String = "",
+    init(imagePhotoName: Data? = nil, name: String = "",
          collectingSince: Date = Date()) {
+        
+        // variavel tipo data opcional que se n receber nada é nil
+        self.imagePhotoName = imagePhotoName
         self.name = name
-        self.photoImageName = photoImageName
         self.collectingSince = collectingSince
     }
 
