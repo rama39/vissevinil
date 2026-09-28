@@ -12,7 +12,7 @@ extension PerfilModel {
     func toStruct() -> TempPerfil {
         TempPerfil(
             name: self.name,
-            photoImageName: self.photoImageName,
+            photoImageName: self.imagePhotoName,
             collectingSince: self.collectingSince
         )
     }

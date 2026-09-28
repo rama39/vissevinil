@@ -41,7 +41,7 @@ struct MainTabBar: View {
         .padding(.horizontal, 10)
         .padding(.vertical, 8)
         .background(
-            Capsule().fill(Color(red: 0.94, green: 0.93, blue: 0.90))
+            Capsule().fill(Color(.secondarySystemBackground))
         )
         .shadow(color: .black.opacity(0.08), radius: 10, y: 4)
         .padding(.horizontal, 16)
@@ -62,12 +62,12 @@ struct MainTabBar: View {
                 Text(tab.title)
                     .font(.system(size: 11, weight: .medium))
             }
-            .foregroundStyle(isSelected ? Color(red: 0.72, green: 0.45, blue: 0.30) : Color.black.opacity(0.55))
+            .foregroundStyle(isSelected ? Color.accentColor : .secondary)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 8)
             .background(
                 Capsule()
-                    .fill(isSelected ? Color.white : Color.clear)
+                    .fill(isSelected ? Color(.systemBackground) : Color.clear)
             )
         }
         .buttonStyle(.plain)
@@ -77,5 +77,5 @@ struct MainTabBar: View {
 #Preview {
     MainTabBar(selectedTab: .constant(.perfil))
         .padding(.vertical)
-        .background(Color(red: 0.98, green: 0.97, blue: 0.95))
+        .background(Color(.systemGroupedBackground))
 }
