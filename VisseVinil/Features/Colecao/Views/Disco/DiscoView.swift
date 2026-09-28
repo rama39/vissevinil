@@ -63,25 +63,7 @@ struct DiscoView: View {
                     .foregroundStyle(.secondary)
                 
                 if disco.caixa != nil {
-                    Button() {
-                        withAnimation {
-                            removendoDaCaixa = true
-                        }
-                    } label: {
-                        HStack {
-                            Image(systemName: "tray.and.arrow.up")
-                            Spacer()
-                            Text("Pegar Disco")
-                            Spacer()
-                        }
-                        .padding()
-                        .background {Color.green.opacity(0.25)}
-                        .clipShape(RoundedRectangle(cornerRadius: 100))
-                        //.padding()
-                        .foregroundStyle(.green)
-                    }
-                    .buttonStyle(.plain)
-                    .padding(.top)
+                    RemoveDiscoButton(action: { removendoDaCaixa = true })
                 }
             }
             .listRowSeparator(.hidden)
