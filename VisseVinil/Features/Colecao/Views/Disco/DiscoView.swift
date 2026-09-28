@@ -23,6 +23,20 @@ struct BotaoDisco: View {
     }
 }
 
+struct BotaoStar: View {
+    @Binding var stars: Int?
+    let i: Int
+    var body: some View {
+        Button {
+            stars = i
+        } label: {
+            Image(systemName: "star" + ((stars != nil && stars! >= i) ? ".fill" : ""))
+                .resizable().scaledToFit()
+                .frame(width:25, height: 25)
+        }.buttonStyle(.plain)
+    }
+}
+
 struct DiscoView: View {
     
     @Bindable var disco: DiscoModel
@@ -75,6 +89,19 @@ struct DiscoView: View {
                 MasterInfoRow(title: "Lançamento", value: disco.released)
                 MasterInfoRow(title: "Gêneros", value: disco.genresListed)
                 MasterInfoRow(title: "Subgêneros", value: disco.stylesListed)
+            }
+            
+            Section("Minhas impressões") {
+                HStack {
+                    Text("Avaliação")
+                        .bold()
+                    Spacer()
+                    BotaoStar(stars: $disco.estrelas, i: 1)
+                    BotaoStar(stars: $disco.estrelas, i: 2)
+                    BotaoStar(stars: $disco.estrelas, i: 3)
+                    BotaoStar(stars: $disco.estrelas, i: 4)
+                    BotaoStar(stars: $disco.estrelas, i: 5)
+                }
             }
         }
         .listStyle(.plain)

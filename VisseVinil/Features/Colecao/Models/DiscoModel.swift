@@ -112,6 +112,7 @@ final class DiscoModel {
     var favorito: Bool = false // disco aparece no carrossel do perfil de favs
     var wishlist: Bool = false
     var removed: Bool = false // disco removido para ouvir
+    var estrelas: Int? = nil
     
     // relacionamentos
     @Relationship(deleteRule: .cascade, inverse: \EventoModel.disco)
