@@ -51,7 +51,7 @@ struct EditPerfilView: View {
                 }
                 .onChange(of: tempimagePhotoName){
                     Task{
-                    
+                        await SalvarFoto()
                     }
                 }
                 Form{
@@ -102,9 +102,12 @@ struct EditPerfilView: View {
     }
     
     private func SalvarFoto() async {
-        guard let foto = tempimagePhotoName,
-              let data = try? await foto.loadTransferable(type: Data.self) else { return }
-        perfil?.imagePhotoName = data
+        guard let tempimagePhotoName,
+              let data = try? await tempimagePhotoName.loadTransferable(type: Data.self),
+              let perfil
+        else { return }
+        
+        tempPerfil.photoImageName = data
     }
 }
 
