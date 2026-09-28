@@ -37,6 +37,7 @@ struct DiscoView: View {
                 
                 HStack {
                     if let caixa = disco.caixa {
+                        // TODO: navigationdestination
                         //NavigationLink {
                         //    CaixaView(caixa: caixa)
                         //} label: {
@@ -100,6 +101,7 @@ struct DiscoView: View {
         
         .alert("Você tem certeza?", isPresented: $removendoDaCaixa) {
             // TODO: MAKE BLUE
+            // TODO: navigationdestination
             NavigationLink {
                 ColecaoView()
                     .onAppear {
