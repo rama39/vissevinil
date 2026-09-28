@@ -35,7 +35,7 @@ struct ProfileHeaderView: View {
 
             // Foto de perfil
             Group {
-                if let uiImage = UIImage(named: profile.photoImageName) {
+                if let profileImage = profile.imagePhotoName, let uiImage = UIImage(data: profileImage) {
                     Image(uiImage: uiImage)
                         .resizable()
                         .scaledToFill()
