@@ -13,8 +13,9 @@
 import Foundation
 
 // MARK: - DiscogsSearchResponse
-struct DiscogsSearchResponse: Codable {
-    let pagination: Pagination
+/// Response do endpoint search do Discogs
+struct PesquisaGlobalResponse: Codable {
+    let pagination: SearchPagination
     let results: [DiscogsRelease]
 
     enum CodingKeys: String, CodingKey {
@@ -24,7 +25,7 @@ struct DiscogsSearchResponse: Codable {
 }
 
 // MARK: - Pagination
-struct Pagination: Codable {
+struct SearchPagination: Codable {
     let perPage: Int
     let pages: Int
     let page: Int
@@ -97,8 +98,4 @@ struct Community: Codable {
         case want = "want"
         case have = "have"
     }
-}
-
-struct DiscogsErrorResponse: Decodable, Sendable {
-    let message: String
 }
