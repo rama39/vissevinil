@@ -33,6 +33,7 @@ struct BotaoStar: View {
             Image(systemName: "star" + ((stars != nil && stars! >= i) ? ".fill" : ""))
                 .resizable().scaledToFit()
                 .frame(width:25, height: 25)
+                .foregroundStyle(.amarelo)
         }.buttonStyle(.plain)
     }
 }
@@ -96,11 +97,9 @@ struct DiscoView: View {
                     Text("Avaliação")
                         .bold()
                     Spacer()
-                    BotaoStar(stars: $disco.estrelas, i: 1)
-                    BotaoStar(stars: $disco.estrelas, i: 2)
-                    BotaoStar(stars: $disco.estrelas, i: 3)
-                    BotaoStar(stars: $disco.estrelas, i: 4)
-                    BotaoStar(stars: $disco.estrelas, i: 5)
+                    ForEach(1...5, id: \.self) { i in
+                        BotaoStar(stars: $disco.estrelas, i: i)
+                    }
                 }
             }
         }
