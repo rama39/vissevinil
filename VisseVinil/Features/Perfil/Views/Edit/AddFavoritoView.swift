@@ -47,7 +47,7 @@ struct AddFavoritoView: View {
             }
             .navigationTitle("Adicionar discos favoritos")
             .navigationBarTitleDisplayMode(.inline)
-            .searchable(text: $pesquisa)
+            .searchable(text: $pesquisa, prompt: "Pesquisar discos da coleção")
             }
             
         }
