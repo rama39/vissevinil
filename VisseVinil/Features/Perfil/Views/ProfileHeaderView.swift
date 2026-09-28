@@ -69,12 +69,12 @@ struct ProfileHeaderView: View {
     }
 }
 
-#Preview {
-    let previewProfile = PerfilModel(
-        name: "Matheus",
-        photoImageName: "profile_photo",
-        collectingSince: Calendar.current.date(byAdding: .month, value: -30, to: Date()) ?? Date()
-    )
-    return ProfileHeaderView(profile: previewProfile)
-        .background(Color(.systemGroupedBackground))
-}
+//#Preview {
+//    let previewProfile = PerfilModel(
+//        name: "Matheus",
+//        photoImageName: "profile_photo",
+//        collectingSince: Calendar.current.date(byAdding: .month, value: -30, to: Date()) ?? Date()
+//    )
+//    return ProfileHeaderView(profile: previewProfile)
+//        .background(Color(.systemGroupedBackground))
+//}

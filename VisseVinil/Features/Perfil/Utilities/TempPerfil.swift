@@ -12,13 +12,13 @@ struct TempPerfil {
     // MARK: - Dados básicos do usuário
 
     var name: String
-    var photoImageName: String
+    var photoImageName: Data?
     var collectingSince: Date
 
     //========================================================
 
     init(name: String = "",
-         photoImageName: String = "",
+         photoImageName: Data? = nil,
          collectingSince: Date = Date()) {
         self.name = name
         self.photoImageName = photoImageName
