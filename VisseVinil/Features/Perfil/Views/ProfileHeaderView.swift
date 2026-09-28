@@ -40,12 +40,12 @@ struct ProfileHeaderView: View {
                         .resizable()
                         .scaledToFill()
                 } else {
-                    // Placeholder enquanto não há asset cadastrado
+                    // Mesmo placeholder da EditPerfilView, quando não há foto.
                     ZStack {
                         Color(.systemGray5)
-                        Image(systemName: "person.fill")
-                            .font(.system(size: 50))
-                            .foregroundStyle(.secondary)
+                        Image(systemName: "opticaldisc.fill")
+                            .resizable()
+                            .frame(width: 115, height: 115)
                     }
                 }
             }
@@ -68,7 +68,6 @@ struct ProfileHeaderView: View {
         }
     }
 }
-
 //#Preview {
 //    let previewProfile = PerfilModel(
 //        name: "Matheus",
