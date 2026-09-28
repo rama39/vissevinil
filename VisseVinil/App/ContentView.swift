@@ -20,7 +20,7 @@ struct ContentView: View {
     var body: some View {
         TabView(selection: $tabSelecionada) {
             Tab("Mapa", systemImage: "map", value: .mapa) {
-                MapaView()
+                RecifeMapView()
             }
             Tab("Buscar", systemImage: "magnifyingglass", value: .buscar) {
                 BuscarView()
