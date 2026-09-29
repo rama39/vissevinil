@@ -38,6 +38,51 @@ struct BotaoStar: View {
     }
 }
 
+struct EventoContentView: View {
+    
+    let evento: EventoModel
+    
+    var body: some View {
+        switch evento.tipo {
+        case .adicionou:
+            Text("Adicionou o disco à coleção")
+        case .tirouParaOuvir:
+            //Image(systemName: "tray.and.arrow.up")
+            Text("adicionou")
+            Spacer()
+        case .comentou:
+            //HStack {
+                //Image(systemName: "bubble")
+            Text(evento.comentario ?? "Comentário vazio")
+                //Spacer()
+            //}
+        }
+    }
+}
+
+struct EventoView: View {
+    
+    let evento: EventoModel
+    let notLast: Bool
+    
+    var body: some View {
+        let elementColor = Color.primary
+        HStack(spacing: 0) {
+            VStack(spacing: 0) {
+                Circle()
+                    .fill(elementColor)
+                    .frame(width: 25, height: 25)
+                if notLast {
+                    Rectangle()
+                        .fill(elementColor)
+                        .frame(width: 3)
+                }
+            }
+            EventoContentView(evento: evento)
+        }
+    }
+}
+
 struct DiscoView: View {
     
     @Bindable var disco: DiscoModel
@@ -117,20 +162,9 @@ struct DiscoView: View {
                             .glassEffect()
                         }.buttonStyle(.plain)
                     }
-                    let columns = [GridItem(.flexible(minimum: 50, maximum: 50)), GridItem(.flexible())]
-                    LazyVGrid(columns: columns) {
+                    VStack(alignment: .leading, spacing: 0) {
                         ForEach(disco.eventos) { evento in
-                            switch evento.tipo {
-                            case .adicionou:
-                                Image(systemName: "plus")
-                                Text("Adicionou o disco à coleção")
-                            case .tirouParaOuvir:
-                                Image(systemName: "tray.and.arrow.up")
-                                Text("adicionou")
-                            case .comentou:
-                                Image(systemName: "bubble")
-                                Text(evento.comentario ?? "")
-                            }
+                            EventoView(evento: evento, notLast: true)
                         }
                     }
                 }

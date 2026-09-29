@@ -26,6 +26,9 @@ struct ComentarioSheet: View {
                     .lineLimit(3...)
                     .font(.body)
                     .padding()
+                    .onSubmit {
+                        saveComment()
+                    }
                 
                     //.background()
                     //.clipShape(RoundedRectangle(cornerRadius: 25))
@@ -34,18 +37,22 @@ struct ComentarioSheet: View {
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
                         Button(role: .confirm) {
-                            guard !newComentarioText.isEmpty
-                                    else { return }
-                            let newEvento = EventoModel(.comentou, newComentarioText)
-                            newEvento.disco = disco
-                            withAnimation {
-                                modelContext.insert(newEvento)
-                                save()
-                                dismiss()
-                            }
+                            saveComment()
                         }
                     }
                 }
+        }
+    }
+    
+    func saveComment() {
+        guard !newComentarioText.isEmpty
+                else { return }
+        let newEvento = EventoModel(.comentou, newComentarioText)
+        newEvento.disco = disco
+        withAnimation {
+            modelContext.insert(newEvento)
+            save()
+            dismiss()
         }
     }
 }
