@@ -23,11 +23,27 @@ struct BotaoDisco: View {
     }
 }
 
+struct BotaoStar: View {
+    @Binding var stars: Int?
+    let i: Int
+    var body: some View {
+        Button {
+            stars = i
+        } label: {
+            Image(systemName: "star" + ((stars != nil && stars! >= i) ? ".fill" : ""))
+                .resizable().scaledToFit()
+                .frame(width:25, height: 25)
+                .foregroundStyle(.amarelo)
+        }.buttonStyle(.plain)
+    }
+}
+
 struct DiscoView: View {
     
     @Bindable var disco: DiscoModel
     
     @State var removendoDaCaixa = false
+    @State var adicionandoComentario = false
     
     var body: some View {
         List {
@@ -63,25 +79,7 @@ struct DiscoView: View {
                     .foregroundStyle(.secondary)
                 
                 if disco.caixa != nil {
-                    Button() {
-                        withAnimation {
-                            removendoDaCaixa = true
-                        }
-                    } label: {
-                        HStack {
-                            Image(systemName: "tray.and.arrow.up")
-                            Spacer()
-                            Text("Pegar Disco")
-                            Spacer()
-                        }
-                        .padding()
-                        .background {Color.green.opacity(0.25)}
-                        .clipShape(RoundedRectangle(cornerRadius: 100))
-                        //.padding()
-                        .foregroundStyle(.green)
-                    }
-                    .buttonStyle(.plain)
-                    .padding(.top)
+                    RemoveDiscoButton(action: { removendoDaCaixa = true })
                 }
             }
             .listRowSeparator(.hidden)
@@ -94,6 +92,49 @@ struct DiscoView: View {
                 MasterInfoRow(title: "Gêneros", value: disco.genresListed)
                 MasterInfoRow(title: "Subgêneros", value: disco.stylesListed)
             }
+            
+            Section("Minhas impressões") {
+                HStack {
+                    Text("Avaliação")
+                        .bold()
+                    Spacer()
+                    ForEach(1...5, id: \.self) { i in
+                        BotaoStar(stars: $disco.estrelas, i: i)
+                    }
+                }
+                VStack(alignment: .leading) {
+                    HStack {
+                        Text("Eventos")
+                        Spacer()
+                        Button {
+                            adicionandoComentario = true
+                        } label: {
+                            HStack {
+                                Image(systemName: "pencil")
+                                Text("Comentário")
+                            }
+                            .padding(7)
+                            .glassEffect()
+                        }.buttonStyle(.plain)
+                    }
+                    let columns = [GridItem(.flexible(minimum: 50, maximum: 50)), GridItem(.flexible())]
+                    LazyVGrid(columns: columns) {
+                        ForEach(disco.eventos) { evento in
+                            switch evento.tipo {
+                            case .adicionou:
+                                Image(systemName: "plus")
+                                Text("Adicionou o disco à coleção")
+                            case .tirouParaOuvir:
+                                Image(systemName: "tray.and.arrow.up")
+                                Text("adicionou")
+                            case .comentou:
+                                Image(systemName: "bubble")
+                                Text(evento.comentario ?? ")
+                            }
+                        }
+                    }
+                }
+            }.padding(.bottom)
         }
         .listStyle(.plain)
         .navigationTitle(disco.title)
@@ -119,5 +160,7 @@ struct DiscoView: View {
                 Text("Ao confirmar, o disco será removido da caixa.")
             }
         }
+        
+        .sheet(isPresented: $adicionandoComentario, content: {ComentarioSheet(disco: disco)})
     }
 }
