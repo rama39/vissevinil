@@ -129,7 +129,7 @@ struct DiscoView: View {
                                 Text("adicionou")
                             case .comentou:
                                 Image(systemName: "bubble")
-                                Text(evento.comentario ?? ")
+                                Text(evento.comentario ?? "")
                             }
                         }
                     }
