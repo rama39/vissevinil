@@ -20,10 +20,10 @@ struct RecordSectionView: View {
                 HStack(spacing: 6) {
                     Text(title)
                         .font(.system(size: 20, weight: .semibold))
-                        .foregroundStyle(Color(red: 0.60, green: 0.38, blue: 0.20))
+                        .foregroundStyle(.primary)
                     Image(systemName: "chevron.right")
                         .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(Color(red: 0.60, green: 0.38, blue: 0.20))
+                        .foregroundStyle(.primary)
                 }
             }
             .buttonStyle(.plain)
@@ -58,9 +58,9 @@ struct RecordCardView: View {
                         .scaledToFill()
                 } else {
                     ZStack {
-                        Color.gray.opacity(0.2)
+                        Color(.systemGray5)
                         Image(systemName: "opticaldisc")
-                            .foregroundStyle(.gray)
+                            .foregroundStyle(.secondary)
                     }
                 }
             }
@@ -70,21 +70,21 @@ struct RecordCardView: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(record.title)
                     .font(.system(size: 16, weight: .semibold))
-                    .foregroundStyle(.black.opacity(0.85))
+                    .foregroundStyle(.primary)
                     .lineLimit(1)
                 Text(record.artistsListed)
                     .font(.system(size: 13))
-                    .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
+                    .foregroundStyle(.secondary)
                     .lineLimit(1)
 
                 if showLocation, let location = record.locationName {
                     HStack(spacing: 6) {
                         Circle()
-                            .fill(record.locationColor ?? .gray)
+                            .fill(record.locationColor ?? Color(.systemGray3))
                             .frame(width: 8, height: 8)
                         Text(location)
                             .font(.system(size: 12))
-                            .foregroundStyle(Color(red: 0.45, green: 0.45, blue: 0.45))
+                            .foregroundStyle(.secondary)
                             .lineLimit(1)
                     }
                     .padding(.top, 2)
@@ -118,5 +118,5 @@ struct RecordCardView: View {
     disco2.caixa = caixa2
 
     return RecordSectionView(title: "Meus Discos", records: [disco1, disco2], showLocation: true)
-        .background(Color(red: 0.98, green: 0.97, blue: 0.95))
+        .background(Color(.systemGroupedBackground))
 }

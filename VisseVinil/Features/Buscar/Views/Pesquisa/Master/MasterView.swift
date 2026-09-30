@@ -34,17 +34,30 @@ struct MasterView: View {
             }
             else if let master = masterViewModel.master {
                 Group {
-                    MasterImageView(images: master.images)
-                        .listRowSeparator(.hidden)
-                    Text(master.title ?? "")
-                        .listRowSeparator(.hidden)
-                    Text(master.artists?[0].name ?? "")
+                    VStack(alignment: .leading, spacing: 0) {
+                        MasterImageView(images: master.images)
+                            .padding(.bottom)
+                        HStack {
+                            MasterIsSavedView(master_id: master.id ?? 0)
+                            // TODO: fazer botoes
+                            Image(systemName: "heart").resizable().scaledToFit().frame(width:25, height: 25)
+                                .padding(.trailing)
+                            Image(systemName: "bookmark").resizable().scaledToFit().frame(width:25, height: 25)
+                        }
+                        .padding(.bottom)
+                        Text(master.title ?? "")
+                            .font(.title2).bold()
+                        Text(master.artists?[0].name ?? "")
+                            .foregroundStyle(.secondary)
+                    }
+                    .listRowSeparator(.hidden)
+                    .padding(.bottom, 0)
                     Section("Informações do disco") {
                         MasterInfoRow(title: "Título", value: master.title)
                         MasterInfoRow(title: "Artista", value: master.artists?[0].name)
                         MasterInfoRow(title: "Lançamento", value: String(master.year ?? 0))
                         MasterInfoRow(title: "Gêneros", value: master.genres?.joined(separator: ", "))
-                        MasterInfoRow(title: "Subgêneros", value: master.styles?.joined(separator: ", "))
+                        MasterInfoRow(title: "Estilos", value: master.styles?.joined(separator: ", "))
                     }
                 }.onAppear {tempMaster = master}
             }

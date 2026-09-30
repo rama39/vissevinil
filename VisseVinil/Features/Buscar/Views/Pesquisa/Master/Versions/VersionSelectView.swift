@@ -109,7 +109,7 @@ struct VersionSelectView: View {
     private func saveDisco(version: MasterVersion) {
         withAnimation {
             let newDisco = getDiscoModel(version: version)
-            print("\(master)")
+            //print("\(master)")
             modelContext.insert(newDisco)
             let newEvento = EventoModel(.adicionou)
             newEvento.disco = newDisco

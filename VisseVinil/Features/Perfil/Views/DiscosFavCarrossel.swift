@@ -53,22 +53,33 @@ struct DiscosFavCarrossel: View {
         let rounded = Int(position.rounded())
         return ((rounded % count) + count) % count
     }
+    
+    private var visibleIndices: [Int] {
+        guard !records.isEmpty else { return [] }
+
+        let count = records.count
+        let center = selectedIndex
+
+        return [-1, 0, 1].map { offset in
+            (center + offset + count) % count
+        }
+    }
 
     var body: some View {
-        VStack(spacing: 2) {
+        VStack(spacing: 0) {
             coverFlow
 
             if records.indices.contains(selectedIndex) {
                 VStack(spacing: 2) {
                     Text(records[selectedIndex].title)
                         .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(.black.opacity(0.88))
+                        .foregroundStyle(.primary)
                         .lineLimit(1)
                         .truncationMode(.tail)
 
                     Text(records[selectedIndex].artistsListed)
                         .font(.system(size: 14))
-                        .foregroundStyle(.black.opacity(0.48))
+                        .foregroundStyle(.secondary)
                         .lineLimit(1)
                         .truncationMode(.tail)
                 }
@@ -84,13 +95,14 @@ struct DiscosFavCarrossel: View {
                         Circle()
                             .fill(
                                 index == selectedIndex
-                                    ? Color.black.opacity(0.75)
-                                    : Color.gray.opacity(0.30)
+                                    ? Color.primary.opacity(0.85)
+                                    : Color(.systemGray4)
                             )
                             .frame(width: 6, height: 6)
                             .animation(.easeInOut(duration: 0.25), value: selectedIndex)
                     }
                 }
+                .padding(.top, 8)
             }
         }
         .onReceive(timer) { _ in
@@ -109,34 +121,46 @@ struct DiscosFavCarrossel: View {
             let containerWidth = outerGeo.size.width
 
             ZStack {
-                ForEach(Array(records.enumerated()), id: \.element.id) { index, record in
-                    let distance = wrappedDistance(forIndex: index, count: records.count)
+                ForEach(visibleIndices, id: \.self) { index in
+                    let record = records[index]
+
+                    let distance = wrappedDistance(
+                        forIndex: index,
+                        count: records.count
+                    )
+
                     let normalizedDistance = min(abs(distance), 1.35)
                     let rotationAmount = min(max(distance * rotationRamp, -1), 1)
                     let scale = 1 - (normalizedDistance / 1.35 * maxScaleReduction)
                     let opacity = 1 - (normalizedDistance / 1.35 * maxOpacityReduction)
                     let blur = normalizedDistance / 1.35 * maxBlurRadius
 
-                    FavoriteDiscoCard(record: record, coverSize: coverSize, reflectionHeight: reflectionHeight)
-                        .frame(width: coverSize, height: itemHeight)
-                        .scaleEffect(scale)
-                        .opacity(opacity)
-                        .blur(radius: blur)
-                        .rotation3DEffect(
-                            .degrees(rotationAmount * -sideRotationDegrees),
-                            axis: (x: 0, y: 1, z: 0),
-                            anchor: rotationAmount >= 0 ? .leading : .trailing,
-                            anchorZ: 0,
-                            perspective: perspective
-                        )
-                        .offset(x: distance * itemStride)
-                        .zIndex(10_000 - abs(distance) * 1_000)
-                        .contentShape(Rectangle())
-                        .onTapGesture {
-                            snapTo(index)
-                        }
+                    FavoriteDiscoCard(
+                        record: record,
+                        coverSize: coverSize,
+                        reflectionHeight: reflectionHeight
+                    )
+                    .frame(width: coverSize, height: itemHeight)
+                    .scaleEffect(scale)
+                    .opacity(opacity)
+                    .blur(radius: blur)
+                    .rotation3DEffect(
+                        .degrees(rotationAmount * -sideRotationDegrees),
+                        axis: (x: 0, y: 1, z: 0),
+                        anchor: .center,
+                        anchorZ: 0,
+                        perspective: perspective
+                    )
+                    .offset(x: distance * itemStride)
+                    .zIndex(10_000 - abs(distance) * 1_000)
+                    .contentShape(Rectangle())
+                    .onTapGesture {
+                        snapTo(index)
+                    }
                 }
             }
+            
+            
             .frame(width: containerWidth, height: itemHeight)
             .contentShape(Rectangle())
             .gesture(dragGesture)
@@ -200,33 +224,21 @@ private struct FavoriteDiscoCard: View {
     let reflectionHeight: CGFloat
 
     var body: some View {
-        VStack(spacing: 8) {
-            cover
-                .frame(width: coverSize, height: coverSize)
-                .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
-                .overlay {
-                    RoundedRectangle(cornerRadius: 5, style: .continuous)
-                        .stroke(.white.opacity(0.16), lineWidth: 1)
-                }
-                .shadow(color: .black.opacity(0.28), radius: 16, x: 0, y: 10)
-
-            cover
-                .frame(width: coverSize, height: reflectionHeight)
-                .clipShape(RoundedRectangle(cornerRadius: 5, style: .continuous))
-                .scaleEffect(x: 1, y: -1)
-                .mask {
-                    LinearGradient(
-                        stops: [
-                            .init(color: .white.opacity(0.28), location: 0),
-                            .init(color: .white.opacity(0.10), location: 0.30),
-                            .init(color: .clear, location: 1)
-                        ],
-                        startPoint: .top,
-                        endPoint: .bottom
-                    )
-                }
-                .allowsHitTesting(false)
-        }
+        cover
+            .frame(width: coverSize, height: coverSize)
+            .clipShape(
+                RoundedRectangle(cornerRadius: 5, style: .continuous)
+            )
+            .overlay {
+                RoundedRectangle(cornerRadius: 5, style: .continuous)
+                    .stroke(.white.opacity(0.16), lineWidth: 1)
+            }
+            .shadow(
+                color: .black.opacity(0.28),
+                radius: 16,
+                x: 0,
+                y: 10
+            )
     }
 
     private var cover: some View {
@@ -238,13 +250,13 @@ private struct FavoriteDiscoCard: View {
             } else {
                 ZStack {
                     LinearGradient(
-                        colors: [.gray.opacity(0.30), .gray.opacity(0.15)],
+                        colors: [Color(.systemGray5), Color(.systemGray6)],
                         startPoint: .topLeading,
                         endPoint: .bottomTrailing
                     )
                     Image(systemName: "opticaldisc")
                         .font(.system(size: 40))
-                        .foregroundStyle(.gray)
+                        .foregroundStyle(.secondary)
                 }
             }
         }
@@ -273,5 +285,5 @@ private func previewDisco(title: String, artist: String, posicao: Int) -> DiscoM
 
     return DiscosFavCarrossel(records: previewRecords)
         .padding(.vertical)
-        .background(Color(red: 0.98, green: 0.97, blue: 0.95))
+        .background(Color(.systemGroupedBackground))
 }
