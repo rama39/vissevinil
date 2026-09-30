@@ -15,7 +15,6 @@ struct MasterInfoRow: View {
         if let value = value, !value.isEmpty {
             HStack {
                 Text(title)
-                    .bold()
                 Spacer()
                 Text(value)
                     .foregroundColor(.secondary)
