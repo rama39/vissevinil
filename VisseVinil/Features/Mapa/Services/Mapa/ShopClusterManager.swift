@@ -16,6 +16,8 @@ class ShopClusterManager {
     private let clusterManager = ClusterManager<Loja>()
     private var lojas: [Loja] = []
     private var idsForcadosASeparar: Set<PersistentIdentifier> = []
+    /// false = mostra todos os locais soltos (modos "Ícones" e "Pontos")
+    var agrupar = true
     // Loja selecionada: nunca entra em cluster, pra que o pin dela sempre apareça (e expanda)
     private var idDestacado: PersistentIdentifier?
 
@@ -45,6 +47,14 @@ class ShopClusterManager {
     }
 
     func updateClusters(mapProxy: MapProxy, spacingInPixels: Int = 60) async {
+        guard agrupar else {
+            withAnimation(.easeInOut(duration: 0.4)) {
+                visibleLojas = lojas
+                visibleGroups = []
+            }
+            return
+        }
+
         guard let epsilon = mapProxy.degrees(fromPixels: spacingInPixels) else { return }
 
         let destacada = lojas.first { $0.persistentModelID == idDestacado }
