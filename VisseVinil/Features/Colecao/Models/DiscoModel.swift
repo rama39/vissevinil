@@ -113,6 +113,7 @@ final class DiscoModel {
     var wishlist: Bool = false
     var removed: Bool = false // disco removido para ouvir
     var estrelas: Int? = nil
+    var estadoCapa: EstadoCapa? = nil
     
     // relacionamentos
     @Relationship(deleteRule: .cascade, inverse: \EventoModel.disco)

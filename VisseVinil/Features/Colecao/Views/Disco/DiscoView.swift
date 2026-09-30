@@ -147,6 +147,19 @@ struct DiscoView: View {
                         BotaoStar(stars: $disco.estrelas, i: i)
                     }
                 }
+                let allEstados = Array(descricaoEstados.keys).sorted(by: {$0.rawValue < $1.rawValue})
+                Picker("Estado da Capa", selection: $disco.estadoCapa) {
+                    Text(disco.estadoCapa != nil ?
+                         "Remover Estado" : "").tag(nil as EstadoCapa?)
+                    
+                    Divider()
+                    
+                    ForEach(allEstados, id: \.self) { estado in
+                        Text(titleEstados[estado] ?? "").tag(estado)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                    }
+                }
                 VStack(alignment: .leading) {
                     HStack {
                         Text("Eventos")
