@@ -65,7 +65,6 @@ struct DiscoView: View {
             Section("Minhas impressões") {
                 HStack {
                     Text("Avaliação")
-                        .bold()
                     Spacer()
                     ForEach(1...5, id: \.self) { i in
                         BotaoStar(stars: $disco.estrelas, i: i)
@@ -85,7 +84,6 @@ struct DiscoView: View {
                             .truncationMode(.tail)
                     }
                 }
-                
                 Picker("Estado do Disco", selection: $disco.estadoDisco) {
                     Text(disco.estadoDisco != nil ?
                          "Remover Estado" : "Selecionar").tag(nil as EstadoCapa?)
@@ -106,16 +104,17 @@ struct DiscoView: View {
                             adicionandoComentario = true
                         } label: {
                             HStack {
-                                Image(systemName: "pencil")
+                                Image(systemName: "square.and.pencil")
                                 Text("Comentário")
                             }
-                            .padding(7)
+                            .padding(15)
                             .glassEffect()
                         }.buttonStyle(.plain)
                     }
                     VStack(alignment: .leading, spacing: 0) {
+                        let last = disco.eventos.last
                         ForEach(disco.eventos) { evento in
-                            EventoView(evento: evento, notLast: true)
+                            EventoView(evento: evento, notLast: (evento != last))
                         }
                     }
                 }

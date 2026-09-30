@@ -13,12 +13,18 @@ struct EventoView: View {
     let notLast: Bool
     
     var body: some View {
-        let elementColor = Color.primary
-        HStack(spacing: 0) {
+        let elementColor = Color(uiColor: UIColor.tertiaryLabel)
+        HStack(alignment: .top, spacing: 0) {
             VStack(spacing: 0) {
                 Circle()
                     .fill(elementColor)
-                    .frame(width: 25, height: 25)
+                    .frame(width: 50, height: 50)
+                    .overlay {
+                        Image(systemName: (imageEvento[evento.tipo] ?? ""))
+                            .resizable().scaledToFit()
+                            .frame(width: 20, height: 20)
+                            .foregroundStyle(.primary)
+                    }
                 if notLast {
                     Rectangle()
                         .fill(elementColor)
