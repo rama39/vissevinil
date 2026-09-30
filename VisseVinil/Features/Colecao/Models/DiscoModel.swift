@@ -114,6 +114,7 @@ final class DiscoModel {
     var removed: Bool = false // disco removido para ouvir
     var estrelas: Int? = nil
     var estadoCapa: EstadoCapa? = nil
+    var estadoDisco: EstadoDisco? = nil
     
     // relacionamentos
     @Relationship(deleteRule: .cascade, inverse: \EventoModel.disco)

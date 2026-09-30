@@ -147,15 +147,29 @@ struct DiscoView: View {
                         BotaoStar(stars: $disco.estrelas, i: i)
                     }
                 }
-                let allEstados = Array(descricaoEstados.keys).sorted(by: {$0.rawValue < $1.rawValue})
+                let estadosCapa = Array(descricaoEstados.keys).sorted(by: {$0.rawValue < $1.rawValue})
+                let estadosDisco = estadosCapa.dropFirst(2).map( { EstadoDisco(rawValue: $0.rawValue )! } )
                 Picker("Estado da Capa", selection: $disco.estadoCapa) {
                     Text(disco.estadoCapa != nil ?
-                         "Remover Estado" : "").tag(nil as EstadoCapa?)
+                         "Remover Estado" : "Selecionar").tag(nil as EstadoCapa?)
                     
                     Divider()
                     
-                    ForEach(allEstados, id: \.self) { estado in
+                    ForEach(estadosCapa, id: \.self) { estado in
                         Text(titleEstados[estado] ?? "").tag(estado)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                    }
+                }
+                
+                Picker("Estado do Disco", selection: $disco.estadoDisco) {
+                    Text(disco.estadoDisco != nil ?
+                         "Remover Estado" : "Selecionar").tag(nil as EstadoCapa?)
+                    
+                    Divider()
+                    
+                    ForEach(estadosDisco, id: \.self) { estado in
+                        Text(titleEstados[ EstadoCapa(rawValue: estado.rawValue )! ] ?? "").tag(estado)
                             .lineLimit(1)
                             .truncationMode(.tail)
                     }
