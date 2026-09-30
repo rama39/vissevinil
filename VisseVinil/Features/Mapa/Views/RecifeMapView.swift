@@ -30,6 +30,9 @@ struct RecifeMapView: View {
     @State private var searchCompleter = SearchCompleter()
     @State private var locator = Locator()
 
+    // MARK: Preferências (salvas no aparelho)
+    @AppStorage("mapa.exibicaoDosLocais") private var exibicao: ExibicaoDosLocais = .agrupados
+
     // MARK: Câmera
     @State private var cameraPosition: MapCameraPosition =
         .userLocation(fallback: .region(ConfiguracaoDoMapa.regiaoMetropolitana))
@@ -82,11 +85,13 @@ struct RecifeMapView: View {
                 .ignoresSafeArea()
                 .onGeometryChange(for: CGSize.self) { $0.size } action: { tamanhoMapa = $0 }
                 // Rastreio + bússola: o botão de localização alterna entre seguir o usuário e
-                // seguir com a direção do aparelho (o "farol" de para onde o celular aponta)
+                // seguir com a direção do aparelho (o "farol" de para onde o celular aponta).
+                // Logo abaixo, o botão que alterna como os locais aparecem (mesmo tamanho e ideia)
                 .overlay(alignment: .topTrailing) {
                     if !buscaAtiva {
                         VStack(spacing: 10) {
                             MapUserLocationButton(scope: escopoDoMapa)
+                            BotaoDeExibicaoDosLocais(exibicao: $exibicao)
                             MapCompass(scope: escopoDoMapa)
                         }
                         .buttonBorderShape(.circle)
@@ -230,7 +235,9 @@ struct RecifeMapView: View {
     // Pin pronto pra desenhar: loja + visual já calculado
     private struct PinDesenhado: Identifiable {
         let loja: Loja
-        let visual: PinDoMapa
+        let visual: MarcadorDoLocal
+        // Ponto: centro na coordenada, sem nome embaixo. Pin: ponta na coordenada, com nome.
+        let ehPonto: Bool
         var id: Loja.ID { loja.id }
     }
 
@@ -240,9 +247,15 @@ struct RecifeMapView: View {
          aqueles closures rodam depois, fora do body, e o SwiftUI não acompanha o estado lido
          lá dentro (favoritos, fixados, seleção). O pin ficava com o visual antigo.
         */
+        let usaPontos = exibicao.usaPontos
         let pinsDesenhados = pinsNoMapa.map { loja in
-            PinDesenhado(loja: loja, visual: PinDoMapa(estilo: locaisSalvos.estilo(para: loja),
-                                                      selecionado: loja == lojaSelecionada))
+            let selecionado = loja == lojaSelecionada
+            return PinDesenhado(
+                loja: loja,
+                visual: MarcadorDoLocal(estilo: locaisSalvos.estilo(para: loja),
+                                        selecionado: selecionado, comoPonto: usaPontos),
+                ehPonto: usaPontos && !selecionado
+            )
         }
 
         return MapReader { mapProxy in
@@ -261,9 +274,11 @@ struct RecifeMapView: View {
                 // Lojas, favoritos/fixados avulsos e o local pesquisado, todos com o mesmo pin
                 ForEach(pinsDesenhados) { pin in
                     let loja = pin.loja
-                    Annotation(loja.nameForSearch, coordinate: loja.coordinate, anchor: .bottom) {
+                    Annotation(loja.nameForSearch, coordinate: loja.coordinate,
+                               anchor: pin.ehPonto ? .center : .bottom) {
                         pin.visual
                     }
+                    .annotationTitles(pin.ehPonto ? .hidden : .automatic)
                     // Sem a tag o Map não reconhece o pin como selecionado
                     .tag(loja)
                 }
@@ -300,6 +315,7 @@ struct RecifeMapView: View {
                 cameraPosition = EnquadramentoDoMapa.cameraInicial(para: novaLocalizacao)
             }
             .task {
+                shopClusterManager.agrupar = exibicao.agrupa
                 SincronizacaoDeLojas.sincronizarCatalogo(em: modelContext)
                 locaisSalvos.lojasCadastradas = lojas
                 locaisSalvos.carregar()
@@ -315,6 +331,10 @@ struct RecifeMapView: View {
             .onChange(of: lojas) {
                 locaisSalvos.lojasCadastradas = lojas
                 atualizarLojasNoCluster(mapProxy: mapProxy)
+            }
+            .onChange(of: exibicao) {
+                shopClusterManager.agrupar = exibicao.agrupa
+                agendarAtualizacaoDosClusters(mapProxy: mapProxy)
             }
             // Favoritou/fixou (ou desfez) um local avulso: ele entra/sai do cluster
             .onChange(of: locaisSalvos.locaisAvulsos) {
