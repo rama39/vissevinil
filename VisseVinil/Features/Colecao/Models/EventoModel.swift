@@ -9,10 +9,16 @@ import Foundation
 import SwiftData
 
 enum TipoEvento: String, Codable {
-    case adicionou
-    case tirouParaOuvir
-    case comentou
+    case adicionou = "Adicionou disco na coleção"
+    case tirouParaOuvir = "Tirou disco para ouvir"
+    case comentou = "Criou comentário"
 }
+
+let imageEvento: [TipoEvento: String] = [
+    .adicionou: "plus",
+    .tirouParaOuvir: "tray.and.arrow.up",
+    .comentou: "bubble"
+]
 
 @Model
 final class EventoModel {

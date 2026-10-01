@@ -40,7 +40,7 @@ struct ColecaoPesquisaView: View {
             .onDelete(perform: deleteItems)
         }
         .searchable(text: $bufferBusca, prompt: "Pesquisar Discos da Coleção")
-        .alertaGuardar($desRemovendoDisco)
+        .alertaGuardar($desRemovendoDisco, addTirouParaOuvir)
     }
 
     private func deleteItems(offsets: IndexSet) {
@@ -55,6 +55,27 @@ struct ColecaoPesquisaView: View {
                 modelContext.delete(deletado)
             }
         }
+    }
+    
+    func addTirouParaOuvir(disco: DiscoModel) {
+        
+        let newEvento = EventoModel (.tirouParaOuvir)
+        let tempoOuvido: Int
+        
+        if let whenRemoved = disco.whenRemoved {
+            tempoOuvido = Calendar .current .dateComponents(
+                [.minute], from: whenRemoved, to: Date()
+            )
+            .minute ?? 0
+            newEvento.data = whenRemoved
+        } else {
+            tempoOuvido = 0
+        }
+        
+        newEvento.disco = disco
+        newEvento.comentario = "Ouviu por \(tempoOuvido) minuto\(tempoOuvido > 1 ? "s" : "")"
+        
+        modelContext.insert(newEvento)
     }
 }
 

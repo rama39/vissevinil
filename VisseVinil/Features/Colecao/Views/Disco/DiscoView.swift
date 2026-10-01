@@ -7,37 +7,6 @@
 
 import SwiftUI
 
-struct BotaoDisco: View {
-    let action: () -> Void
-    let image: String
-    let fill: Bool
-    var body: some View {
-        Button {
-            action()
-        } label: {
-            Image(systemName: image + (fill ? ".fill" : ""))
-                .resizable().scaledToFit()
-                .frame(width:25, height: 25)
-        }
-        .buttonStyle(.plain)
-    }
-}
-
-struct BotaoStar: View {
-    @Binding var stars: Int?
-    let i: Int
-    var body: some View {
-        Button {
-            stars = i
-        } label: {
-            Image(systemName: "star" + ((stars != nil && stars! >= i) ? ".fill" : ""))
-                .resizable().scaledToFit()
-                .frame(width:25, height: 25)
-                .foregroundStyle(.amarelo)
-        }.buttonStyle(.plain)
-    }
-}
-
 struct DiscoView: View {
     
     @Bindable var disco: DiscoModel
@@ -96,10 +65,35 @@ struct DiscoView: View {
             Section("Minhas impressões") {
                 HStack {
                     Text("Avaliação")
-                        .bold()
                     Spacer()
                     ForEach(1...5, id: \.self) { i in
                         BotaoStar(stars: $disco.estrelas, i: i)
+                    }
+                }
+                let estadosCapa = Array(descricaoEstados.keys).sorted(by: {$0.rawValue < $1.rawValue})
+                let estadosDisco = estadosCapa.dropFirst(2).map( { EstadoDisco(rawValue: $0.rawValue )! } )
+                Picker("Estado da Capa", selection: $disco.estadoCapa) {
+                    Text(disco.estadoCapa != nil ?
+                         "Remover Estado" : "Selecionar").tag(nil as EstadoCapa?)
+                    
+                    Divider()
+                    
+                    ForEach(estadosCapa, id: \.self) { estado in
+                        Text(titleEstados[estado] ?? "").tag(estado)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
+                    }
+                }
+                Picker("Estado do Disco", selection: $disco.estadoDisco) {
+                    Text(disco.estadoDisco != nil ?
+                         "Remover Estado" : "Selecionar").tag(nil as EstadoDisco?)
+                    
+                    Divider()
+                    
+                    ForEach(estadosDisco, id: \.self) { estado in
+                        Text(titleEstados[ EstadoCapa(rawValue: estado.rawValue )! ] ?? "").tag(estado)
+                            .lineLimit(1)
+                            .truncationMode(.tail)
                     }
                 }
                 VStack(alignment: .leading) {
@@ -110,27 +104,17 @@ struct DiscoView: View {
                             adicionandoComentario = true
                         } label: {
                             HStack {
-                                Image(systemName: "pencil")
+                                Image(systemName: "square.and.pencil")
                                 Text("Comentário")
                             }
-                            .padding(7)
+                            .padding(15)
                             .glassEffect()
                         }.buttonStyle(.plain)
                     }
-                    let columns = [GridItem(.flexible(minimum: 50, maximum: 50)), GridItem(.flexible())]
-                    LazyVGrid(columns: columns) {
+                    VStack(alignment: .leading, spacing: 0) {
+                        let last = disco.eventos.last
                         ForEach(disco.eventos) { evento in
-                            switch evento.tipo {
-                            case .adicionou:
-                                Image(systemName: "plus")
-                                Text("Adicionou o disco à coleção")
-                            case .tirouParaOuvir:
-                                Image(systemName: "tray.and.arrow.up")
-                                Text("adicionou")
-                            case .comentou:
-                                Image(systemName: "bubble")
-                                Text(evento.comentario ?? "")
-                            }
+                            EventoView(evento: evento, notLast: (evento != last))
                         }
                     }
                 }
@@ -147,6 +131,7 @@ struct DiscoView: View {
                 ColecaoView()
                     .onAppear {
                         disco.removed = true
+                        disco.whenRemoved = Date()
                     }
                     .navigationBarBackButtonHidden(true)
             } label: {
