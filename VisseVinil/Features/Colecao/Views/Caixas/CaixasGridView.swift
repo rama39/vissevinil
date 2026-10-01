@@ -127,18 +127,23 @@ struct CaixasGridView: View {
     }
     
     func addTirouParaOuvir(disco: DiscoModel) {
-        //TODO: Colocar tempo de retirada em from
+        
+        let newEvento = EventoModel (.tirouParaOuvir)
         let tempoOuvido: Int
+        
         if let whenRemoved = disco.whenRemoved {
             tempoOuvido = Calendar .current .dateComponents(
                 [.minute], from: whenRemoved, to: Date()
-            ) .minute ?? 0
-        } else { tempoOuvido = 0 }
-        let newEvento = EventoModel (
-            .tirouParaOuvir,
-            "Ouviu por \(tempoOuvido) minuto\(tempoOuvido > 1 ? "s" : "")"
-        )
+            )
+            .minute ?? 0
+            newEvento.data = whenRemoved
+        } else {
+            tempoOuvido = 0
+        }
+        
         newEvento.disco = disco
+        newEvento.comentario = "Ouviu por \(tempoOuvido) minuto\(tempoOuvido > 1 ? "s" : "")"
+        
         modelContext.insert(newEvento)
     }
 }

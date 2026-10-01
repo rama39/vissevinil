@@ -58,11 +58,23 @@ struct ColecaoPesquisaView: View {
     }
     
     func addTirouParaOuvir(disco: DiscoModel) {
-        let newEvento = EventoModel (
-            .tirouParaOuvir,
-            "\(Calendar.current.dateComponents([.hour], from: Date(), to: Date()).hour ?? 0)"
-        )
+        
+        let newEvento = EventoModel (.tirouParaOuvir)
+        let tempoOuvido: Int
+        
+        if let whenRemoved = disco.whenRemoved {
+            tempoOuvido = Calendar .current .dateComponents(
+                [.minute], from: whenRemoved, to: Date()
+            )
+            .minute ?? 0
+            newEvento.data = whenRemoved
+        } else {
+            tempoOuvido = 0
+        }
+        
         newEvento.disco = disco
+        newEvento.comentario = "Ouviu por \(tempoOuvido) minuto\(tempoOuvido > 1 ? "s" : "")"
+        
         modelContext.insert(newEvento)
     }
 }
