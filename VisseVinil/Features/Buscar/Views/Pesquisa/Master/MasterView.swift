@@ -6,8 +6,14 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct MasterView: View {
+    @Environment(\.modelContext) private var modelContext
+    func save() { if modelContext.hasChanges { try? modelContext.save() } }
+    @Query private var curtidas: [CurtidaModel]
+    @Query private var desejados: [WishlistModel]
+    
     let master_id: Int //snake case to match API documentation
     @State private var masterViewModel = MasterViewModel()
     
@@ -39,10 +45,25 @@ struct MasterView: View {
                             .padding(.bottom)
                         HStack {
                             MasterIsSavedView(master_id: master.id ?? 0)
-                            // TODO: fazer botoes
-                            Image(systemName: "heart").resizable().scaledToFit().frame(width:25, height: 25)
-                                .padding(.trailing)
-                            Image(systemName: "bookmark").resizable().scaledToFit().frame(width:25, height: 25)
+                            Spacer()
+                            let curtida = curtidas.first(where: {$0.master_id == master.id})
+                            BotaoDisco( action: {
+                                if curtida == nil {
+                                    saveCurtida(master: master)
+                                } else {
+                                    deleteCurtida(curtida: curtida!)
+                                }
+                            }, image: "heart", fill: curtida != nil)
+                            .padding(.trailing)
+                            
+//                            let desejado = desejados.first(where: {$0.master_id == master.id})
+//                            BotaoDisco( action: {
+//                                if curtida == nil {
+//                                    saveCurtida(master: master)
+//                                } else {
+//                                    deleteCurtida(curtida: curtida!)
+//                                }
+//                            }, image: "bookmark", fill: curtida != nil)
                         }
                         .padding(.bottom)
                         Text(master.title ?? "")
@@ -82,6 +103,22 @@ struct MasterView: View {
             Task {
                 await masterViewModel.requestMaster(id: master_id)
             }
+        }
+    }
+    
+    func saveCurtida(master: MasterResponse) {
+        withAnimation {
+            let newCurtida = CurtidaModel(master: master)
+            modelContext.insert(newCurtida)
+            save()
+        }
+    }
+
+    func deleteCurtida(curtida: CurtidaModel) {
+        withAnimation {
+            let deletedCurtida = curtida
+            modelContext.delete(deletedCurtida)
+            save()
         }
     }
 }
