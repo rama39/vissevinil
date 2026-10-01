@@ -106,7 +106,7 @@ struct CaixasGridView: View {
                 }
             }, navTitle: "Editar caixa")
         }
-        .alertaGuardar($desRemovendoDisco)
+        .alertaGuardar($desRemovendoDisco, addTirouParaOuvir)
         .searchable(text: $bufferBusca, prompt: "Pesquisar Caixas")
     }
     
@@ -124,6 +124,19 @@ struct CaixasGridView: View {
             modelContext.delete(deletedCaixa)
             save()
         }
+    }
+    
+    func addTirouParaOuvir(disco: DiscoModel) {
+        //TODO: Colocar tempo de retirada em from
+        let tempoOuvido = Calendar .current .dateComponents(
+                [.minute], from: disco.eventos[0].data, to: Date()
+            ) .minute ?? 0
+        let newEvento = EventoModel (
+            .tirouParaOuvir,
+            "Ouviu por \(tempoOuvido) minuto\(tempoOuvido > 1 ? "s" : "")"
+        )
+        newEvento.disco = disco
+        modelContext.insert(newEvento)
     }
 }
 

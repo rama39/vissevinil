@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension View {
-    func alertaGuardar(_ desRemovendoDisco: Binding<DiscoModel?>) -> some View {
+    func alertaGuardar(_ desRemovendoDisco: Binding<DiscoModel?>, _ acaoGuardar: @escaping (DiscoModel) -> Void) -> some View {
         return self.alert("Guardar Disco", item: desRemovendoDisco) { disco in
             // TODO: MAKE BLUE
             Button("Guardar disco na frente", role: .confirm) {
@@ -16,12 +16,14 @@ extension View {
                     // TODO: mover à frente
                     disco.removed = false
                     desRemovendoDisco.wrappedValue = nil
+                    acaoGuardar(disco)
                 }
             }
             Button("Guardar disco onde estava", role: .none) {
                 withAnimation {
                     disco.removed = false
                     desRemovendoDisco.wrappedValue = nil
+                    acaoGuardar(disco)
                 }
             }
             Button("Cancelar", role: .cancel) {
