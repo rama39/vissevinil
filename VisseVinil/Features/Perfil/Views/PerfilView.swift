@@ -117,7 +117,7 @@ struct PerfilView: View {
                     TelaGenericaView(texto: "Wishlist")
 
                 case .curtidos:
-                    TelaGenericaView(texto: "Curtidos")
+                    CurtidasListView()
                 }
             }
             .onAppear {

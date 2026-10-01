@@ -21,6 +21,17 @@ struct CurtidasListView: View {
                     CurtidaRow(curtida: curtida)
                 }
             }
+            
+            .onDelete(perform: deleteItems)
+        }
+    }
+    
+    private func deleteItems(offsets: IndexSet) {
+        withAnimation {
+            for index in offsets {
+                let deletado = curtidas[index]
+                modelContext.delete(deletado)
+            }
         }
     }
 }
