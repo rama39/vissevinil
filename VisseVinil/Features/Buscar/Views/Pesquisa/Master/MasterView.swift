@@ -52,6 +52,7 @@ struct MasterView: View {
 //                                    deleteCurtida(curtida: curtida!)
 //                                }
 //                            }, image: "bookmark", fill: curtida != nil)
+                                .padding(.trailing)
                         }
                         .padding(.bottom)
                         Text(master.title ?? "")

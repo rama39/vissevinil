@@ -108,7 +108,8 @@ final class DiscoModel {
     
     // posicao na coleção
     var posicao: Int
-    var curtido: Bool = false  // disco curtido, aparece primeir na busca
+    // deprecated, prefer using CurtidaModel
+    //var curtido: Bool = false  // disco curtido, aparece primeir na busca
     var favorito: Bool = false // disco aparece no carrossel do perfil de favs
     var wishlist: Bool = false
     var removed: Bool = false // disco removido para ouvir
@@ -191,5 +192,9 @@ final class DiscoModel {
             
             posicao: posicao
         )
+    }
+    
+    func curtido(curtidas: [CurtidaModel]) -> Bool {
+        curtidas.map{$0.master_id}.contains(master_id)
     }
 }

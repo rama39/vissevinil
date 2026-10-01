@@ -36,7 +36,8 @@ struct PerfilView: View {
 
     // Discos curtidos com o coração.
     private var curtidos: [DiscoModel] {
-        todosOsDiscos.filter { $0.curtido }
+        //todosOsDiscos.filter { $0.curtido }
+        []
     }
 
     var body: some View {

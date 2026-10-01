@@ -30,10 +30,7 @@ struct DiscoView: View {
                         //} .buttonStyle(.plain)
                     }
                     Spacer()
-                    BotaoDisco(
-                        action: {disco.curtido.toggle()},
-                        image: "heart", fill: disco.curtido
-                    )
+                    BotaoCurtidaDisco(disco: disco)
                     .padding(.trailing)
                     BotaoDisco(
                         action: {disco.wishlist.toggle()},

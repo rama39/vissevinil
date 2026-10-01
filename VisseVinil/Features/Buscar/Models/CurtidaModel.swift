@@ -49,4 +49,22 @@ final class CurtidaModel {
         self.lowestPrice = master.lowestPrice
         self.dataQuality = master.dataQuality
     }
+    
+    init(disco master: DiscoModel) {
+        self.genres = master.genres
+        self.styles = master.styles
+        self.master_title = master.master_title
+        self.mainRelease = master.mainRelease
+        self.mainReleaseURL = master.mainReleaseURL
+        self.uri = master.uri
+        self.artists = master.artists
+        self.versionsURL = master.versionsURL
+        self.images = master.images
+        self.master_resourceURL = master.master_title
+        self.tracklist = master.tracklist
+        self.master_id = master.master_id
+        self.numForSale = master.numForSale
+        self.lowestPrice = master.lowestPrice
+        self.dataQuality = master.dataQuality
+    }
 }
