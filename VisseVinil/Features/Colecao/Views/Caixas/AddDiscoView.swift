@@ -38,7 +38,8 @@ struct AddDiscoView: View {
                         if caixa.discos.map({$0.posicao}).contains(count) {
                             count += 1
                         }
-                        disco.posicaoCaixa = caixa.discos.count
+                        disco.posicaoCaixa = (caixa.discos.compactMap(\.posicaoCaixa).max() ?? -1) + 1
+                        disco.adicionadoNaCaixaEm = .now
                         disco.caixa = caixa
                         save()
                         adicionandoDisco = false

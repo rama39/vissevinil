@@ -15,16 +15,18 @@ struct AddCaixaView: View {
         NavigationStack {
             Form {
                 if nil != newCaixa {
+                    // Leitura segura: ao salvar/cancelar, newCaixa vira nil enquanto a sheet
+                    // ainda está fechando e os campos são lidos de novo (com "!" o app fechava)
                     TextField("Nome da Caixa", text:
                         Binding(
-                            get: {newCaixa!.title},
-                            set: {newCaixa!.title = $0}
+                            get: { newCaixa?.title ?? "" },
+                            set: { newCaixa?.title = $0 }
                         )
                     )
                     ColorPicker("Cor da Caixa", selection:
                         Binding(
-                            get: {newCaixa!.cor},
-                            set: {newCaixa!.rgba = $0.toRGBA}
+                            get: { newCaixa?.cor ?? .brown },
+                            set: { newCaixa?.rgba = $0.toRGBA }
                         )
                     )
                 }

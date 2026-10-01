@@ -122,6 +122,7 @@ final class DiscoModel {
     var eventos: [EventoModel] = []
     var caixa: CaixaModel?
     var posicaoCaixa: Int? = nil
+    var adicionadoNaCaixaEm: Date? = nil // quando entrou na caixa atual (ordenação por inclusão)
     
     init(genres: [String]? = nil, styles: [String]? = nil, master_title: String?, mainRelease: Int? = nil, mainReleaseURL: String? = nil, uri: String? = nil, artists: [MasterArtist]? = nil, versionsURL: String? = nil, images: [MasterImage]? = nil, master_resourceURL: String? = nil, tracklist: [MasterTracklist]? = nil, master_id: Int?, numForSale: Int? = nil, lowestPrice: Double? = nil, dataQuality: String? = nil, status: String? = nil, community: MasterVersionCommunity? = nil, thumb: String? = nil, thumbData: Data? = nil, format: String? = nil, country: String? = nil, title: String? = nil, label: String? = nil, released: String? = nil, majorFormats: [String]? = nil, catno: String? = nil, resourceURL: String? = nil, id: Int, posicao: Int) {
         self.genres = genres

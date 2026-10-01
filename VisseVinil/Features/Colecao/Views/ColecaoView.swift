@@ -23,6 +23,10 @@ struct ColecaoView: View {
     
     @AppStorage("Modo de Visualização da Coleção (discos/caixas)")
     private var modoVisualizacao: ModeoVisualizacao = .discos
+
+    // Ordenação da lista de discos (salva no aparelho; a ColecaoPesquisaView lê as mesmas chaves)
+    @AppStorage("colecao.ordenacao") private var ordenacao: Ordenacao = .inclusao
+    @AppStorage("colecao.ordemCrescente") private var ordemCrescente = false
     
     var body: some View {
         NavigationStack {
@@ -44,6 +48,11 @@ struct ColecaoView: View {
                                 Label(modo.rawValue, systemImage: modo.iconName)
                                     .tag(modo)
                             }
+                        }
+
+                        if modoVisualizacao == .discos {
+                            SubmenuDeOrdenacao(ordenacao: $ordenacao, crescente: $ordemCrescente,
+                                               contexto: .colecao)
                         }
                     } label: {
                         Image(systemName: "ellipsis")
