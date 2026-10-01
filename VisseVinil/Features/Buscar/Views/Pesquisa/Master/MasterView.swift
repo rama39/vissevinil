@@ -9,10 +9,6 @@ import SwiftUI
 import SwiftData
 
 struct MasterView: View {
-    @Environment(\.modelContext) private var modelContext
-    func save() { if modelContext.hasChanges { try? modelContext.save() } }
-    @Query private var curtidas: [CurtidaModel]
-    @Query private var desejados: [WishlistModel]
     
     let master_id: Int //snake case to match API documentation
     @State private var masterViewModel = MasterViewModel()
@@ -46,15 +42,7 @@ struct MasterView: View {
                         HStack {
                             MasterIsSavedView(master_id: master.id ?? 0)
                             Spacer()
-                            let curtida = curtidas.first(where: {$0.master_id == master.id})
-                            BotaoDisco( action: {
-                                if curtida == nil {
-                                    saveCurtida(master: master)
-                                } else {
-                                    deleteCurtida(curtida: curtida!)
-                                }
-                            }, image: "heart", fill: curtida != nil)
-                            .padding(.trailing)
+                            BotaoCurtidaMaster(master: master)
                             
 //                            let desejado = desejados.first(where: {$0.master_id == master.id})
 //                            BotaoDisco( action: {
@@ -103,22 +91,6 @@ struct MasterView: View {
             Task {
                 await masterViewModel.requestMaster(id: master_id)
             }
-        }
-    }
-    
-    func saveCurtida(master: MasterResponse) {
-        withAnimation {
-            let newCurtida = CurtidaModel(master: master)
-            modelContext.insert(newCurtida)
-            save()
-        }
-    }
-
-    func deleteCurtida(curtida: CurtidaModel) {
-        withAnimation {
-            let deletedCurtida = curtida
-            modelContext.delete(deletedCurtida)
-            save()
         }
     }
 }
