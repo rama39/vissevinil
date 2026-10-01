@@ -29,6 +29,5 @@ struct EventoContentView: View {
         .background {Color(uiColor: UIColor.tertiaryLabel)}
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .padding(.horizontal)
-        .padding(.bottom)
     }
 }
