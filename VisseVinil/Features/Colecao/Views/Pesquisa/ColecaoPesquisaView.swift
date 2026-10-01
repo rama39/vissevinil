@@ -13,14 +13,22 @@ struct ColecaoPesquisaView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var discos: [DiscoModel]
     
+    // Mesmas chaves do menu "Ordenar Por" da ColecaoView
+    @AppStorage("colecao.ordenacao") private var ordenacao: Ordenacao = .inclusao
+    @AppStorage("colecao.ordemCrescente") private var ordemCrescente = false
+
     @State private var bufferBusca = ""
     var discosBuscados: [DiscoModel] {
         discos.filter { disco in
             bufferBusca.isEmpty ||
             disco.title.localizedCaseInsensitiveContains(bufferBusca)
-        }.sorted(by: {
-            $0.posicao > $1.posicao
-        })
+        }
+        .ordenados(por: ordenacao, crescente: ordemCrescente, em: .colecao)
+    }
+
+    // Arrastar só faz sentido na ordem manual e com a lista inteira (sem busca)
+    private var podeReordenar: Bool {
+        ordenacao == .manual && bufferBusca.isEmpty
     }
     
     @State var desRemovendoDisco: DiscoModel? = nil
@@ -38,9 +46,30 @@ struct ColecaoPesquisaView: View {
                 }
             }
             .onDelete(perform: deleteItems)
+            .onMove(perform: acaoDeMover)
+        }
+        .toolbar {
+            if ordenacao == .manual {
+                ToolbarItem(placement: .topBarTrailing) {
+                    EditButton()
+                }
+            }
         }
         .searchable(text: $bufferBusca, prompt: "Pesquisar Discos da Coleção")
         .alertaGuardar($desRemovendoDisco, addTirouParaOuvir)
+    }
+
+    // nil desliga o arrastar (a lista só deixa mover quando há uma ação)
+    private var acaoDeMover: ((IndexSet, Int) -> Void)? {
+        guard podeReordenar else { return nil }
+        return { origem, destino in moverDiscos(de: origem, para: destino) }
+    }
+
+    // Salva a nova ordem como ordem manual (o app lembra onde cada disco está)
+    private func moverDiscos(de origem: IndexSet, para destino: Int) {
+        var lista = discosBuscados
+        lista.move(fromOffsets: origem, toOffset: destino)
+        lista.salvarComoOrdemManual(em: .colecao)
     }
 
     private func deleteItems(offsets: IndexSet) {

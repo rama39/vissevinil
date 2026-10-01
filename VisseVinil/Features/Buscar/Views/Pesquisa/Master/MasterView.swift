@@ -57,14 +57,14 @@ struct MasterView: View {
                         .padding(.bottom)
                         Text(master.title ?? "")
                             .font(.title2).bold()
-                        Text(master.artists?[0].name ?? "")
+                        Text(master.artists?.first?.name ?? "")
                             .foregroundStyle(.secondary)
                     }
                     .listRowSeparator(.hidden)
                     .padding(.bottom, 0)
                     Section("Informações do disco") {
                         MasterInfoRow(title: "Título", value: master.title)
-                        MasterInfoRow(title: "Artista", value: master.artists?[0].name)
+                        MasterInfoRow(title: "Artista", value: master.artists?.first?.name)
                         MasterInfoRow(title: "Lançamento", value: String(master.year ?? 0))
                         MasterInfoRow(title: "Gêneros", value: master.genres?.joined(separator: ", "))
                         MasterInfoRow(title: "Estilos", value: master.styles?.joined(separator: ", "))

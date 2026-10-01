@@ -68,7 +68,7 @@ struct DiscoView: View {
                     }
                 }
                 let estadosCapa = Array(descricaoEstados.keys).sorted(by: {$0.rawValue < $1.rawValue})
-                let estadosDisco = estadosCapa.dropFirst(2).map( { EstadoDisco(rawValue: $0.rawValue )! } )
+                let estadosDisco = estadosCapa.dropFirst(2).compactMap { EstadoDisco(rawValue: $0.rawValue) }
                 Picker("Estado da Capa", selection: $disco.estadoCapa) {
                     Text(disco.estadoCapa != nil ?
                          "Remover Estado" : "Selecionar").tag(nil as EstadoCapa?)
@@ -88,7 +88,7 @@ struct DiscoView: View {
                     Divider()
                     
                     ForEach(estadosDisco, id: \.self) { estado in
-                        Text(titleEstados[ EstadoCapa(rawValue: estado.rawValue )! ] ?? "").tag(estado)
+                        Text(EstadoCapa(rawValue: estado.rawValue).flatMap { titleEstados[$0] } ?? "").tag(estado)
                             .lineLimit(1)
                             .truncationMode(.tail)
                     }

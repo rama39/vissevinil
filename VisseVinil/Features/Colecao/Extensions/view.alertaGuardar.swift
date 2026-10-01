@@ -13,7 +13,7 @@ extension View {
             // TODO: MAKE BLUE
             Button("Guardar disco na frente", role: .confirm) {
                 withAnimation {
-                    // TODO: mover à frente
+                    disco.moverParaFrenteDaCaixa()
                     disco.removed = false
                     desRemovendoDisco.wrappedValue = nil
                     acaoGuardar(disco)
@@ -33,12 +33,23 @@ extension View {
         } message: { _ in
             if let disco = desRemovendoDisco.wrappedValue {
                 let text =
-                    "Disco: \(disco.title) - \(disco.artistsListed)" + (
-                        disco.caixa != nil ?
-                        "\nCaixa: \(disco.caixa!.title)" : ""
-                    )
+                    "Disco: \(disco.title) - \(disco.artistsListed)" +
+                    (disco.caixa.map { "\nCaixa: \($0.title)" } ?? "")
                 Text(text)
             }
         }
+    }
+}
+
+extension DiscoModel {
+    /// Coloca o disco na frente da caixa (posição 0 da ordem manual), empurrando os outros
+    func moverParaFrenteDaCaixa() {
+        guard let caixa else { return }
+        for outro in caixa.discos where outro !== self {
+            if let posicao = outro.posicaoCaixa {
+                outro.posicaoCaixa = posicao + 1
+            }
+        }
+        posicaoCaixa = 0
     }
 }
