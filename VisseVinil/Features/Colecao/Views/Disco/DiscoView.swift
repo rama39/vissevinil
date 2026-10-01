@@ -86,7 +86,7 @@ struct DiscoView: View {
                 }
                 Picker("Estado do Disco", selection: $disco.estadoDisco) {
                     Text(disco.estadoDisco != nil ?
-                         "Remover Estado" : "Selecionar").tag(nil as EstadoCapa?)
+                         "Remover Estado" : "Selecionar").tag(nil as EstadoDisco?)
                     
                     Divider()
                     
