@@ -128,9 +128,12 @@ struct CaixasGridView: View {
     
     func addTirouParaOuvir(disco: DiscoModel) {
         //TODO: Colocar tempo de retirada em from
-        let tempoOuvido = Calendar .current .dateComponents(
-                [.minute], from: disco.eventos[0].data, to: Date()
+        let tempoOuvido: Int
+        if let whenRemoved = disco.whenRemoved {
+            tempoOuvido = Calendar .current .dateComponents(
+                [.minute], from: whenRemoved, to: Date()
             ) .minute ?? 0
+        } else { tempoOuvido = 0 }
         let newEvento = EventoModel (
             .tirouParaOuvir,
             "Ouviu por \(tempoOuvido) minuto\(tempoOuvido > 1 ? "s" : "")"

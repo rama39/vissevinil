@@ -131,6 +131,7 @@ struct DiscoView: View {
                 ColecaoView()
                     .onAppear {
                         disco.removed = true
+                        disco.whenRemoved = Date()
                     }
                     .navigationBarBackButtonHidden(true)
             } label: {

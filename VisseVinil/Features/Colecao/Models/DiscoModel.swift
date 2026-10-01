@@ -112,6 +112,7 @@ final class DiscoModel {
     var favorito: Bool = false // disco aparece no carrossel do perfil de favs
     var wishlist: Bool = false
     var removed: Bool = false // disco removido para ouvir
+    var whenRemoved: Date? = nil // quando disco foi removido
     var estrelas: Int? = nil
     var estadoCapa: EstadoCapa? = nil
     var estadoDisco: EstadoDisco? = nil

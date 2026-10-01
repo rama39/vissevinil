@@ -22,6 +22,7 @@ extension View {
             Button("Guardar disco onde estava", role: .none) {
                 withAnimation {
                     disco.removed = false
+                    disco.whenRemoved = nil
                     desRemovendoDisco.wrappedValue = nil
                     acaoGuardar(disco)
                 }
