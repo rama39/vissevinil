@@ -12,6 +12,8 @@ struct PerfilView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var perfis: [PerfilModel]
     @Query private var todosOsDiscos: [DiscoModel]
+    
+    @Query var curtidas: [CurtidaModel]
 
     @State var editando: Bool = false
     @State var profileRef: PerfilModel? = nil
@@ -32,12 +34,6 @@ struct PerfilView: View {
     // Discos que o usuário quer adquirir.
     private var wishlist: [DiscoModel] {
         todosOsDiscos.filter { $0.wishlist }
-    }
-
-    // Discos curtidos com o coração.
-    private var curtidos: [DiscoModel] {
-        //todosOsDiscos.filter { $0.curtido }
-        []
     }
 
     var body: some View {
@@ -82,14 +78,14 @@ struct PerfilView: View {
                             // MARK: - Curtidos
 
                             
-                            if !curtidos.isEmpty {
-                                RecordSectionView(
+                            //if !curtidos.isEmpty {
+                                CurtidaSectionView(
                                     title: "Curtidos",
-                                    records: curtidos
+                                    records: curtidas
                                 ) {
                                     destino = .curtidos
                                 }
-                            }
+                            //}
 
                             
                             // MARK: - Wishlist
