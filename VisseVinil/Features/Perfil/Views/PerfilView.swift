@@ -3,7 +3,7 @@
 //  VisseVinil
 //
 //  Created by Rian Antony Medeiros de Abreu on 03/09/26.
-
+//
 
 import SwiftUI
 import SwiftData
@@ -16,69 +16,139 @@ struct PerfilView: View {
     @State var editando: Bool = false
     @State var profileRef: PerfilModel? = nil
 
-    // TEMPORÁRIO: 4 discos do Bob Marley, até o onboarding deixar o usuário
-    // escolher os favoritos de verdade. Ver DiscosFavoritosMock.swift.
+    // Controla qual tela será aberta ao tocar no título de uma seção.
+    @State private var destino: PerfilDestino?
+
+    // Discos marcados como favoritos pelo coração.
     private var discosFavoritos: [DiscoModel] {
-        todosOsDiscos.filter({ disco in disco.favorito })
+        todosOsDiscos.filter { $0.favorito }
     }
+
     // Discos que já fazem parte da coleção (não estão na wishlist).
     private var meusDiscos: [DiscoModel] {
         todosOsDiscos.filter { !$0.wishlist }
     }
+
     // Discos que o usuário quer adquirir.
     private var wishlist: [DiscoModel] {
         todosOsDiscos.filter { $0.wishlist }
     }
 
-    var body: some View {
-        ZStack {
-            Color(.systemGroupedBackground).ignoresSafeArea()
+    // Discos curtidos com o coração.
+    private var curtidos: [DiscoModel] {
+        todosOsDiscos.filter { $0.curtido }
+    }
 
-            if let profile = perfis.first {
-                ScrollView {
-                    VStack(spacing: 32) {
-                        ProfileHeaderView(profile: profile) {
-                            onEditTapped: do {
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                Color(.systemGroupedBackground)
+                    .ignoresSafeArea()
+
+                if let profile = perfis.first {
+                    ScrollView {
+                        VStack(spacing: 32) {
+                            ProfileHeaderView(profile: profile) {
                                 editando = true
                                 profileRef = profile
                             }
-                        }
 
-                        VStack(alignment: .leading, spacing: 14) {
-                            Text("Discos favoritos")
-                                .font(.system(size: 20, weight: .semibold))
-                                .foregroundStyle(.primary)
-                                .padding(.horizontal, 20)
+                            // MARK: - Discos favoritos
+
+                            VStack(alignment: .leading, spacing: 14) {
+                                Text("Discos favoritos")
+                                    .font(.system(size: 20, weight: .semibold))
+                                    .foregroundStyle(.primary)
+                                    .padding(.horizontal, 20)
 
                                 if !discosFavoritos.isEmpty {
-                                DiscosFavCarrossel(records: discosFavoritos)
+                                    DiscosFavCarrossel(records: discosFavoritos)
+                                }
                             }
-                        }
 
-                        if !meusDiscos.isEmpty {
-                            RecordSectionView(title: "Meus Discos", records: meusDiscos, showLocation: true) {
-                                // TODO: navegar para a lista completa de discos do usuário
-                            }
-                        }
+                            // MARK: - Meus Discos
 
-                        if !wishlist.isEmpty {
-                            RecordSectionView(title: "Wishlist", records: wishlist) {
-                                // TODO: navegar para a wishlist completa
+                            if !meusDiscos.isEmpty {
+                                RecordSectionView(
+                                    title: "Meus Discos",
+                                    records: meusDiscos,
+                                    showLocation: true
+                                ) {
+                                    destino = .meusDiscos
+                                }
                             }
+                            
+                            // MARK: - Curtidos
+
+                            
+                            if !curtidos.isEmpty {
+                                RecordSectionView(
+                                    title: "Curtidos",
+                                    records: curtidos
+                                ) {
+                                    destino = .curtidos
+                                }
+                            }
+
+                            
+                            // MARK: - Wishlist
+
+                            if !wishlist.isEmpty {
+                                RecordSectionView(
+                                    title: "Wishlist",
+                                    records: wishlist
+                                ) {
+                                    destino = .wishlist
+                                }
+                            }
+
+                            // MARK: - Curtidos
+
+                          
                         }
+                        .padding(.top, 12)
+                        .padding(.bottom, 24)
                     }
-                    .padding(.top, 12)
-                    .padding(.bottom, 24)
                 }
             }
+            .navigationDestination(item: $destino) { destino in
+                switch destino {
+                case .meusDiscos:
+                    ColecaoPesquisaView()
+
+                case .wishlist:
+                    TelaGenericaView(texto: "Wishlist")
+
+                case .curtidos:
+                    TelaGenericaView(texto: "Curtidos")
+                }
+            }
+            .onAppear {
+                // Só cria um perfil se ainda não existir nenhum salvo.
+                guard perfis.isEmpty else { return }
+                modelContext.insert(PerfilModel())
+            }
+            .fullScreenCover(isPresented: $editando) {
+                EditPerfilView(
+                    perfil: $profileRef,
+                    editando: $editando
+                )
+            }
         }
-        .onAppear {
-            // Só cria um perfil se ainda não existir nenhum salvo.
-            guard perfis.isEmpty else { return }
-            modelContext.insert(PerfilModel())
-        }
-        .fullScreenCover(isPresented: $editando, content: {
-            EditPerfilView(perfil: $profileRef, editando: $editando)
-        })
     }
+}
+
+// MARK: - Destinos da navegação
+
+private enum PerfilDestino: Hashable {
+    case meusDiscos
+    case wishlist
+    case curtidos
+}
+
+// MARK: - Preview
+
+#Preview {
+    PerfilView()
+        .modelContainer(for: appSchema, inMemory: true)
 }
