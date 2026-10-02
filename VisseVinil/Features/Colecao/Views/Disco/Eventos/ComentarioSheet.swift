@@ -16,8 +16,14 @@ struct ComentarioSheet: View {
     @Environment(\.dismiss) private var dismiss
     
     let disco: DiscoModel
+    @Binding var existingComment: EventoModel?
     
     @State var newComentarioText: String = ""
+    
+    init(disco: DiscoModel, existingComment: Binding<EventoModel?>) {
+        self.disco = disco
+        self._existingComment = existingComment
+    }
     
     var body: some View {
         NavigationStack {
@@ -26,22 +32,25 @@ struct ComentarioSheet: View {
                     .lineLimit(20...)
                     .font(.body)
                     .padding()
-                    .onSubmit {
+            }
+            .navigationTitle(
+                existingComment == nil ?
+                "Novo Comentário" : "Editar Comentário"
+            )
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(role: .confirm) {
                         saveComment()
                     }
-                
-                    //.background()
-                    //.clipShape(RoundedRectangle(cornerRadius: 25))
-            }
-                .navigationTitle("Novo Comentário")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .topBarTrailing) {
-                        Button(role: .confirm) {
-                            saveComment()
-                        }
-                    }
                 }
+            }
+            .onAppear {
+                if let existingComment,
+                   let comentario = existingComment.comentario{
+                    newComentarioText = comentario
+                }
+            }
         }
     }
     
@@ -49,12 +58,16 @@ struct ComentarioSheet: View {
         withAnimation {
             
             dismiss()
-            
             guard !newComentarioText.isEmpty else { return }
             
-            let newEvento = EventoModel(.comentou, newComentarioText)
-            newEvento.disco = disco
-            modelContext.insert(newEvento)
+            if let existingComment {
+                existingComment.comentario = newComentarioText
+            } else {
+                let newEvento = EventoModel(.comentou, newComentarioText)
+                newEvento.disco = disco
+                modelContext.insert(newEvento)
+            }
+            existingComment = nil
             save()
         }
     }

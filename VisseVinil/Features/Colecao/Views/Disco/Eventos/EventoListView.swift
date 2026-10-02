@@ -10,6 +10,7 @@ import SwiftUI
 struct EventoListView: View {
     @Binding var adicionandoComentario: Bool
     let eventos: [EventoModel]
+    @Binding var existingComment: EventoModel?
     var body: some View {
         VStack(alignment: .leading) {
             HStack {
@@ -29,7 +30,7 @@ struct EventoListView: View {
             VStack(alignment: .leading, spacing: 0) {
                 let last = eventos.last
                 ForEach(eventos.sorted(by: {$0.data < $1.data})) { evento in
-                    EventoView(evento: evento, notLast: (evento != last))
+                    EventoView(evento: evento, existingComment: $existingComment, notLast: (evento != last))
                 }
             }
         }

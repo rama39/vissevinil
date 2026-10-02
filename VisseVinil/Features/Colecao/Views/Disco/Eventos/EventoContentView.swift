@@ -11,6 +11,7 @@ import SwiftUI
 struct EventoContentView: View {
     
     let evento: EventoModel
+    @Binding var existingComment: EventoModel?
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -20,7 +21,9 @@ struct EventoContentView: View {
                 Spacer()
                 if evento.tipo == .comentou {
                     Menu {
-                        MenuLabel("Editar", .confirm, image: "pencil", action: {})
+                        MenuLabel("Editar", .confirm, image: "pencil", action: {
+                            existingComment = evento
+                        })
                         MenuLabel("Excluir", .destructive, image: "trash", evento: evento)
                     } label: {
                         Image(systemName: "ellipsis.circle")

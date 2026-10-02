@@ -10,6 +10,7 @@ import SwiftUI
 struct EventoView: View {
     
     let evento: EventoModel
+    @Binding var existingComment: EventoModel?
     let notLast: Bool
     
     let iconSize = 50.0
@@ -19,7 +20,7 @@ struct EventoView: View {
         let elementColor = Color(uiColor: UIColor.tertiaryLabel)
         HStack(alignment: .top, spacing: 0) {
             EventoIcon(elementColor: elementColor, systemImage: imageEvento[evento.tipo] ?? "", iconSize: iconSize)
-            EventoContentView(evento: evento)
+            EventoContentView(evento: evento, existingComment: $existingComment)
         }
         .padding(.bottom)
         

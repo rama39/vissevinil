@@ -13,6 +13,7 @@ struct DiscoView: View {
     
     @State var removendoDaCaixa = false
     @State var adicionandoComentario = false
+    @State var existingComment: EventoModel? = nil
     
     var body: some View {
         List {
@@ -79,8 +80,12 @@ struct DiscoView: View {
                 )
                 EventoListView(
                     adicionandoComentario: $adicionandoComentario,
-                    eventos: disco.eventos
+                    eventos: disco.eventos,
+                    existingComment: $existingComment
                 )
+                .onChange(of: existingComment) {
+                    if existingComment != nil { adicionandoComentario = true }
+                }
             }.padding(.bottom)
         }
         .listStyle(.plain)
@@ -109,6 +114,6 @@ struct DiscoView: View {
             }
         }
         
-        .sheet(isPresented: $adicionandoComentario, content: {ComentarioSheet(disco: disco)})
+        .sheet(isPresented: $adicionandoComentario, content: {ComentarioSheet(disco: disco, existingComment: $existingComment)})
     }
 }
