@@ -32,11 +32,11 @@ struct DiscoView: View {
                     }
                     Spacer()
                     BotaoCurtidaDisco(disco: disco)
-                    .padding(.trailing)
-                    BotaoDisco(
-                        action: {disco.wishlist.toggle()},
-                        image: "bookmark", fill: disco.wishlist
-                    )
+                    //.padding(.trailing)
+//                    BotaoDisco(
+//                        action: {disco.wishlist.toggle()},
+//                        image: "bookmark", fill: disco.wishlist
+//                    )
                 }
                 .padding(.bottom)
                 
