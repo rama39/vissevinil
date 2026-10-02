@@ -69,30 +69,18 @@ struct DiscoView: View {
                 }
                 let estadosCapa = Array(descricaoEstados.keys).sorted(by: {$0.rawValue < $1.rawValue})
                 let estadosDisco = estadosCapa.dropFirst(2).compactMap { EstadoDisco(rawValue: $0.rawValue) }
-                PickerEstado<EstadoCapa>  ("Estado da Capa", $disco.estadoCapa, estados: estadosCapa)
-                PickerEstado<EstadoDisco> ("Estado do Disco", $disco.estadoDisco, estados: estadosDisco)
-                VStack(alignment: .leading) {
-                    HStack {
-                        Text("Eventos")
-                        Spacer()
-                        Button {
-                            adicionandoComentario = true
-                        } label: {
-                            HStack {
-                                Image(systemName: "square.and.pencil")
-                                Text("Comentário")
-                            }
-                            .padding(15)
-                            .glassEffect()
-                        }.buttonStyle(.plain)
-                    }
-                    VStack(alignment: .leading, spacing: 0) {
-                        let last = disco.eventos.last
-                        ForEach(disco.eventos) { evento in
-                            EventoView(evento: evento, notLast: (evento != last))
-                        }
-                    }
-                }
+                PickerEstado<EstadoCapa>(
+                    "Estado da Capa", $disco.estadoCapa,
+                    estados: estadosCapa
+                )
+                PickerEstado<EstadoDisco>(
+                    "Estado do Disco", $disco.estadoDisco,
+                    estados: estadosDisco
+                )
+                EventoListView(
+                    adicionandoComentario: $adicionandoComentario,
+                    eventos: disco.eventos
+                )
             }.padding(.bottom)
         }
         .listStyle(.plain)
