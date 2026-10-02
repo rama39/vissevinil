@@ -26,8 +26,9 @@ struct EventoContentView: View {
                         })
                         MenuLabel("Excluir", .destructive, image: "trash", evento: evento)
                     } label: {
-                        Image(systemName: "ellipsis.circle")
+                        Image(systemName: "ellipsis")
                             .tint(.primary)
+                            .frame(width: 25, height: 25)
                     }
                 }
             }
