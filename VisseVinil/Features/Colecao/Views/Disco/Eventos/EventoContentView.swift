@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct EventoContentView: View {
     
     let evento: EventoModel
@@ -17,6 +18,15 @@ struct EventoContentView: View {
                 Text(evento.tipo.rawValue)
                     .font(.headline)
                 Spacer()
+                if evento.tipo == .comentou {
+                    Menu {
+                        MenuLabel("Editar", .confirm, image: "pencil", action: {})
+                        MenuLabel("Excluir", .destructive, image: "trash", evento: evento)
+                    } label: {
+                        Image(systemName: "ellipsis.circle")
+                            .tint(.primary)
+                    }
+                }
             }
             if let comment = evento.comentario {
                 Text(comment)

@@ -28,7 +28,7 @@ struct EventoListView: View {
             }
             VStack(alignment: .leading, spacing: 0) {
                 let last = eventos.last
-                ForEach(eventos) { evento in
+                ForEach(eventos.sorted(by: {$0.data < $1.data})) { evento in
                     EventoView(evento: evento, notLast: (evento != last))
                 }
             }
