@@ -69,30 +69,8 @@ struct DiscoView: View {
                 }
                 let estadosCapa = Array(descricaoEstados.keys).sorted(by: {$0.rawValue < $1.rawValue})
                 let estadosDisco = estadosCapa.dropFirst(2).compactMap { EstadoDisco(rawValue: $0.rawValue) }
-                Picker("Estado da Capa", selection: $disco.estadoCapa) {
-                    Text(disco.estadoCapa != nil ?
-                         "Remover Estado" : "Selecionar").tag(nil as EstadoCapa?)
-                    
-                    Divider()
-                    
-                    ForEach(estadosCapa, id: \.self) { estado in
-                        Text(titleEstados[estado] ?? "").tag(estado)
-                            .lineLimit(1)
-                            .truncationMode(.tail)
-                    }
-                }
-                Picker("Estado do Disco", selection: $disco.estadoDisco) {
-                    Text(disco.estadoDisco != nil ?
-                         "Remover Estado" : "Selecionar").tag(nil as EstadoDisco?)
-                    
-                    Divider()
-                    
-                    ForEach(estadosDisco, id: \.self) { estado in
-                        Text(EstadoCapa(rawValue: estado.rawValue).flatMap { titleEstados[$0] } ?? "").tag(estado)
-                            .lineLimit(1)
-                            .truncationMode(.tail)
-                    }
-                }
+                PickerEstado<EstadoCapa>  ("Estado da Capa", $disco.estadoCapa, estados: estadosCapa)
+                PickerEstado<EstadoDisco> ("Estado do Disco", $disco.estadoDisco, estados: estadosDisco)
                 VStack(alignment: .leading) {
                     HStack {
                         Text("Eventos")
