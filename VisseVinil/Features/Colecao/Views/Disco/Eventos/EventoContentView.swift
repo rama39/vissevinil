@@ -34,6 +34,7 @@ struct EventoContentView: View {
             }
             if let comment = evento.comentario {
                 Text(comment)
+                    .padding(.vertical, 5)
             }
             Text(evento.data.formatted(date: .abbreviated, time: .shortened))
                 .foregroundStyle(.secondary)
