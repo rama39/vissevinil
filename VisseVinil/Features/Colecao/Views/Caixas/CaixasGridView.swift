@@ -45,39 +45,52 @@ struct CaixasGridView: View {
     @State var desRemovendoDisco: DiscoModel? = nil
     
     var body: some View {
-        let columns = caixas.count > 4 ?
-            [GridItem(.flexible()), GridItem(.flexible())] :
-            [GridItem(.flexible())]
-        ScrollView {
-            DiscosRemovidosView(desRemovendoDisco: $desRemovendoDisco)
-                .padding()
-                .background() {Color(uiColor: .secondarySystemBackground).ignoresSafeArea()}
-                .clipShape(RoundedRectangle(cornerRadius: 26))
-                .padding(.horizontal)
-            LazyVGrid(columns: columns) {
-                ForEach(caixasBuscadas) { caixa in
-                    NavigationLink {
-                        CaixaView(caixa: caixa)
-                    } label: {
-                        CaixaOuterView(caixa: caixa, count: caixas.count)
-                    }
-                    .buttonStyle(.plain)
-                    .contextMenu {
-                        Button(role: .destructive) {
-                            deleteCaixa(caixa)
-                        } label: {
-                            Label("Deletar", systemImage: "trash")
+        Group {
+            if caixas.isEmpty {
+                VStack {
+                    Spacer()
+                    VStack {
+                        Text("Nenhuma caixa ainda")
+                        Text("Adicione uma caixa para começar")
+                    }.foregroundStyle(.secondary)
+                    Spacer()
+                }
+            } else {
+                ScrollView {
+                    DiscosRemovidosView(desRemovendoDisco: $desRemovendoDisco)
+                        .padding()
+                        .background() {Color(uiColor: .secondarySystemBackground).ignoresSafeArea()}
+                        .clipShape(RoundedRectangle(cornerRadius: 26))
+                        .padding(.horizontal)
+                    let columns = caixas.count > 4 ?
+                        [GridItem(.flexible()), GridItem(.flexible())] :
+                        [GridItem(.flexible())]
+                    LazyVGrid(columns: columns) {
+                        ForEach(caixasBuscadas) { caixa in
+                            NavigationLink {
+                                CaixaView(caixa: caixa)
+                            } label: {
+                                CaixaOuterView(caixa: caixa, count: caixas.count)
+                            }
+                            .buttonStyle(.plain)
+                            .contextMenu {
+                                Button(role: .destructive) {
+                                    deleteCaixa(caixa)
+                                } label: {
+                                    Label("Deletar", systemImage: "trash")
+                                }
+                                Button(role: .confirm) {
+                                    editandoCaixa = tempCaixa(title: caixa.title, rgba: caixa.rgba)
+                                    editandoCaixaData = caixa
+                                } label: {
+                                    Label("Editar", systemImage: "pencil")
+                                }
+                            }
                         }
-                        Button(role: .confirm) {
-                            editandoCaixa = tempCaixa(title: caixa.title, rgba: caixa.rgba)
-                            editandoCaixaData = caixa
-                        } label: {
-                            Label("Editar", systemImage: "pencil")
-                        }
                     }
+                    .padding()
                 }
             }
-            .padding()
         }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
