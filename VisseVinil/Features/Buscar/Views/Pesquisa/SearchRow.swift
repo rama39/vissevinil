@@ -31,7 +31,7 @@ struct SearchRow: View {
                 VStack {
                     Spacer()
                     HStack {
-                        CurtidaSearch(release: release)
+                        CurtidaSearch(id: release.id)
                         Spacer()
                     }
                 }

@@ -12,10 +12,10 @@ struct CurtidaSearch: View {
     
     @Query private var curtidas: [CurtidaModel]
     
-    let release: DiscogsRelease
+    let id: Int
     
     var body: some View {
-        let curtida = curtidas.first(where: {$0.master_id == release.id})
+        let curtida = curtidas.first(where: {$0.master_id == id})
         if curtida != nil {
             Image(systemName: "heart.fill")
                 .foregroundStyle(.primary)

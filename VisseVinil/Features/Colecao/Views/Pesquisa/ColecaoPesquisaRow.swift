@@ -22,7 +22,17 @@ struct ColecaoPesquisaRow: View {
         
         HStack(alignment: .top, spacing: 12) {
             // Carrega a imagem da capa de forma assíncrona
-            frameThumb(disco.thumbData)
+            ZStack {
+                frameThumb(disco.thumbData)
+                VStack {
+                    Spacer()
+                    HStack {
+                        CurtidaSearch(id: disco.master_id ?? 0)
+                        Spacer()
+                    }
+                }
+                .frame(width: 70, height: 70)
+            }
             
             VStack(alignment: .leading, spacing: 0) {
                 let mostraCaixa = !inCaixa && nil != disco.caixa && !disco.removed
