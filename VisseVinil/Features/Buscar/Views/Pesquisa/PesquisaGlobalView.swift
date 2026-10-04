@@ -14,13 +14,11 @@ struct PesquisaGlobalView: View {
     @State var tagSelecionada: DiscogsGenre? = nil
     @State var tipoSelecionado: TipoDeBusca = TipoDeBusca.disco
     
-    @State var naoPesquisou = true
-    
     var body: some View {
         NavigationStack {
             List {
                 Section {
-                    if naoPesquisou {
+                    if searchViewModel.naoPesquisou {
                         let text = tipoSelecionado == .disco ?
                         "Digite o nome de um disco que você busca para adicionar na sua coleção.":
                         "Digite o nome de um artista que você busca para adicionar seus discos na suacoleção"
@@ -99,7 +97,6 @@ struct PesquisaGlobalView: View {
         }
     }
     private func search() {
-        naoPesquisou = false // precaução
         Task {
             await searchViewModel.search(
                 query: searchText,
@@ -108,7 +105,6 @@ struct PesquisaGlobalView: View {
         }
     }
     private func resetSearch() {
-        naoPesquisou = false
         Task {
             await searchViewModel.resetSearch(
                 query: searchText,

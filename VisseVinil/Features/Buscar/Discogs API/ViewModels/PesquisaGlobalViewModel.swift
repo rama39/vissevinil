@@ -13,6 +13,7 @@ class PesquisaGlobalViewModel {
     var releases: [DiscogsRelease] = []
     var isLoading = false
     var errorMessage: String? = nil
+    var naoPesquisou = true
     
     private var currentPage = 1
     private var pagination: SearchPagination?
@@ -104,6 +105,7 @@ class PesquisaGlobalViewModel {
         await performSearch(request: request)
         
         self.isLoading = false
+        self.naoPesquisou = false 
     }
     
     func movePage() {
