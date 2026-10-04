@@ -43,16 +43,7 @@ struct MasterView: View {
                             MasterIsSavedView(master_id: master.id ?? 0)
                             Spacer()
                             BotaoCurtidaMaster(master: master)
-                            
-//                            let desejado = desejados.first(where: {$0.master_id == master.id})
-//                            BotaoDisco( action: {
-//                                if curtida == nil {
-//                                    saveCurtida(master: master)
-//                                } else {
-//                                    deleteCurtida(curtida: curtida!)
-//                                }
-//                            }, image: "bookmark", fill: curtida != nil)
-                                .padding(.trailing)
+                            .padding(.trailing)
                         }
                         .padding(.bottom)
                         Text(master.title ?? "")

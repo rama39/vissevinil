@@ -15,18 +15,28 @@ struct SearchRow: View {
         
         HStack(alignment: .top, spacing: 12) {
             // Carrega a imagem da capa de forma assíncrona
-            if let thumbUrlString = release.thumb, let thumbUrl = URL(string: thumbUrlString) {
-                AsyncImage(url: thumbUrl) { image in
-                    image
-                        .resizable()
-                        .scaledToFit()
-                } placeholder: {
-                    Color.gray.opacity(0.3)
+            ZStack {
+                if let thumbUrlString = release.thumb, let thumbUrl = URL(string: thumbUrlString) {
+                    AsyncImage(url: thumbUrl) { image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                    } placeholder: {
+                        Color.gray.opacity(0.3)
+                    }
+                    //.frame(width: 70, height: 70)
+                    .cornerRadius(8)
+                    .clipped()
+                } else { noThumb }
+                VStack {
+                    Spacer()
+                    HStack {
+                        CurtidaSearch(release: release)
+                        Spacer()
+                    }
                 }
-                .frame(width: 70, height: 70)
-                .cornerRadius(8)
-                .clipped()
-            } else { noThumb() }
+            }
+            .frame(width: 70, height: 70)
             
             VStack(alignment: .leading, spacing: 4) {
                 Text(release.title ?? "Disco")

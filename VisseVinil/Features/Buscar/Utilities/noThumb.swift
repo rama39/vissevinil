@@ -8,7 +8,7 @@
 import SwiftUI
 
 let noThumb: some View =
-    RoundedRectangle(cornerRadius: 4, style: .continuous)
+    RoundedRectangle(cornerRadius: 8, style: .continuous)
         .fill( Color(uiColor: .secondarySystemBackground) )
         .overlay( Image(systemName: "music.note") )
         .aspectRatio(1, contentMode: .fit)
