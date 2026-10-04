@@ -50,6 +50,8 @@ class PesquisaGlobalViewModel {
 
         guard let url = components.url else { return nil }
         
+        print(url.absoluteString)
+        
         var request = URLRequest(url: url)
         request.httpMethod = "GET"
         request.setValue(userAgent, forHTTPHeaderField: "User-Agent")
@@ -68,7 +70,7 @@ class PesquisaGlobalViewModel {
             if httpResponse.statusCode == 200 {
                 do {
                     let decodedResponse = try JSONDecoder().decode(PesquisaGlobalResponse.self, from: data)
-                    self.releases += decodedResponse.results
+                    self.releases += decodedResponse.results ?? []
                     self.pagination = decodedResponse.pagination
                 } catch {
                     self.errorMessage = "Erro de mapeamento interno."

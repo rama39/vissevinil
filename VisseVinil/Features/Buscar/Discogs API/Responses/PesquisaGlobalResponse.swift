@@ -15,8 +15,8 @@ import Foundation
 // MARK: - DiscogsSearchResponse
 /// Response do endpoint search do Discogs
 struct PesquisaGlobalResponse: Codable {
-    let pagination: SearchPagination
-    let results: [DiscogsRelease]
+    let pagination: SearchPagination?
+    let results: [DiscogsRelease]?
 
     enum CodingKeys: String, CodingKey {
         case pagination = "pagination"
@@ -26,11 +26,11 @@ struct PesquisaGlobalResponse: Codable {
 
 // MARK: - Pagination
 struct SearchPagination: Codable {
-    let perPage: Int
-    let pages: Int
-    let page: Int
-    let urls: Urls
-    let items: Int
+    let perPage: Int?
+    let pages: Int?
+    let page: Int?
+    let urls: Urls?
+    let items: Int?
 
     enum CodingKeys: String, CodingKey {
         case perPage = "per_page"
@@ -43,8 +43,8 @@ struct SearchPagination: Codable {
 
 // MARK: - Urls
 struct Urls: Codable {
-    let last: String
-    let next: String
+    let last: String?
+    let next: String?
 
     enum CodingKeys: String, CodingKey {
         case last = "last"
@@ -91,8 +91,8 @@ struct DiscogsRelease: Codable, Identifiable {
 
 // MARK: - Community
 struct Community: Codable {
-    let want: Int
-    let have: Int
+    let want: Int?
+    let have: Int?
 
     enum CodingKeys: String, CodingKey {
         case want = "want"
