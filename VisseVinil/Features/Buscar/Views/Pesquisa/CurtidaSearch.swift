@@ -16,6 +16,11 @@ struct CurtidaSearch: View {
     
     var body: some View {
         let curtida = curtidas.first(where: {$0.master_id == release.id})
-        Image(systemName: "heart" + (curtida != nil ? ".fill" : ""))
+        if curtida != nil {
+            Image(systemName: "heart.fill")
+                .foregroundStyle(.primary)
+                //.foregroundStyle(.vinho)
+                //.shadow(color: .primary, radius: 1)
+        }
     }
 }
