@@ -103,8 +103,7 @@ struct EditPerfilView: View {
     
     private func SalvarFoto() async {
         guard let tempimagePhotoName,
-              let data = try? await tempimagePhotoName.loadTransferable(type: Data.self),
-              let perfil
+              let data = try? await tempimagePhotoName.loadTransferable(type: Data.self)
         else { return }
         
         tempPerfil.photoImageName = data
