@@ -21,7 +21,7 @@ struct PesquisaGlobalView: View {
                     if searchViewModel.naoPesquisou {
                         let text = tipoSelecionado == .disco ?
                         "Digite o nome de um disco que você busca para adicionar na sua coleção.":
-                        "Digite o nome de um artista que você busca para adicionar seus discos na suacoleção"
+                        "Digite o nome de um artista que você busca para adicionar seus discos na sua coleção"
                         Text(text)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
