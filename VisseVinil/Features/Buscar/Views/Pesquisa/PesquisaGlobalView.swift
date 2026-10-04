@@ -14,6 +14,8 @@ struct PesquisaGlobalView: View {
     @State var tagSelecionada: DiscogsGenre? = nil
     @State var tipoSelecionado: TipoDeBusca = TipoDeBusca.disco
     
+    @State private var isSearchPresented = true
+    
     var body: some View {
         NavigationStack {
             List {
@@ -85,9 +87,13 @@ struct PesquisaGlobalView: View {
                 }
             }
             .navigationTitle("Pesquisar Discos")
-            .searchable(text: $searchText, placement: .automatic,
-                        prompt: tipoSelecionado == .disco ?
-                        "Pesquisar Discos" : "Pesquisar Discos por Artista")
+            .searchable(
+                text: $searchText,
+                isPresented: $isSearchPresented,
+                placement: .automatic,
+                prompt: tipoSelecionado == .disco ?
+                        "Pesquisar Discos" : "Pesquisar Discos por Artista"
+            )
             
             .listStyle(.plain)
             
