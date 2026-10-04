@@ -14,11 +14,23 @@ struct PesquisaGlobalView: View {
     @State var tagSelecionada: DiscogsGenre? = nil
     @State var tipoSelecionado: TipoDeBusca = TipoDeBusca.disco
     
+    @State var naoPesquisou = true
+    
     var body: some View {
         NavigationStack {
             List {
                 Section {
-                    if searchViewModel.releases.isEmpty {
+                    if naoPesquisou {
+                        let text = tipoSelecionado == .disco ?
+                        "Digite o nome de um disco que você busca para adicionar na sua coleção.":
+                        "Digite o nome de um artista que você busca para adicionar seus discos na suacoleção"
+                        Text(text)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                            .frame(height: 300)
+                            .listRowSeparator(.hidden)
+                    } else if !searchViewModel.isLoading,
+                        searchViewModel.releases.isEmpty {
                         HStack {
                             Spacer()
                             Text("Nenhum vinil encontrado.")
@@ -87,6 +99,7 @@ struct PesquisaGlobalView: View {
         }
     }
     private func search() {
+        naoPesquisou = false // precaução
         Task {
             await searchViewModel.search(
                 query: searchText,
@@ -95,6 +108,7 @@ struct PesquisaGlobalView: View {
         }
     }
     private func resetSearch() {
+        naoPesquisou = false
         Task {
             await searchViewModel.resetSearch(
                 query: searchText,
