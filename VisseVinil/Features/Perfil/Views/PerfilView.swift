@@ -20,6 +20,11 @@ struct PerfilView: View {
 
     // Controla qual tela será aberta ao tocar no título de uma seção.
     @State private var destino: PerfilDestino?
+    
+    // Disco selecionado para abrir o DiscoView.
+    @State private var discoSelecionado: DiscoModel?
+    
+    @State private var masterSelecionado: Int?
 
     // Discos marcados como favoritos pelo coração.
     private var discosFavoritos: [DiscoModel] {
@@ -76,10 +81,14 @@ struct PerfilView: View {
                                 RecordSectionView(
                                     title: "Meus Discos",
                                     records: meusDiscos,
-                                    showLocation: true
-                                ) {
-                                    destino = .meusDiscos
-                                }
+                                    showLocation: true,
+                                    onSeeAllTapped: {
+                                        destino = .meusDiscos
+                                    },
+                                    onRecordTapped: { disco in
+                                        discoSelecionado = disco
+                                    }
+                                )
                             }
 
                             // MARK: - Curtidos
@@ -91,10 +100,15 @@ struct PerfilView: View {
                             } else {
                                 CurtidaSectionView(
                                     title: "Curtidos",
-                                    records: curtidas
-                                ) {
-                                    destino = .curtidos
-                                }
+                                    records: curtidas,
+                                    onSeeAllTapped: {
+                                        destino = .curtidos
+                                    }, onRecordTapped: { curtida in
+                                        if let masterID = curtida.master_id {
+                                            masterSelecionado = masterID
+                                        }
+                                    }
+                                )
                             }
                         }
                         .padding(.top, 12)
@@ -111,6 +125,16 @@ struct PerfilView: View {
                     CurtidasListView()
                 }
             }
+            
+            .navigationDestination(item: $masterSelecionado) { masterID in
+                MasterView(master_id: masterID)
+            }
+            
+            .navigationDestination(item: $discoSelecionado) { disco in
+                DiscoView(disco: disco)
+            }
+            
+            
             .onAppear {
                 // Só cria um perfil se ainda não existir nenhum salvo.
                 guard perfis.isEmpty else { return }
