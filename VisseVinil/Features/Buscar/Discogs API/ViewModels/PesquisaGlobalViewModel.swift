@@ -12,6 +12,8 @@ import SwiftUI
 class PesquisaGlobalViewModel {
     var releases: [DiscogsRelease] = []
     var isLoading = false
+    var tag: DiscogsGenre? = nil // tag selecionada
+    var tipo: TipoDeBusca = .disco // tipo selecionado
     var errorMessage: String? = nil
     var naoPesquisou = true
     
@@ -24,9 +26,7 @@ class PesquisaGlobalViewModel {
     }
     
     private func getDiscogsSearchRequest(
-        query: String,
-        tag: DiscogsGenre?,
-        tipo: TipoDeBusca
+        query: String
     ) -> URLRequest? {
         guard !query.isEmpty || tag != nil else { return nil }
         
@@ -93,12 +93,10 @@ class PesquisaGlobalViewModel {
     }
 
     func search(
-        query: String,
-        tag: DiscogsGenre?,
-        tipo: TipoDeBusca
+        query: String
     ) async {
         
-        guard let request = getDiscogsSearchRequest(query: query, tag: tag, tipo: tipo) else { return }
+        guard let request = getDiscogsSearchRequest(query: query) else { return }
         self.isLoading = true
         self.errorMessage = nil
         
@@ -116,21 +114,19 @@ class PesquisaGlobalViewModel {
         currentPage += 1
     }
     
-    private func resetPage() {
+    func resetPage() {
         currentPage = 1
         self.releases = []
         self.pagination = nil
     }
     
     func resetSearch(
-        query: String,
-        tag: DiscogsGenre?,
-        tipo: TipoDeBusca
+        query: String
     ) async {
         
         resetPage()
         
-        await search(query: query, tag: tag, tipo: tipo)
+        await search(query: query)
         
     }
     
