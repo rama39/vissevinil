@@ -49,6 +49,8 @@ struct EditPerfilView: View {
                 PhotosPicker(selection: $tempimagePhotoName, matching: .images){
                     Label("Editar foto", systemImage: "pencil")
                 }
+                .buttonStyle(.borderedProminent)
+                .padding ()
                 .onChange(of: tempimagePhotoName){
                     Task{
                         await SalvarFoto()
