@@ -35,6 +35,7 @@ struct ColecaoView: View {
                 case .caixas:
                     CaixasGridView()
                         .navigationTitle("Caixas da Coleção")
+                        .navigationSubtitle("Registre onde seus discos de vinil estão")
                 default:
                     ColecaoPesquisaView()
                         .navigationTitle("Discos da Coleção")
