@@ -9,50 +9,51 @@ import SwiftUI
 
 enum Componente {
     case meusDiscos
-    case wishlist
     case discosCurtidos
-    
+    case favoritos
+
     var icone: String {
-        switch self{
+        switch self {
             case .meusDiscos: "music.note.square.stack"
-            case .wishlist: "bookmark"
             case .discosCurtidos: "heart"
+            case .favoritos: "star"
         }
     }
-    
+
     var titulo: String {
-        switch self{
+        switch self {
             case .meusDiscos: "Sua coleção está vazia"
-            case .wishlist: "Sua wishlist está vazia"
             case .discosCurtidos: "Você ainda não curtiu discos"
+            case .favoritos: "Você ainda não tem discos favoritos"
         }
     }
+
     var textinho: String {
-        switch self{
+        switch self {
             case .meusDiscos: "Acesse a página ”Buscar” e\nadicione novos discos"
-            case .wishlist: "Acesse a página ”Buscar” e\npesquise seus discos desejados!"
             case .discosCurtidos: "Acesse a página ”Buscar” e \ncurta os discos que você gosta"
+            case .favoritos: "Escolha até 4 discos favoritos\nna edição do seu perfil"
         }
     }
 }
 
 struct VazioView: View {
-    
+
     let coisinha: Componente
-    
+
     var body: some View {
-        VStack{
-            ZStack{
+        VStack {
+            ZStack {
                 Circle()
                     .frame(width: 50, height: 50)
                     .foregroundStyle(.creme)
-                
-                Image(systemName:coisinha.icone)
+
+                Image(systemName: coisinha.icone)
                     .resizable()
                     .scaledToFit()
-                    .frame(width:22, height: 22)
+                    .frame(width: 22, height: 22)
                     .foregroundStyle(.marrom)
-                
+
             }
             Text(coisinha.titulo)
                 .bold()
@@ -64,4 +65,3 @@ struct VazioView: View {
         }
     }
 }
-
