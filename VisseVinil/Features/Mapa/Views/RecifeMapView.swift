@@ -109,7 +109,7 @@ struct RecifeMapView: View {
                     }
                     .animation(.easeInOut(duration: 0.2), value: buscaAtiva)
                 }
-                .navigationTitle("Mapa")
+                .navigationTitle("Lojas")
                 .navigationBarTitleDisplayMode(.inline)
                 // Com a sheet aberta não dá pra pesquisar: a barra (título + busca) some
                 .toolbarVisibility(lojaDaSheet == nil ? .visible : .hidden, for: .navigationBar)
@@ -117,7 +117,7 @@ struct RecifeMapView: View {
                     text: $textoBusca,
                     isPresented: $buscaAtiva,
                     placement: .navigationBarDrawer(displayMode: .always),
-                    prompt: "Buscar local"
+                    prompt: "Buscar lojas de vinil"
                 )
                 .onSubmit(of: .search) {
                     if let primeira = searchCompleter.sugestoes.first {

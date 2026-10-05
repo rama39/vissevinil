@@ -19,7 +19,7 @@ struct ContentView: View {
     @State private var tabSelecionada: VisseVinilTabs = .colecao
     var body: some View {
         TabView(selection: $tabSelecionada) {
-            Tab("Mapa", systemImage: "map", value: .mapa) {
+            Tab("Lojas", systemImage: "map", value: .mapa) {
                 RecifeMapView()
             }
             Tab("Buscar", systemImage: "magnifyingglass", value: .buscar) {
