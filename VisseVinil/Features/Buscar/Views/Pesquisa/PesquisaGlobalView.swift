@@ -11,9 +11,6 @@ struct PesquisaGlobalView: View {
     @State private var searchViewModel = PesquisaGlobalViewModel()
     
     @State private var searchText = ""
-    @State var tagSelecionada: DiscogsGenre? = nil
-    @State var tipoSelecionado: TipoDeBusca = TipoDeBusca.disco
-    
     @State private var isSearchPresented = true
     
     var body: some View {
@@ -21,7 +18,7 @@ struct PesquisaGlobalView: View {
             List {
                 Section {
                     if searchViewModel.naoPesquisou {
-                        let text = tipoSelecionado == .disco ?
+                        let text = searchViewModel.tipo == .disco ?
                         "Digite o nome de um disco que você busca para adicionar na sua coleção.":
                         "Digite o nome de um artista que você busca para adicionar seus discos na sua coleção"
                         Text(text)
@@ -68,7 +65,7 @@ struct PesquisaGlobalView: View {
                             ForEach(TipoDeBusca.allCases, id: \.self) { tipo in
                                 TipoTagView (
                                     tipo: tipo,
-                                    tipoSelecionado: $tipoSelecionado
+                                    tipoSelecionado: $searchViewModel.tipo
                                 )
                             }
                         }
@@ -77,7 +74,7 @@ struct PesquisaGlobalView: View {
                                 ForEach(DiscogsGenre.allCases, id: \.self) { genero in
                                     GeneroTagView(
                                         genero: genero,
-                                        tagSelecionada: $tagSelecionada
+                                        tagSelecionada: $searchViewModel.tag
                                     )
                                 }
                             }
@@ -91,31 +88,28 @@ struct PesquisaGlobalView: View {
                 text: $searchText,
                 isPresented: $isSearchPresented,
                 placement: .automatic,
-                prompt: tipoSelecionado == .disco ?
+                prompt: searchViewModel.tipo == .disco ?
                         "Pesquisar Discos" : "Pesquisar Discos por Artista"
             )
             
             .listStyle(.plain)
             
             .onSubmit(of: .search) { resetSearch() }
-            .onChange(of: tagSelecionada) { resetSearch() }
-            .onChange(of: tipoSelecionado) { resetSearch() }
+            .onChange(of: searchViewModel.tag) { resetSearch() }
+            .onChange(of: searchViewModel.tipo) { resetSearch() }
+            .onChange(of: isSearchPresented, {
+                
+            } )
         }
     }
     private func search() {
         Task {
-            await searchViewModel.search(
-                query: searchText,
-                tag: tagSelecionada,
-                tipo: tipoSelecionado)
+            await searchViewModel.search( query: searchText )
         }
     }
     private func resetSearch() {
         Task {
-            await searchViewModel.resetSearch(
-                query: searchText,
-                tag: tagSelecionada,
-                tipo: tipoSelecionado)
+            await searchViewModel.resetSearch( query: searchText )
         }
     }
 }
