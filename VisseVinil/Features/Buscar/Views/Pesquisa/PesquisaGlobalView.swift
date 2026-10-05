@@ -98,7 +98,10 @@ struct PesquisaGlobalView: View {
             .onChange(of: searchViewModel.tag) { resetSearch() }
             .onChange(of: searchViewModel.tipo) { resetSearch() }
             .onChange(of: isSearchPresented, {
-                
+                if isSearchPresented { // isSearchPresented changed to true -> user clicked search bar
+                    searchViewModel.tag = nil
+                    searchViewModel.resetPage()
+                }
             } )
         }
     }

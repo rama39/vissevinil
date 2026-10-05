@@ -114,7 +114,7 @@ class PesquisaGlobalViewModel {
         currentPage += 1
     }
     
-    private func resetPage() {
+    func resetPage() {
         currentPage = 1
         self.releases = []
         self.pagination = nil
