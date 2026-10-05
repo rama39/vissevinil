@@ -48,6 +48,13 @@ struct CaixasGridView: View {
         Group {
             if caixas.isEmpty {
                 VStack {
+                    
+                    NavigationLink {
+                        SuperCaixaView()
+                    } label: {
+                        SuperCaixaOuterView()
+                    } .buttonStyle(.plain)
+                    
                     Spacer()
                     VStack {
                         Text("Nenhuma caixa ainda")
@@ -62,6 +69,13 @@ struct CaixasGridView: View {
                         .background() {Color(uiColor: .secondarySystemBackground).ignoresSafeArea()}
                         .clipShape(RoundedRectangle(cornerRadius: 26))
                         .padding(.horizontal)
+                    
+                    NavigationLink {
+                        SuperCaixaView()
+                    } label: {
+                        SuperCaixaOuterView()
+                    } .buttonStyle(.plain)
+                    
                     let columns = caixas.count > 4 ?
                         [GridItem(.flexible()), GridItem(.flexible())] :
                         [GridItem(.flexible())]
