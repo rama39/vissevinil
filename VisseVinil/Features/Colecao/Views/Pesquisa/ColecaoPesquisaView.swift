@@ -102,7 +102,7 @@ struct ColecaoPesquisaView: View {
         }
         
         newEvento.disco = disco
-        newEvento.comentario = "Ouviu por \(tempoOuvido) minuto\(tempoOuvido > 1 ? "s" : "")"
+        newEvento.comentario = "Ouviu por \(tempoOuvido) minuto\(tempoOuvido != 1 ? "s" : "")"
         
         modelContext.insert(newEvento)
     }
