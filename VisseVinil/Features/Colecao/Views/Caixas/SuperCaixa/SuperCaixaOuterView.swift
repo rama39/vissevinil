@@ -19,8 +19,11 @@ struct SuperCaixaOuterView: View {
                 
                 HStack {
                     Spacer()
-                    Image("Discos Todos")
-                        .resizable().scaledToFit()
+                    VStack {
+                        Spacer()
+                        Image("Discos Todos")
+                            .resizable().scaledToFit()
+                    }
                 }
                 
                 VStack(spacing: 0) {
