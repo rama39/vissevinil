@@ -18,17 +18,19 @@ struct MasterIsSavedView: View {
         let savedAs = discos.filter({$0.master_id == master_id})
         if savedAs.count > 0 {
             ScrollView(.horizontal) {
-                ForEach(savedAs) { version in
-                    NavigationLink {
-                        DiscoView(disco: version)
-                    } label: {
-                        if let caixa = version.caixa {
-                            CaixaTag(caixa: caixa).padding(.trailing)
-                        } else {
-                            Text(version.title).padding(.trailing)
+                HStack {
+                    ForEach(savedAs) { version in
+                        NavigationLink {
+                            DiscoView(disco: version)
+                        } label: {
+                            if let caixa = version.caixa {
+                                CaixaTag(caixa: caixa).padding(.trailing)
+                            } else {
+                                Text(version.title).padding(.trailing)
+                            }
                         }
+                        .buttonStyle(.plain)
                     }
-                    .buttonStyle(.plain)
                 }
             }
         }
