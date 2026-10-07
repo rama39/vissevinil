@@ -31,19 +31,13 @@ struct EditPerfilView: View {
                             .resizable()
                             .scaledToFill()
                     } else {
-                        // Placeholder enquanto não há asset cadastrado
-                        ZStack {
-                            Color.gray.opacity(0.2)
-                            Image(systemName: "opticaldisc.fill")
-                                .resizable()
-                                .frame(width: 115, height: 115)
-                        }
+                        FotoPadraoDoPerfil()
                     }
                 }
                 .frame(width: 130, height: 130)
                 .clipShape(Circle())
                 .overlay(
-                    Circle().stroke(Color.gray)
+                    Circle().strokeBorder(.bordaDoPerfil, lineWidth: 3)
                 )
                 PhotosPicker(selection: $tempimagePhotoName, matching: .images){
                     Label("Editar foto", systemImage: "pencil")

@@ -28,12 +28,12 @@ struct CurtidaSectionView: View {
             Button(action: onSeeAllTapped) {
                 HStack(spacing: 6) {
                     Text(title)
-                        .font(.system(size: 20, weight: .semibold))
+                        .font(.title3.weight(.semibold))
                         .foregroundStyle(.primary)
 
                     Image(systemName: "chevron.right")
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(.primary)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.secondary)
                 }
             }
             .buttonStyle(.plain)

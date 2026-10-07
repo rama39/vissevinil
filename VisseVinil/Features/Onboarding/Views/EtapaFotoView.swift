@@ -8,7 +8,7 @@ import PhotosUI
 import UIKit
 
 /// Etapa 2 do onboarding (opcional): foto de perfil.
-/// Como no app Contatos: sem foto, mostra as iniciais do nome; e como nas configurações do
+/// Sem foto, mostra a imagem padrão do perfil (um disco); e como nas configurações do
 /// sistema, a opção de deixar pra depois ("Agora Não") fica embaixo do botão principal.
 struct EtapaFotoView: View {
     let nome: String
@@ -79,7 +79,7 @@ struct EtapaFotoView: View {
 
     private let tamanhoDaFoto: CGFloat = 140
 
-    // Foto escolhida, ou as iniciais do nome num círculo cinza (como no Contatos)
+    // Foto escolhida, ou a imagem padrão do perfil (um disco)
     private var fotoDePerfil: some View {
         ZStack {
             if let foto, let imagem = UIImage(data: foto) {
@@ -87,17 +87,7 @@ struct EtapaFotoView: View {
                     .resizable()
                     .scaledToFill()
             } else {
-                Circle()
-                    .fill(Color(.systemGray3).gradient)
-                if iniciais.isEmpty {
-                    Image(systemName: "person.fill")
-                        .font(.system(size: tamanhoDaFoto * 0.45))
-                        .foregroundStyle(.white)
-                } else {
-                    Text(iniciais)
-                        .font(.system(size: tamanhoDaFoto * 0.4, weight: .medium, design: .rounded))
-                        .foregroundStyle(.white)
-                }
+                FotoPadraoDoPerfil()
             }
 
             if carregando {
@@ -107,17 +97,11 @@ struct EtapaFotoView: View {
         }
         .frame(width: tamanhoDaFoto, height: tamanhoDaFoto)
         .clipShape(Circle())
+        .overlay {
+            Circle().strokeBorder(.bordaDoPerfil, lineWidth: 3)
+        }
         .accessibilityElement()
         .accessibilityLabel(foto == nil ? "Sem foto de perfil" : "Foto de perfil escolhida")
-    }
-
-    // "Gabriel Melo" -> "GM"
-    private var iniciais: String {
-        nome.split(separator: " ")
-            .prefix(2)
-            .compactMap { $0.first.map(String.init) }
-            .joined()
-            .uppercased()
     }
 
     private func carregarFoto(de item: PhotosPickerItem) async {
