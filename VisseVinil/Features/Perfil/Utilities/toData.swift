@@ -13,5 +13,6 @@ extension TempPerfil {
         perfil.name = self.name
         perfil.imagePhotoName = self.photoImageName
         perfil.collectingSince = self.collectingSince
+        perfil.bordaDaFoto = self.bordaDaFoto
     }
 }

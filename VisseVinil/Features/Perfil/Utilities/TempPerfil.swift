@@ -14,6 +14,7 @@ struct TempPerfil {
     var name: String
     var photoImageName: Data?
     var collectingSince: Date
+    var bordaDaFoto: String?
 
     //========================================================
 

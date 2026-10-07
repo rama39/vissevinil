@@ -28,12 +28,12 @@ struct RecordSectionView: View {
             Button(action: onSeeAllTapped) {
                 HStack(spacing: 6) {
                     Text(title)
-                        .font(.system(size: 20, weight: .semibold))
+                        .font(.title3.weight(.semibold))
                         .foregroundStyle(.primary)
 
                     Image(systemName: "chevron.right")
-                        .font(.system(size: 15, weight: .semibold))
-                        .foregroundStyle(.primary)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(.secondary)
                 }
             }
             .buttonStyle(.plain)
@@ -114,12 +114,12 @@ struct RecordCardView: View {
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(record.title)
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.callout.weight(.semibold))
                     .foregroundStyle(.primary)
                     .lineLimit(1)
 
                 Text(record.artistsListed)
-                    .font(.system(size: 13))
+                    .font(.footnote)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
 
@@ -135,7 +135,7 @@ struct RecordCardView: View {
                             .frame(width: 8, height: 8)
 
                         Text(location)
-                            .font(.system(size: 12))
+                            .font(.caption)
                             .foregroundStyle(.secondary)
                             .lineLimit(1)
                     }

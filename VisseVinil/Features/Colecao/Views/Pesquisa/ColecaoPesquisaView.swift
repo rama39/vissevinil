@@ -55,7 +55,13 @@ struct ColecaoPesquisaView: View {
                 }
             }
         }
-        .searchable(text: $bufferBusca, prompt: "Pesquisar Discos da Coleção")
+        // Campo de busca sempre visível (sem precisar puxar a lista pra baixo)
+        .searchable(text: $bufferBusca, placement: .navigationBarDrawer(displayMode: .always),
+                    prompt: "Pesquisar Discos da Coleção")
+        // Primeiro disco mais perto da busca (a seção de discos tirados pra ouvir costuma
+        // estar vazia e deixava um espaço grande)
+        .listSectionSpacing(.compact)
+        .contentMargins(.top, 8, for: .scrollContent)
         .alertaGuardar($desRemovendoDisco, addTirouParaOuvir)
     }
 

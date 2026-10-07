@@ -9,63 +9,47 @@ import SwiftUI
 
 struct ProfileHeaderView: View {
     @Bindable var profile: PerfilModel
-    var onEditTapped: () -> Void = {}
+
+    private let tamanhoDaFoto: CGFloat = 120
 
     var body: some View {
-        VStack(spacing: 16) {
-            // Barra de título com botão de edição
-            ZStack {
-                Text("Perfil")
-                    .font(.system(size: 20, weight: .semibold))
-                    .foregroundStyle(.primary)
-
-                HStack {
-                    Spacer()
-                    Button(action: onEditTapped) {
-                        Image(systemName: "pencil")
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundStyle(.primary)
-                            .padding(12)
-                            .background(Circle().fill(Color(.secondarySystemBackground)))
-                            .shadow(color: .black.opacity(0.08), radius: 4, y: 2)
-                    }
-                }
-            }
-            .padding(.horizontal, 20)
-
-            // Foto de perfil
-            Group {
-                if let profileImage = profile.imagePhotoName, let uiImage = UIImage(data: profileImage) {
-                    Image(uiImage: uiImage)
-                        .resizable()
-                        .scaledToFill()
-                } else {
-                    // Mesmo placeholder da EditPerfilView, quando não há foto.
-                    ZStack {
-                        Color(.systemGray5)
-                        Image(systemName: "opticaldisc.fill")
-                            .resizable()
-                            .frame(width: 115, height: 115)
-                    }
-                }
-            }
-            .frame(width: 130, height: 130)
-            .clipShape(Circle())
-            .overlay(
-                Circle().stroke(Color.accentColor.opacity(0.6), lineWidth: 3)
-            )
+        VStack(spacing: 14) {
+            foto
 
             // Nome e tempo de coleção
-            VStack(spacing: 6) {
+            VStack(spacing: 4) {
                 Text(profile.name)
-                    .font(.system(size: 30, weight: .bold))
+                    .font(.title.bold())
                     .foregroundStyle(.primary)
+                    .multilineTextAlignment(.center)
 
                 Text(profile.collectingTimeDescription)
-                    .font(.system(size: 15))
+                    .font(.subheadline)
                     .foregroundStyle(.secondary)
             }
         }
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 20)
+        .accessibilityElement(children: .combine)
+    }
+
+    // Foto de perfil; sem foto, a imagem padrão (um disco)
+    private var foto: some View {
+        Group {
+            if let profileImage = profile.imagePhotoName, let uiImage = UIImage(data: profileImage) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+            } else {
+                FotoPadraoDoPerfil()
+            }
+        }
+        .frame(width: tamanhoDaFoto, height: tamanhoDaFoto)
+        .clipShape(Circle())
+        .overlay {
+            Circle().strokeBorder(BordaDoPerfil.estilo(profile.bordaDaFoto), lineWidth: 3)
+        }
+        .accessibilityHidden(true)
     }
 }
 //#Preview {

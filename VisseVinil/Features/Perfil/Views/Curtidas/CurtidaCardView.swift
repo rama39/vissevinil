@@ -45,12 +45,12 @@ struct CurtidaCardView: View {
 
             VStack(alignment: .leading, spacing: 2) {
                 Text(curtida.master_title ?? "")
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.callout.weight(.semibold))
                     .foregroundStyle(.primary)
                     .lineLimit(1)
 
                 Text(curtida.artistsListed)
-                    .font(.system(size: 13))
+                    .font(.footnote)
                     .foregroundStyle(.secondary)
                     .lineLimit(1)
 

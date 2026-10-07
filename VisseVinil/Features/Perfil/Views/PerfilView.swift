@@ -45,26 +45,24 @@ struct PerfilView: View {
                 if let profile = perfis.first {
                     ScrollView {
                         VStack(spacing: 32) {
-                            ProfileHeaderView(profile: profile) {
-                                editando = true
-                                profileRef = profile
-                            }
+                            ProfileHeaderView(profile: profile)
 
                             // MARK: - Discos favoritos
 
                             if discosFavoritos.isEmpty {
-                                secaoVazia(titulo: "Discos favoritos", coisinha: .favoritos)
+                                secaoVazia(titulo: "Discos Favoritos", coisinha: .favoritos)
                             } else {
                                 VStack(alignment: .leading, spacing: 14) {
-                                    Text("Discos favoritos")
-                                        .font(.system(size: 20, weight: .semibold))
+                                    Text("Discos Favoritos")
+                                        .font(.title3.weight(.semibold))
                                         .foregroundStyle(.primary)
                                         .padding(.horizontal, 20)
-                                    
-                                        .padding(0.5)
+                                        .accessibilityAddTraits(.isHeader)
 
-
-                                    DiscosFavCarrossel(records: discosFavoritos)
+                                    // Capa do centro abre o disco (pela navegação desta tela)
+                                    DiscosFavCarrossel(records: discosFavoritos) { disco in
+                                        discoSelecionado = disco
+                                    }
                                 }
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 
@@ -74,8 +72,6 @@ struct PerfilView: View {
 
                             if meusDiscos.isEmpty {
                                 secaoVazia(titulo: "Meus Discos", coisinha: .meusDiscos)
-                                
-                                    .padding(0.5)
 
                             } else {
                                 RecordSectionView(
@@ -95,7 +91,6 @@ struct PerfilView: View {
 
                             if curtidas.isEmpty {
                                 secaoVazia(titulo: "Curtidos", coisinha: .discosCurtidos)
-                                    .padding(0.5)
 
                             } else {
                                 CurtidaSectionView(
@@ -110,6 +105,11 @@ struct PerfilView: View {
                                     }
                                 )
                             }
+
+                            // MARK: - Contato
+
+                            contato
+                                .padding(.top, 40)
                         }
                         .padding(.top, 12)
                         .padding(.bottom, 24)
@@ -120,9 +120,11 @@ struct PerfilView: View {
                 switch destino {
                 case .meusDiscos:
                     ColecaoPesquisaView()
+                        .navigationTitle("Meus Discos")
 
                 case .curtidos:
                     CurtidasListView()
+                        .navigationTitle("Curtidos")
                 }
             }
             
@@ -135,12 +137,27 @@ struct PerfilView: View {
             }
             
             
+            // Título e ação no lugar padrão da barra (antes eram desenhados à mão no cabeçalho)
+            .navigationTitle("Perfil")
+            // Sempre o título pequeno, centralizado na barra
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                if let profile = perfis.first {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Button("Editar") {
+                            profileRef = profile
+                            editando = true
+                        }
+                    }
+                }
+            }
             .onAppear {
                 // Só cria um perfil se ainda não existir nenhum salvo.
                 guard perfis.isEmpty else { return }
                 modelContext.insert(PerfilModel())
             }
-            .fullScreenCover(isPresented: $editando) {
+            // Formulário curto: sheet (a HIG reserva tela cheia pra tarefas longas/imersivas)
+            .sheet(isPresented: $editando) {
                 EditPerfilView(
                     perfil: $profileRef,
                     editando: $editando
@@ -149,15 +166,32 @@ struct PerfilView: View {
         }
     }
 
+    /// Rodapé discreto com os canais de contato (os links abrem o Mail e o Instagram).
+    /// Pequeno e apagado de propósito: está ali pra quem procurar, sem chamar atenção.
+    private var contato: some View {
+        VStack(spacing: 2) {
+            Text("Precisa falar com a gente?")
+                .fontWeight(.semibold)
+            // Links na cor do app (vinho)
+            Text("Mande um e-mail para [vissevinil@gmail.com](mailto:vissevinil@gmail.com) ou fale com a gente no Instagram [@vissevinil](https://instagram.com/vissevinil).")
+        }
+        .font(.caption2)
+        .foregroundStyle(.tertiary)
+        .multilineTextAlignment(.center)
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 32)
+    }
+
     /// Título da seção (sem seta/botão — ainda não há nada pra abrir) +
     /// o estado vazio correspondente, logo abaixo.
     @ViewBuilder
     private func secaoVazia(titulo: String, coisinha: Componente) -> some View {
         VStack(alignment: .leading, spacing: 14) {
             Text(titulo)
-                .font(.system(size: 20, weight: .semibold))
+                .font(.title3.weight(.semibold))
                 .foregroundStyle(.primary)
                 .padding(.horizontal, 20)
+                .accessibilityAddTraits(.isHeader)
 
             VazioView(coisinha: coisinha)
                 .frame(maxWidth: .infinity)
