@@ -54,16 +54,15 @@ struct CaixaOuterView: View {
                                     switch count {
                                     case 2: size * 0.40
                                     case 3: size * 0.25
-                                    case 4: size * 0.25
                                     default: size * 0.15
                                     }
                                 })
-                        }.padding(count > 4 ? 10 : 15)
+                        }.padding(count > 3 ? 10 : 15)
                     }
                     Spacer()
                 }
             }
-            caixa.cor.frame(height: count > 4 ? 16 : 24).ignoresSafeArea()
+            caixa.cor.frame(height: count > 3 ? 16 : 24).ignoresSafeArea()
         }
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .shadow(radius: 5)
