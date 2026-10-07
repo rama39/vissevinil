@@ -5,14 +5,6 @@
 //  Created by Rian Antony Medeiros de Abreu on 01/10/26.
 //
 
-
-//
-//  RecordSectionView.swift
-//  VisseVinil
-//
-//  Created by Pedro Augusto Santos de Sousa on 16/09/26.
-//
-
 import SwiftUI
 
 struct CurtidaSectionView: View {

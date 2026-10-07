@@ -22,7 +22,7 @@ struct ColecaoView: View {
     }
     
     @AppStorage("Modo de Visualização da Coleção (discos/caixas)")
-    private var modoVisualizacao: ModeoVisualizacao = .discos
+    private var modoVisualizacao: ModeoVisualizacao = .caixas
 
     // Ordenação da lista de discos (salva no aparelho; a ColecaoPesquisaView lê as mesmas chaves)
     @AppStorage("colecao.ordenacao") private var ordenacao: Ordenacao = .inclusao
@@ -35,30 +35,31 @@ struct ColecaoView: View {
                 case .caixas:
                     CaixasGridView()
                         .navigationTitle("Caixas da Coleção")
+                        .navigationSubtitle("Registre onde seus discos de vinil estão")
                 default:
                     ColecaoPesquisaView()
                         .navigationTitle("Discos da Coleção")
                 }
             }
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Menu {
-                        Picker("", selection: $modoVisualizacao) {
-                            ForEach(ModeoVisualizacao.allCases) { modo in
-                                Label(modo.rawValue, systemImage: modo.iconName)
-                                    .tag(modo)
-                            }
-                        }
-
-                        if modoVisualizacao == .discos {
-                            SubmenuDeOrdenacao(ordenacao: $ordenacao, crescente: $ordemCrescente,
-                                               contexto: .colecao)
-                        }
-                    } label: {
-                        Image(systemName: "ellipsis")
-                    }
-                }
-            }
+//            .toolbar {
+//                ToolbarItem(placement: .topBarLeading) {
+//                    Menu {
+//                        Picker("", selection: $modoVisualizacao) {
+//                            ForEach(ModeoVisualizacao.allCases) { modo in
+//                                Label(modo.rawValue, systemImage: modo.iconName)
+//                                    .tag(modo)
+//                            }
+//                        }
+//
+//                        if modoVisualizacao == .discos {
+//                            SubmenuDeOrdenacao(ordenacao: $ordenacao, crescente: $ordemCrescente,
+//                                               contexto: .colecao)
+//                        }
+//                    } label: {
+//                        Image(systemName: "ellipsis")
+//                    }
+//                }
+//            }
         }
     }
 }

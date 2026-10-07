@@ -88,12 +88,12 @@ struct CaixaView: View {
             // "…" como no app Notas: forma de ver + "Ordenar Por"
             ToolbarItem(placement: .topBarTrailing) {
                 Menu {
-                    Picker("Visualização", selection: $visualizacao) {
-                        ForEach(Visualizacao.allCases) { opcao in
-                            Label(opcao.titulo, systemImage: opcao.icone).tag(opcao)
-                        }
-                    }
-                    .pickerStyle(.inline)
+//                    Picker("Visualização", selection: $visualizacao) {
+//                        ForEach(Visualizacao.allCases) { opcao in
+//                            Label(opcao.titulo, systemImage: opcao.icone).tag(opcao)
+//                        }
+//                    }
+//                    .pickerStyle(.inline)
 
                     SubmenuDeOrdenacao(ordenacao: $caixa.ordenacao, crescente: $caixa.ordemCrescente,
                                        contexto: .caixa)

@@ -31,6 +31,7 @@ struct DiscosFavCarrossel: View {
 
     @State private var position: CGFloat = 0
     @State private var dragStartPosition: CGFloat?
+    @State private var discoSelecionado: DiscoModel?
 
     private let timer: Publishers.Autoconnect<Timer.TimerPublisher>
 
@@ -112,6 +113,9 @@ struct DiscosFavCarrossel: View {
             guard !records.isEmpty else { return }
             position = 0
         }
+        .navigationDestination(item: $discoSelecionado) { disco in
+            DiscoView(disco: disco)
+        }
     }
 
     // MARK: - Cover Flow
@@ -155,7 +159,11 @@ struct DiscosFavCarrossel: View {
                     .zIndex(10_000 - abs(distance) * 1_000)
                     .contentShape(Rectangle())
                     .onTapGesture {
-                        snapTo(index)
+                        if selectedIndex == index {
+                            discoSelecionado = record
+                        } else {
+                            snapTo(index)
+                        }
                     }
                 }
             }

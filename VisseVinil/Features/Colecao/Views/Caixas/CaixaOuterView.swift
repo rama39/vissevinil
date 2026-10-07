@@ -29,7 +29,7 @@ struct CaixaOuterView: View {
                     .font(.headline)
                     .minimumScaleFactor(0.65)
                     .lineLimit(2)
-                Text( "\(discos.count) Disco\(discos.count > 1 ? "s" : "")" )
+                Text( "\(discos.count) Disco\(discos.count != 1 ? "s" : "")" )
                     .font(.subheadline)
                     .minimumScaleFactor(0.65)
                     .foregroundStyle(.secondary)
