@@ -12,6 +12,7 @@ struct DiscoView: View {
     @Bindable var disco: DiscoModel
     
     @State var removendoDaCaixa = false
+    @State var RemoveuDisco = false
     @State var adicionandoComentario = false
     @State var existingComment: EventoModel? = nil
     
@@ -94,14 +95,10 @@ struct DiscoView: View {
         
         .alert("Você tem certeza?", isPresented: $removendoDaCaixa) {
             // TODO: MAKE BLUE
-            // TODO: navigationdestination
-            NavigationLink {
-                ColecaoView()
-                    .onAppear {
-                        disco.removed = true
-                        disco.whenRemoved = Date()
-                    }
-                    .navigationBarBackButtonHidden(true)
+            Button {
+                disco.removed = true
+                disco.whenRemoved = Date()
+                RemoveuDisco = true
             } label: {
                 Text("Confirmar")
             }
@@ -112,6 +109,11 @@ struct DiscoView: View {
             if disco.caixa != nil {
                 Text("Ao confirmar, o disco será removido da caixa.")
             }
+        }
+        
+        .navigationDestination(isPresented: $RemoveuDisco) {
+            ColecaoView()
+                .navigationBarBackButtonHidden(true)
         }
         
         .sheet(isPresented: $adicionandoComentario, content: {ComentarioSheet(disco: disco, existingComment: $existingComment)})

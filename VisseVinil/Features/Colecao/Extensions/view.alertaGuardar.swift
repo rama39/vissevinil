@@ -15,16 +15,19 @@ extension View {
                 withAnimation {
                     disco.moverParaFrenteDaCaixa()
                     disco.removed = false
-                    desRemovendoDisco.wrappedValue = nil
+                    disco.whenRemoved = nil
                     acaoGuardar(disco)
+                    
+                    desRemovendoDisco.wrappedValue = nil
                 }
             }
             Button("Guardar disco onde estava", role: .none) {
                 withAnimation {
                     disco.removed = false
                     disco.whenRemoved = nil
-                    desRemovendoDisco.wrappedValue = nil
                     acaoGuardar(disco)
+                    
+                    desRemovendoDisco.wrappedValue = nil
                 }
             }
             Button("Cancelar", role: .cancel) {
