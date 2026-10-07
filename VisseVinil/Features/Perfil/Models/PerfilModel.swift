@@ -22,6 +22,10 @@ final class PerfilModel {
     /// texto pronto).
     var collectingSince: Date
 
+    /// Cor/degradê da borda da foto (sugestão ou "#RRGGBB", ver BordaDoPerfil); nil = padrão.
+    /// Opcional pra perfis já salvos migrarem sem perder dados.
+    var bordaDaFoto: String?
+
     //========================================================
 
     init(imagePhotoName: Data? = nil, name: String = "",

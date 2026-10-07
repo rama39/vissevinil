@@ -47,7 +47,7 @@ struct ProfileHeaderView: View {
         .frame(width: tamanhoDaFoto, height: tamanhoDaFoto)
         .clipShape(Circle())
         .overlay {
-            Circle().strokeBorder(.bordaDoPerfil, lineWidth: 3)
+            Circle().strokeBorder(BordaDoPerfil.estilo(profile.bordaDaFoto), lineWidth: 3)
         }
         .accessibilityHidden(true)
     }

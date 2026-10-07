@@ -109,7 +109,7 @@ struct PerfilView: View {
                             // MARK: - Contato
 
                             contato
-                                .padding(.top, 56)
+                                .padding(.top, 40)
                         }
                         .padding(.top, 12)
                         .padding(.bottom, 24)
