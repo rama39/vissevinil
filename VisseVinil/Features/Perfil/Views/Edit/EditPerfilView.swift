@@ -14,7 +14,6 @@ struct EditPerfilView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var perfis: [PerfilModel]
     
-    @State private var date = Date()
     @State var tempPerfil = TempPerfil(name: "")
     @Binding var perfil: PerfilModel?
     @State private var tempimagePhotoName: PhotosPickerItem?
@@ -59,7 +58,8 @@ struct EditPerfilView: View {
                 Form{
                     Section{
                         TextField("Nome", text: $tempPerfil.name)
-                        DatePicker("Data de início da coleção", selection: $date, displayedComponents: [.date])
+                        DatePicker("Data de início da coleção", selection: $tempPerfil.collectingSince,
+                                   in: ...Date.now, displayedComponents: [.date])
                         
                     }
                     Section{ // fazer como o add disco view - botao quw adiciona a listinha que o
