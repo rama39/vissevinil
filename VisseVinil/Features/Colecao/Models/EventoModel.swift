@@ -15,7 +15,7 @@ enum TipoEvento: String, Codable {
 }
 
 let imageEvento: [TipoEvento: String] = [
-    .adicionou: "plus",
+    .adicionou: "opticaldisc",
     .tirouParaOuvir: "tray.and.arrow.up",
     .comentou: "bubble"
 ]
