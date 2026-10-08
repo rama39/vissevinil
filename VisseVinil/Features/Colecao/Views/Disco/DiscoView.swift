@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct DiscoView: View {
+    //@Environment(\.dismiss) var dismiss
     
     @Bindable var disco: DiscoModel
     
@@ -94,17 +95,18 @@ struct DiscoView: View {
         .navigationBarTitleDisplayMode(.automatic)
         
         .alert("Você tem certeza?", isPresented: $removendoDaCaixa) {
-            // TODO: MAKE BLUE
-            Button {
-                disco.removed = true
-                disco.whenRemoved = Date()
-                RemoveuDisco = true
-            } label: {
-                Text("Confirmar")
-            }
             Button("Cancelar", role: .cancel) {
                 removendoDaCaixa = false
             }
+            Button("Confirmar") {
+                disco.removed = true
+                disco.whenRemoved = Date()
+                RemoveuDisco = true
+                // TODO: investigate dismiss across versions
+                //dismiss()
+            }
+            // forma gambiarrosa de deixar proeminente
+            .keyboardShortcut(.defaultAction)
         } message: {
             if disco.caixa != nil {
                 Text("Ao confirmar, o disco será removido da caixa.")
