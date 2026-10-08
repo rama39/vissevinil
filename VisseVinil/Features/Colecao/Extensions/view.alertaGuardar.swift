@@ -21,6 +21,7 @@ extension View {
                     desRemovendoDisco.wrappedValue = nil
                 }
             }
+            .keyboardShortcut(.defaultAction)
             Button("Guardar disco onde estava", role: .none) {
                 withAnimation {
                     disco.removed = false
