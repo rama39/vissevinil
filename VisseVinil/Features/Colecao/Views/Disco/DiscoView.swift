@@ -72,14 +72,20 @@ struct DiscoView: View {
                 }
                 let estadosCapa = Array(descricaoEstados.keys).sorted(by: {$0.rawValue < $1.rawValue})
                 let estadosDisco = estadosCapa.dropFirst(2).compactMap { EstadoDisco(rawValue: $0.rawValue) }
-                PickerEstado<EstadoCapa>(
-                    "Estado da Capa", $disco.estadoCapa,
-                    estados: estadosCapa
-                )
-                PickerEstado<EstadoDisco>(
-                    "Estado do Disco", $disco.estadoDisco,
-                    estados: estadosDisco
-                )
+                HStack {
+                    PickerEstado<EstadoCapa>(
+                        "Estado da Capa", $disco.estadoCapa,
+                        estados: estadosCapa
+                    )
+                    //InfoButton()
+                }
+                HStack {
+                    PickerEstado<EstadoDisco>(
+                        "Estado do Disco", $disco.estadoDisco,
+                        estados: estadosDisco
+                    )
+                    //InfoButton()
+                }
                 EventoListView(
                     adicionandoComentario: $adicionandoComentario,
                     eventos: disco.eventos,
