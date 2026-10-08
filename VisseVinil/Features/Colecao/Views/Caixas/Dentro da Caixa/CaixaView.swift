@@ -55,7 +55,12 @@ struct CaixaView: View {
         Group {
             switch visualizacao {
             case .lista:
-                lista
+                if discosBuscados.isEmpty {
+                    ContentUnavailableView(bufferBusca.isEmpty ? "Caixa vazia\nProcure seus discos na aba Buscar" : "Nenhum disco encontrado",
+                                           systemImage: "square.stack.3d.down.forward")
+                } else {
+                    lista
+                }
             case .caixa:
                 if discosBuscados.isEmpty {
                     ContentUnavailableView(bufferBusca.isEmpty ? "Caixa vazia" : "Nenhum disco encontrado",

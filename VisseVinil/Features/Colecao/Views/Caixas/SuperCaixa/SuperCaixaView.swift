@@ -27,6 +27,10 @@ struct SuperCaixaView: View {
         .ordenados(por: ordenacao, crescente: ordemCrescente, em: .colecao)
     }
     
+    // Arrastar só faz sentido na ordem manual e com a lista inteira (sem busca)
+    private var podeReordenar: Bool {
+        ordenacao == .manual && bufferBusca.isEmpty
+    }
     
     var body: some View {
         List {
@@ -47,16 +51,15 @@ struct SuperCaixaView: View {
                     EditButton()
                 }
             }
+            ToolbarItem(placement: .topBarTrailing) {
+                SubmenuDeOrdenacao(ordenacao: $ordenacao, crescente: $ordemCrescente, contexto: .colecao)
+            }
         }
         .searchable(text: $bufferBusca, prompt: "Pesquisar Discos da Coleção")
     }
     
     
     
-    // Arrastar só faz sentido na ordem manual e com a lista inteira (sem busca)
-    private var podeReordenar: Bool {
-        ordenacao == .manual && bufferBusca.isEmpty
-    }
 
     // nil desliga o arrastar (a lista só deixa mover quando há uma ação)
     private var acaoDeMover: ((IndexSet, Int) -> Void)? {

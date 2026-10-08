@@ -15,14 +15,9 @@ struct CaixaOuterView: View {
     let helperAnimacao = Namespace()
     
     var body: some View {
-        let discos = caixa.discos.filter({!$0.removed}).sorted(by: {
-            if let pos0 = $0.posicaoCaixa,
-               let pos1 = $1.posicaoCaixa {
-                pos0 > pos1
-            } else {
-                true
-            }
-        })
+        let discos = caixa.discos
+            .filter({!$0.removed})
+            .ordenados(por: caixa.ordenacao, crescente: caixa.ordemCrescente, em: .caixa)
         let titleSubtitle =
             VStack(alignment: .leading, spacing: 0) {
                 Text(caixa.title)
@@ -59,16 +54,15 @@ struct CaixaOuterView: View {
                                     switch count {
                                     case 2: size * 0.40
                                     case 3: size * 0.25
-                                    case 4: size * 0.25
                                     default: size * 0.15
                                     }
                                 })
-                        }.padding(count > 4 ? 10 : 15)
+                        }.padding(count > 3 ? 10 : 15)
                     }
                     Spacer()
                 }
             }
-            caixa.cor.frame(height: count > 4 ? 16 : 24).ignoresSafeArea()
+            caixa.cor.frame(height: count > 3 ? 16 : 24).ignoresSafeArea()
         }
         .clipShape(RoundedRectangle(cornerRadius: 8))
         .shadow(radius: 5)

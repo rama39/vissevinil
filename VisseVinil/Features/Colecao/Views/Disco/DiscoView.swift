@@ -8,10 +8,12 @@
 import SwiftUI
 
 struct DiscoView: View {
+    //@Environment(\.dismiss) var dismiss
     
     @Bindable var disco: DiscoModel
     
     @State var removendoDaCaixa = false
+    @State var RemoveuDisco = false
     @State var adicionandoComentario = false
     @State var existingComment: EventoModel? = nil
     
@@ -70,14 +72,20 @@ struct DiscoView: View {
                 }
                 let estadosCapa = Array(descricaoEstados.keys).sorted(by: {$0.rawValue < $1.rawValue})
                 let estadosDisco = estadosCapa.dropFirst(2).compactMap { EstadoDisco(rawValue: $0.rawValue) }
-                PickerEstado<EstadoCapa>(
-                    "Estado da Capa", $disco.estadoCapa,
-                    estados: estadosCapa
-                )
-                PickerEstado<EstadoDisco>(
-                    "Estado do Disco", $disco.estadoDisco,
-                    estados: estadosDisco
-                )
+                HStack {
+                    PickerEstado<EstadoCapa>(
+                        "Estado da Capa", $disco.estadoCapa,
+                        estados: estadosCapa
+                    )
+                    //InfoButton()
+                }
+                HStack {
+                    PickerEstado<EstadoDisco>(
+                        "Estado do Disco", $disco.estadoDisco,
+                        estados: estadosDisco
+                    )
+                    //InfoButton()
+                }
                 EventoListView(
                     adicionandoComentario: $adicionandoComentario,
                     eventos: disco.eventos,
@@ -93,25 +101,27 @@ struct DiscoView: View {
         .navigationBarTitleDisplayMode(.automatic)
         
         .alert("Você tem certeza?", isPresented: $removendoDaCaixa) {
-            // TODO: MAKE BLUE
-            // TODO: navigationdestination
-            NavigationLink {
-                ColecaoView()
-                    .onAppear {
-                        disco.removed = true
-                        disco.whenRemoved = Date()
-                    }
-                    .navigationBarBackButtonHidden(true)
-            } label: {
-                Text("Confirmar")
-            }
             Button("Cancelar", role: .cancel) {
                 removendoDaCaixa = false
             }
+            Button("Confirmar") {
+                disco.removed = true
+                disco.whenRemoved = Date()
+                RemoveuDisco = true
+                // TODO: investigate dismiss across versions
+                //dismiss()
+            }
+            // forma gambiarrosa de deixar proeminente
+            .keyboardShortcut(.defaultAction)
         } message: {
             if disco.caixa != nil {
                 Text("Ao confirmar, o disco será removido da caixa.")
             }
+        }
+        
+        .navigationDestination(isPresented: $RemoveuDisco) {
+            ColecaoView()
+                .navigationBarBackButtonHidden(true)
         }
         
         .sheet(isPresented: $adicionandoComentario, content: {ComentarioSheet(disco: disco, existingComment: $existingComment)})

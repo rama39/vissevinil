@@ -17,8 +17,14 @@ struct SuperCaixaOuterView: View {
             ZStack {
                 Color(uiColor: .secondarySystemBackground).ignoresSafeArea()
                 
-                Image("Discos Todos")
-                    .resizable().scaledToFit()
+                HStack {
+                    Spacer()
+                    VStack {
+                        Spacer()
+                        Image("Discos Todos")
+                            .resizable().scaledToFit()
+                    }
+                }
                 
                 VStack(spacing: 0) {
                         HStack(alignment: .top) {

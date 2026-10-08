@@ -76,7 +76,7 @@ struct CaixasGridView: View {
                         SuperCaixaOuterView()
                     } .buttonStyle(.plain)
                     
-                    let columns = caixas.count > 4 ?
+                    let columns = caixas.count > 3 ?
                         [GridItem(.flexible()), GridItem(.flexible())] :
                         [GridItem(.flexible())]
                     LazyVGrid(columns: columns) {
