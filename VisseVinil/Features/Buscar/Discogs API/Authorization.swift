@@ -12,5 +12,5 @@ private let consumerKey = "DttubofUrVvYcUjshepw"
 private let consumerSecret = "eGuEYkUAZGEELQdujUqcYKpzIUmqZDuq"
 
 // If you change this version, tell me so I can change the app name in Discogs
-let userAgent = "VisseVinil/0.0 (iOS; SwiftUI)"
+let userAgent = "VisseVinil/1.1 (iOS; SwiftUI)"
 let authorization = "Discogs key=\(consumerKey), secret=\(consumerSecret)"
