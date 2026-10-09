@@ -35,7 +35,7 @@ struct EscolherFavoritosView: View {
                 linha(disco)
             }
             .overlay {
-                if !pesquisa.isEmpty && discosPesquisados.isEmpty {
+                if discosPesquisados.isEmpty {
                     ContentUnavailableView.search(text: pesquisa)
                 }
             }
