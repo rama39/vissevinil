@@ -25,7 +25,7 @@ struct PickerEstado< T : Hashable & RawRepresentable>: View {
             
             ForEach(estados, id: \.self) { estado in
                 if let rawValue = estado.rawValue as? Int {
-                    Text(EstadoCapa(rawValue: rawValue).flatMap { titleEstados[$0] } ?? "").tag(estado)
+                    Text(EstadoCapa(rawValue: rawValue).flatMap { nomeEstados[$0] } ?? "").tag(estado)
                         .lineLimit(1)
                         .truncationMode(.tail)
                 }

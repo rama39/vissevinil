@@ -36,7 +36,7 @@ let infoTextCapa: [EstadoCapa: String] = [
     .Generica: "Capa diferente da original (mesmo que de outra versão do mesmo albúm)",
     .M: "Perfeita. Sem dobras ou rasgos.",
     .NM: "Praticamente nova. Sinais mínimos.",
-    .VG: "Excelente. Desgaste leve nos cantos.",
+    .VGP: "Excelente. Desgaste leve nos cantos.",
     .VG: "Marcas de uso, escritas ou etiquetas.",
     .GP: "Bordas gastas ou abertas e marcas de fita.",
     .G: "Muito desgastada. Grandes rasgos ou manchas.",
@@ -44,7 +44,7 @@ let infoTextCapa: [EstadoCapa: String] = [
     .P: "Destruída ou incompleta."
 ]
 
-let infoTextDisco: [EstadoDisco: String] = [
+let infoTextDisco: [EstadoCapa: String] = [
     .M: "Impecável. Sem uso e sem marcas.",
     .NM: "Quase perfeito. Sem chiados.",
     .VGP: "Excelente. Marcas superficiais leves.",

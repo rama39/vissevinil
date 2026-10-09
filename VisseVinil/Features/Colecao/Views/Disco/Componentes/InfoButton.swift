@@ -9,36 +9,52 @@ import SwiftUI
 
 struct InfoButton: View {
     
+    enum Tipo {
+        case capa
+        case disco
+    }
+    
     @State private var showInfo = false
+    let tipo: Tipo
     
     var body: some View {
         Button {
             showInfo.toggle()
         } label: {
-            Image(systemName: "info.circle")
-                .accessibilityLabel("More information")
+            Image(systemName: "questionmark.circle")
+                .foregroundStyle(.secondary)
+                .frame(width: 25, height: 25)
+                .accessibilityLabel("Mais informação")
         }
         .buttonStyle(.plain)
         .sheet(isPresented: $showInfo) {
-            Text("""
-                 ESTADO DO DISCO
-                 • M: Impecável. Sem uso e sem marcas.
-                 • NM: Quase perfeito. Sem chiados.
-                 • VG+: Excelente. Marcas superficiais leves.
-                 • VG: Marcas visíveis e chiado leve (não pula).
-                 • G+: Desgastado. Chiados contínuos, mas audível.
-                 • G: Muito usado. Ruído constante de fundo.
-                 • F: Mau estado. Riscos que fazem a agulha pular.
-                 • P: Danificado/Empenado. Inaudível.
-            """)
-                .padding()
+            let estadosCapa = Array(titleEstados.keys).sorted(by: {$0.rawValue < $1.rawValue})
+            let estadosDisco = Array(estadosCapa.dropFirst(2))
+            let estados = tipo == .disco ? estadosDisco : estadosCapa
+            let info = tipo == .disco ? infoTextDisco : infoTextCapa
+            NavigationStack {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 10) {
+                        ForEach(estados, id: \.self) { estado in
+                            HStack {
+                                Text("**\(titleEstados[estado] ?? "")**: \(info[estado] ?? "")")
+                            }
+                            //.frame(maxWidth: .infinity, alignment: .leading)
+                            .fixedSize(horizontal: false, vertical: true)
+                        }
+                    }
+                    .padding()
+                }
                 //.presentationCompactAdaptableSizes([.compact])
                 //.presentationCompactAdaptation(.popover)
-                .presentationDetents([.medium])
+                .presentationDetents([.fraction(0.3), .large])
+                .navigationTitle(tipo == .disco ? "Estado do Disco" : "Estado da Capa")
+                .navigationBarTitleDisplayMode(.inline)
+            }
         }
     }
 }
 
 #Preview {
-    InfoButton()
+    InfoButton(tipo: .disco)
 }

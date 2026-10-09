@@ -71,21 +71,21 @@ struct DiscoView: View {
                         BotaoStar(stars: $disco.estrelas, i: i)
                     }
                 }
-                let estadosCapa = Array(descricaoEstados.keys).sorted(by: {$0.rawValue < $1.rawValue})
+                let estadosCapa = Array(titleEstados.keys).sorted(by: {$0.rawValue < $1.rawValue})
                 let estadosDisco = estadosCapa.dropFirst(2).compactMap { EstadoDisco(rawValue: $0.rawValue) }
                 HStack {
                     PickerEstado<EstadoCapa>(
                         "Estado da Capa", $disco.estadoCapa,
                         estados: estadosCapa
                     )
-                    //InfoButton()
+                    InfoButton(tipo: .capa)
                 }
                 HStack {
                     PickerEstado<EstadoDisco>(
                         "Estado do Disco", $disco.estadoDisco,
                         estados: estadosDisco
                     )
-                    //InfoButton()
+                    InfoButton(tipo: .disco)
                 }
                 EventoListView(
                     adicionandoComentario: $adicionandoComentario,
