@@ -98,8 +98,8 @@ Leia a [Política de Privacidade](https://rama39.github.io/vissevinil/Support/Po
 
 ## Equipe
 
-- **Gabriel Alves**: graduando em Engenharia da Programação no CIn-UFPE
-- **Rian Antony**: graduando em Engenharia da Programação no CIn-UFPE
+- **Gabriel Alves**: graduando em Engenharia da Computação no CIn-UFPE
+- **Rian Antony**: graduando em Engenharia da Computação no CIn-UFPE
 - **Pedro Augusto**: graduando em Psicologia na UFPE
 - **Maria Eduarda Marrocos**: graduação em Design no CAC-UFPE
 
