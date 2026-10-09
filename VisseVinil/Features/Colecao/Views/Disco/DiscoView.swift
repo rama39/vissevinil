@@ -16,6 +16,7 @@ struct DiscoView: View {
     @State var RemoveuDisco = false
     @State var adicionandoComentario = false
     @State var existingComment: EventoModel? = nil
+    @State var adicionandoCaixa = false
     
     var body: some View {
         List {
@@ -29,16 +30,16 @@ struct DiscoView: View {
                         //NavigationLink {
                         //    CaixaView(caixa: caixa)
                         //} label: {
-                            CaixaTag(caixa: caixa)
+                        CaixaTag(caixa: caixa)
                         //} .buttonStyle(.plain)
                     }
                     Spacer()
                     BotaoCurtidaDisco(disco: disco)
                     //.padding(.trailing)
-//                    BotaoDisco(
-//                        action: {disco.wishlist.toggle()},
-//                        image: "bookmark", fill: disco.wishlist
-//                    )
+                    //                    BotaoDisco(
+                    //                        action: {disco.wishlist.toggle()},
+                    //                        image: "bookmark", fill: disco.wishlist
+                    //                    )
                 }
                 .padding(.bottom)
                 
@@ -125,5 +126,17 @@ struct DiscoView: View {
         }
         
         .sheet(isPresented: $adicionandoComentario, content: {ComentarioSheet(disco: disco, existingComment: $existingComment)})
+        
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    adicionandoCaixa = true
+                } label: {
+                    Image(systemName: "tray.and.arrow.down")
+                        .accessibilityLabel("Adicionar este disco a uma caixa")
+                }
+            }
+        }
+        .sheet(isPresented: $adicionandoCaixa, content: { AddToCaixaView(disco: disco) } )
     }
 }
