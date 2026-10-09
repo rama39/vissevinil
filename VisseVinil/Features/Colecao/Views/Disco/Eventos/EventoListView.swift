@@ -28,8 +28,9 @@ struct EventoListView: View {
                 }.buttonStyle(.plain)
             }
             VStack(alignment: .leading, spacing: 0) {
-                let last = eventos.last
-                ForEach(eventos.sorted(by: {$0.data < $1.data})) { evento in
+                let sortedEventos = eventos.sorted(by: {$0.data > $1.data})
+                let last = sortedEventos.last
+                ForEach(sortedEventos) { evento in
                     EventoView(evento: evento, existingComment: $existingComment, notLast: (evento != last))
                 }
             }
