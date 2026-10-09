@@ -8,10 +8,10 @@
 enum EstadoDisco: Int, Codable {
     case P = 2
     case F = 3
-    case NM = 4
-    case M = 5
-    case G = 6
-    case GP = 7
-    case VG = 8
-    case VGP = 9
+    case G = 4
+    case GP = 5
+    case VG = 6
+    case VGP = 7
+    case NM = 8
+    case M = 9
 }
