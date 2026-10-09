@@ -174,6 +174,8 @@ struct PerfilView: View {
                 .fontWeight(.semibold)
             // Links na cor do app (vinho)
             Text("Mande um e-mail para [vissevinil@gmail.com](mailto:vissevinil@gmail.com) ou fale com a gente no Instagram [@vissevinil](https://instagram.com/vissevinil).")
+            // Página de suporte (docs/index.html, publicada no GitHub Pages)
+            Text("Dúvidas frequentes na nossa [página de suporte](https://rama39.github.io/vissevinil/).")
         }
         .font(.caption2)
         .foregroundStyle(.tertiary)
