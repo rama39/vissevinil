@@ -60,6 +60,19 @@ struct MasterView: View {
                         MasterInfoRow(title: "Gêneros", value: master.genres?.joined(separator: ", "))
                         MasterInfoRow(title: "Estilos", value: master.styles?.joined(separator: ", "))
                     }
+                    Section {
+                        VStack(spacing: 2) {
+                            Text("Discos providenciados por")
+                                .fontWeight(.semibold)
+                            Text("[Discogs](https://www.discogs.com)")
+                        }
+                        .font(.caption2)
+                        .foregroundStyle(.tertiary)
+                        .multilineTextAlignment(.center)
+                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, 32)
+                        .listRowSeparator(.hidden)
+                    }
                 }.onAppear {tempMaster = master}
             }
         }
