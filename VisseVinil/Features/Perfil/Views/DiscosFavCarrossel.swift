@@ -233,7 +233,8 @@ struct DiscosFavCarrossel: View {
                         .float2(Float(origemDaOnda.x), Float(origemDaOnda.y)),
                         .float(Float(reduzirMovimento ? -1 : idadeDaOnda))
                     ),
-                    maxSampleOffset: CGSize(width: 16, height: 16)
+                    // Maior deslocamento possível do shader (ondas + onda do toque)
+                    maxSampleOffset: CGSize(width: 32, height: 32)
                 )
                 .mask {
                     LinearGradient(colors: [.white.opacity(0.42), .white.opacity(0.12), .clear],
