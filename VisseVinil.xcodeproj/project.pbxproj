@@ -22,6 +22,11 @@
 			path = VisseVinil;
 			sourceTree = "<group>";
 		};
+		213736A2307950F3004B30B5 /* docs */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = docs;
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +48,7 @@
 			children = (
 				211563133049A7C0000B4F34 /* VisseVinil */,
 				211563123049A7C0000B4F34 /* Products */,
+				213736A2307950F3004B30B5 /* docs */,
 			);
 			sourceTree = "<group>";
 		};
@@ -71,6 +77,7 @@
 			);
 			fileSystemSynchronizedGroups = (
 				211563133049A7C0000B4F34 /* VisseVinil */,
+				213736A2307950F3004B30B5 /* docs */,
 			);
 			name = VisseVinil;
 			packageProductDependencies = (
