@@ -14,8 +14,8 @@ let titleEstados: [EstadoCapa: String] = [
     .GP: "Good Plus / Mais que Boa (G+)",
     .VG: "Very Good / Muito Boa (VG)",
     .VGP: "Very Good Plus / Mais que Muito Boa (VG+)",
-    .NM: "Near Mint / Quase _ (NM ou M-)",
-    .M: "Mint / _ (M)"
+    .NM: "Near Mint / Quase Perfeito (NM ou M-)",
+    .M: "Mint / Perfeito (M)"
 ]
 
 let nomeEstados: [EstadoCapa: String] = [
@@ -45,8 +45,8 @@ let infoTextCapa: [EstadoCapa: String] = [
 ]
 
 let infoTextDisco: [EstadoCapa: String] = [
-    .M: "Impecável. Sem uso e sem marcas.",
-    .NM: "Quase perfeito. Sem chiados.",
+    .M: "Perfeito / Impecável. Sem uso e sem marcas.",
+    .NM: "Quase Perfeito. Sinais mínimos de uso, sem chiados.",
     .VGP: "Excelente. Marcas superficiais leves.",
     .VG: "Marcas visíveis e chiado leve (não pula).",
     .GP: "Desgastado. Chiados contínuos, mas audível.", 
