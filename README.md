@@ -32,7 +32,7 @@ Crie uma visualização de quem você é como colecionador. Escolha seus discos 
 - Seus discos e os discos que você curtiu na busca
 
 ### 🔎 Busque discos
-Pesquise lançamentos no catálogo do [Discogs](https://www.discogs.com), veja as versões de cada disco e adicione à sua coleção ou à lista de desejos.
+Pesquise lançamentos no catálogo do [Discogs](https://www.discogs.com), veja as versões de cada disco, curta e adicione à sua coleção.
 
 ## Requisitos
 
@@ -75,7 +75,7 @@ VisseVinil/
 ├── Features/
 │   ├── Onboarding/ # Primeira abertura: privacidade, perfil e foto
 │   ├── Colecao/    # Caixas, discos, ordenação e diário
-│   ├── Buscar/     # Busca no Discogs, curtidos e lista de desejos
+│   ├── Buscar/     # Busca no Discogs e discos curtidos
 │   ├── Mapa/       # Lojas, mapa, detalhes, avaliações e rotas
 │   └── Perfil/     # Perfil, favoritos e edição
 └── Resources/      # Ícone do app e Assets (cores da paleta e imagens)
