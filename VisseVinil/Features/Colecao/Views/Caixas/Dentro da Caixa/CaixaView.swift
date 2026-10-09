@@ -92,7 +92,7 @@ struct CaixaView: View {
             }
             // "…" como no app Notas: forma de ver + "Ordenar Por"
             ToolbarItem(placement: .topBarTrailing) {
-                Menu {
+                //Menu {
 //                    Picker("Visualização", selection: $visualizacao) {
 //                        ForEach(Visualizacao.allCases) { opcao in
 //                            Label(opcao.titulo, systemImage: opcao.icone).tag(opcao)
@@ -102,9 +102,9 @@ struct CaixaView: View {
 
                     SubmenuDeOrdenacao(ordenacao: $caixa.ordenacao, crescente: $caixa.ordemCrescente,
                                        contexto: .caixa)
-                } label: {
-                    Label("Mais opções", systemImage: "ellipsis")
-                }
+//                } label: {
+//                    Label("Mais opções", systemImage: "ellipsis")
+//                }
             }
         }
         .sheet(isPresented: $adicionandoDisco) {
